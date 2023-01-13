@@ -5,7 +5,7 @@
 		$solucion_edit=  MysqlQuery::RequestPost('solucion_ticket');
 		$radio_email=  MysqlQuery::RequestPost('optionsRadios');
 
-		$cabecera="From: LinuxStore El Salvador<linuxstore@hifenix.com>";
+		$cabecera="From: alcomex<correodepruebasutp@gmail.com>";
 		$mensaje_mail="Estimado usuario la solución a su problema es la siguiente : ".$solucion_edit;
 		$mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
 

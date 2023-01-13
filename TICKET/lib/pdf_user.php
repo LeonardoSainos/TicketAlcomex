@@ -17,22 +17,20 @@ $pdf->SetMargins(15,20);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 
-$pdf->SetTextColor(0,0,128);
-$pdf->SetFillColor(0,255,255);
+$pdf->SetTextColor(0,0,0);
+$pdf->SetFillColor(243, 156, 18);
 $pdf->SetDrawColor(0,0,0);
 $pdf->SetFont("Arial","b",9);
-$pdf->Image('../img/ISOTIPO_ALCMX.png',40,10,-300);
+$pdf->Image('../img/transp_ALCOMEX.png',20,10,-500);
 $pdf->Cell (0,5,utf8_decode('Alcomex'),0,1,'C');
 $pdf->Cell (0,5,utf8_decode('Reporte de problema mediante Ticket'),0,1,'C');
 
 $pdf->Ln();
 $pdf->Ln();
 $pdf->Ln();
-$pdf->Ln();
-$pdf->Ln();
-
+ 
 $pdf->Cell (0,5,utf8_decode('Información de Ticket #'.utf8_decode($reg['serie'])),0,1,'C');
-
+$pdf->Ln();
 $pdf->Cell (35,10,'Fecha',1,0,'C',true);
 $pdf->Cell (0,10,utf8_decode($reg['fecha']),1,1,'L');
 $pdf->Cell (35,10,'Serie',1,0,'C',true);
@@ -54,6 +52,6 @@ $pdf->Cell (0,15,utf8_decode($reg['solucion']),1,1,'L');
 
 $pdf->Ln();
 
-$pdf->cell(0,5,"Alcomex" . date("Y")  ,0,0,'C');
+$pdf->cell(0,5,"Alcomex " . date("Y")  ,0,0,'C');
 
 $pdf->output();

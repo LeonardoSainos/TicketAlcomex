@@ -50,7 +50,7 @@ if(mysqli_num_rows($consulta_tablaTicket)>=1){
                               <div class="col-sm-12">
                                   <div class="row">
                                       <div class="col-sm-4">
-                                          <img class="img-responsive" alt="Image" src="img/tux_repair.png">
+                                          <img class="img-responsive" alt="Image" src="img/soporte.jpg">
                                       </div>
                                       <div class="col-sm-8">
                                           <div class="row">

@@ -5,7 +5,7 @@
               <img src="./img/msj.png" alt="Image" class="img-responsive animated tada">
             </div>
             <div class="col-sm-10">
-              <p class="lead text-info">Bienvenido administrador, aqui se muestran todos los Tickets de LinuxStore los cuales podra eliminar, modificar e imprimir.</p>
+              <p class="lead text-info">Bienvenido administrador, aqui se muestran todos los Tickets de alcomex los cuales podra eliminar, modificar e imprimir.</p>
             </div>
           </div>
         </div>
@@ -215,7 +215,7 @@
                     
                 </div>
                 <div class="col-sm-7 animated flip">
-                    <h1 class="text-danger">Lo sentimos esta página es solamente para administradores de LinuxStore</h1>
+                    <h1 class="text-danger">Lo sentimos esta página es solamente para administradores de alcomex</h1>
                     <h3 class="text-info text-center">Inicia sesión como administrador para poder acceder</h3>
                 </div>
                 <div class="col-sm-1">&nbsp;</div>

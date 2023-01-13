@@ -41,7 +41,7 @@
                 <img src="./img/card_identy.png" alt="Image" class="img-responsive animated flipInY">
             </div>
             <div class="col-sm-10">
-              <p class="lead text-info">Bienvenido administrador, en esta página se muestran todos los usuarios y administradores registrados en LinuxStore, usted podra eliminarlos si lo desea.</p>
+              <p class="lead text-info">Bienvenido administrador, en esta página se muestran todos los usuarios y administradores registrados en soporte tecnico de alcomex, usted podra eliminarlos si lo desea.</p>
             </div>
           </div>
         </div>
@@ -173,7 +173,7 @@
                     
                 </div>
                 <div class="col-sm-7 animated flip">
-                    <h1 class="text-danger">Lo sentimos esta página es solamente para administradores de LinuxStore</h1>
+                    <h1 class="text-danger">Lo sentimos esta página es solamente para administradores de alcomex</h1>
                     <h3 class="text-info text-center">Inicia sesión como administrador para poder acceder</h3>
                 </div>
                 <div class="col-sm-1">&nbsp;</div>
