@@ -4,7 +4,7 @@ include './lib/class_mysql.php';
 include './lib/config.php';
 header('Content-Type: text/html; charset=UTF-8');
 
-if($_SESSION['tipo']!="admin"){
+if($_SESSION['rol']!=4046){
     session_start(); 
     session_unset();
     session_destroy();
@@ -24,7 +24,7 @@ if($_SESSION['tipo']!="admin"){
             <div class="col-sm-12">
               <div class="page-header">
                 <h1 class="animated lightSpeedIn">Panel Administrativo</h1>
-                <span class="label label-danger">LinuxStore S.A de C.V</span>
+                <span class="label label-danger">alcomex S.A de C.V</span>
                 <p class="pull-right text-primary">
                   <strong>
                   <?php include "./inc/timezone.php"; ?>

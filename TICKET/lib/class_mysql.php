@@ -1,5 +1,4 @@
 <?php
-
 class Mysql{
 
     public static function Conectar(){
@@ -81,9 +80,4 @@ class MysqlQuery {
         }
         return $sql;
     }
-
-    
-
-
 }
-

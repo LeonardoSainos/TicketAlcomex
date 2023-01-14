@@ -2,7 +2,7 @@
 include '../lib/class_mysql.php';
 include '../lib/config.php';
 
-$sql=  Mysql::consulta("SELECT nombre_admin FROM administrador WHERE nombre_admin='".MysqlQuery::RequestGet('id')."'");
+$sql=  Mysql::consulta("SELECT nombre_usuario FROM cliente WHERE nombre_usuario='".MysqlQuery::RequestGet('id')."'");
 
 if(mysqli_num_rows($sql)>0){
     echo '<span class="glyphicon glyphicon-remove form-control-feedback"></span>';

@@ -19,7 +19,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-user"></span> &nbsp; <?php echo $_SESSION['nombre']; ?><b class="caret"></b>
+                        <span class="glyphicon glyphicon-user"></span> &nbsp; <?php echo $_SESSION['nombre'];?><b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- usuarios -->
@@ -93,8 +93,8 @@
             </div>
           <form action="" method="POST" style="margin: 20px;">
               <div class="form-group">
-                  <label><span class="glyphicon glyphicon-user"></span>&nbsp;Nombre</label>
-                  <input type="text" class="form-control" name="nombre_login" placeholder="Escribe tu nombre" required=""/>
+                  <label><span class="glyphicon glyphicon-user"></span>&nbsp;Usuario</label>
+                  <input type="text" class="form-control" name="nombre_login" placeholder="Escribe tu nombre de usuario" required=""/>
               </div>
               <div class="form-group">
                   <label><span class="glyphicon glyphicon-lock"></span>&nbsp;Contraseña</label>
