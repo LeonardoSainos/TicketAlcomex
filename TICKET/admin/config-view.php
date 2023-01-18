@@ -40,26 +40,33 @@
         
        /* Actualizar cuenta admin */
         
-        if(isset($_POST['nom_admin_up']) && isset($_POST['admin_up']) && isset($_POST['old_nom_admin_up'])){
-            $nom_complete_update=MysqlQuery::RequestPost('nom_admin_up');
-            $nom_admin_update=MysqlQuery::RequestPost('admin_up');
-            //$old_nom_admin_update=MysqlQuery::RequestPost('old_nom_admin_up');
-            $pass_admin_update=md5(MysqlQuery::RequestPost('admin_clave_up'));
-            $pass_admin_update1 = md5(MysqlQuery::RequestPost('admin_clave_up1'));
-            $old_pass_admin_uptade=md5(MysqlQuery::RequestPost('old_admin_clave_up'));
-            $email_admin_update=MysqlQuery::RequestPost('admin_email_up');
+        if(isset($_POST['nombre']) && isset($_POST['nombre_usuario']) && isset($_POST['email_usuario'])){
 
-            $sql=Mysql::consulta("SELECT * FROM cliente WHERE nombre_completo= '$nom_admin_update' AND clave='$old_pass_admin_uptade'");
+
+    $CargarName = MysqlQuery::RequestPost('nombre');
+    $CargarClave =md5( MysqlQuery::RequestPost('clave'));
+
+
+
+            $nombre=MysqlQuery::RequestPost('nombre');
+            $usuario=MysqlQuery::RequestPost('nombre_usuario');
+            //$old_nom_admin_update=MysqlQuery::RequestPost('old_nom_admin_up');
+            $newclave=md5(MysqlQuery::RequestPost('newclave'));
+            $newclave1 = md5(MysqlQuery::RequestPost('newclave1'));
+            $clave=md5(MysqlQuery::RequestPost('clave'));
+            $email=MysqlQuery::RequestPost('email_usuario');
+              echo $CargarName . $CargarClave; 
+            $sql=Mysql::consulta("SELECT * FROM cliente WHERE nombre_completo= '$CargarName' AND clave='$CargarClave'");
             if(mysqli_num_rows($sql)>0){
-                          if($pass_admin_update == $pass_admin_update1)
+                          if($newclave == $newclave1)
                           {
 
 
-                              echo "<script> alert('Si entra despues de validar contraseñas'); </script>";
-                              if(MysqlQuery::Actualizar("cliente", "nombre_completo='$nom_complete_update', nombre_usuario='$nom_admin_update', clave='$pass_admin_update', email_cliente='$email_admin_update'", "nombre_usuario='$old_nom_admin_update' and clave='$old_pass_admin_uptade'"))
+                            
+                              if(MysqlQuery::Actualizar("cliente", "nombre_completo='$nombre', nombre_usuario='$usuario', clave='$newclave', email_cliente='$email'", "nombre_usuario='$CargarName' and clave='$CargarClave'"))
                               {
-                                    $_SESSION['nombre']=$nom_admin_update;
-                                    $_SESSION['clave']=$pass_admin_update;
+                                    $_SESSION['nombre']=$usuario;
+                                    $_SESSION['clave']=$newclave;
                                     echo '
                                         <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -172,7 +179,7 @@
                             </div>
                             <div class="form-group">
                               <label><i class="fa fa-shield"></i>&nbsp;Contraseña</label>
-                              <input type="password" class="form-control" name="admin_clave_reg" placeholder="Contraseña" required="">
+                              <input type="password" minlength="8" class="form-control" name="admin_clave_reg" placeholder="Contraseña" required="">
                             </div>
                             <div class="form-group">
                               <label><i class="fa fa-envelope"></i>&nbsp;Email</label>
@@ -280,28 +287,28 @@
                              <form role="form" action="" method="POST">
                              <div class="form-group">
                                <label><i class="fa fa-male"></i>&nbsp;Nombre completo</label>
-                               <input type="text" class="form-control" value="<?php echo $reg1['nombre_completo']; ?>" name="nom_admin_up" placeholder="Nombre completo" required="" pattern="[a-zA-Z ]{1,40}" title="Nombre Apellido" maxlength="40">
+                               <input type="text" class="form-control" value="<?php echo $reg1['nombre_completo']; ?>" name="nombre" placeholder="Nombre completo" required="" pattern="[a-zA-Z ]{1,40}" title="Nombre Apellido" maxlength="40">
                              </div>
                              <div class="form-group">
                                <label><i class="fa fa-user"></i>&nbsp;Nombre de Usuario</label>
-                               <input type="text" class="form-control" value="<?php echo $reg1['nombre_usuario']; ?>" name="old_nom_admin_up" placeholder="Nombre anterior de administrador" required="" pattern="[a-zA-Z0-9]{1,15}" title="Ejemplo7 maximo 15 caracteres" maxlength="15">
+                               <input type="text" class="form-control" value="<?php echo $reg1['nombre_usuario']; ?>" name="nombre_usuario" placeholder="Nombre anterior de administrador" required="" pattern="[a-zA-Z0-9]{1,15}" title="Ejemplo7 maximo 15 caracteres" maxlength="15">
                              </div>
                          
                              <div class="form-group">
                                <label><i class="fa fa-shield"></i>&nbsp;Contraseña anterior</label>
-                               <input type="text" class="form-control" name="old_admin_clave_up" placeholder="Contraseña anterior" required="">
+                               <input type="password" minlength="8" class="form-control" name="clave" placeholder="Contraseña anterior" required="">
                              </div>
                                  <div class="form-group">
-                               <label><i class="fa fa-shield"></i>&nbsp;Nueva contraseña</label>
-                               <input type="text" class="form-control" name="admin_clave_up" placeholder="Nueva contraseña" required="">
+                               <label><i class="fa fa-key"></i>&nbsp;Nueva contraseña</label>
+                               <input type="password" minlength="8" class="form-control" name="newclave" placeholder="Nueva contraseña" required="">
                              </div>
                                <div class="form-group">
-                               <label><i class="fa fa-shield"></i>&nbsp;Confirmar contraseña</label>
-                               <input type="text" class="form-control" name="admin_clave_up1" placeholder="Confirmar contraseña" required="">
+                               <label><i class="fa fa-key"></i>&nbsp;Confirmar contraseña</label>
+                               <input type="password" minlength="8" class="form-control" name="newclave1" placeholder="Confirmar contraseña" required="">
                              </div>
                              <div class="form-group">
                                <label><i class="fa fa-envelope"></i>&nbsp;Email</label>
-                               <input type="email" class="form-control" value="<?php echo $reg1['email_cliente']; ?>" name="admin_email_up"  placeholder="Email administrador" required="">
+                               <input type="email" class="form-control" value="<?php echo $reg1['email_cliente']; ?>" name="email_usuario"  placeholder="Email administrador" required="">
                              </div><button type="submit" class="btn btn-info">Actualizar datos</button>
                            </form>
                          </div>

@@ -5,7 +5,7 @@ include './config.php';
 
 
 $id = MysqlQuery::RequestGet('id');
-$sql = Mysql::consulta("SELECT * FROM ticket WHERE serie= '$id'");
+$sql = Mysql::consulta("SELECT t.fecha,t.serie, e.Nombre as estado_ticket, c.nombre_completo, c.nombre_usuario,c.email_cliente, d.nombre as departamento, t.asunto, t.solucion, t.mensaje FROM ticket t LEFT JOIN cliente c ON t.idUsuario= c.id_cliente INNER JOIN estatus e ON e.idEstatus = t.idStatus INNER JOIN departamento d ON d.idDepartamento= t.idDepartamento WHERE t.serie = '$id';");
 $reg = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 
 class PDF extends FPDF

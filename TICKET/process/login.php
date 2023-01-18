@@ -4,7 +4,7 @@
     $radio=MysqlQuery::RequestPost('optionsRadios');
     if($nombre!="" && $contra!="" && $radio!=""){
         if($radio=="admin"){
-            $sql=Mysql::consulta("SELECT * FROM cliente WHERE ((nombre_usuario OR email_cliente)='$nombre' AND clave='$contra') and id_rol = 4046");
+            $sql=Mysql::consulta("SELECT * FROM cliente WHERE ((nombre_usuario= '$nombre' OR email_cliente='$nombre') AND clave='$contra') and id_rol = 4046");
             if(mysqli_num_rows($sql)>0){
                 $reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
                 $_SESSION['nombre']=$reg['nombre_usuario'];
@@ -26,7 +26,7 @@
                 '; 
             }
         }elseif($radio=="user"){
-            $sql=Mysql::consulta("SELECT * FROM cliente WHERE ((nombre_usuario OR email_cliente)  = '$nombre' AND clave='$contra' ) and id_rol = 9947");
+            $sql=Mysql::consulta("SELECT * FROM cliente WHERE ((nombre_usuario = '$nombre' OR email_cliente  = '$nombre') AND clave='$contra' ) and id_rol = 9947");
             if(mysqli_num_rows($sql)>0){
                 $reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
                 $_SESSION['nombre']=$reg['nombre_usuario'];

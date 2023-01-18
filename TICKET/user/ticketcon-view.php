@@ -26,9 +26,7 @@ if(isset($_POST['del_ticket'])){
 }
 $email_consul=  MysqlQuery::RequestGet('email_consul');
 $id_colsul= MysqlQuery::RequestGet('id_consul');
-//SELECT t.id, t.fecha, t.serie, t.asunto , t. mensaje, t.solucion, c.nombre_completo as Usuario, c.email_cliente as Correo, d.nombre as Departamento, e.Nombre as Estatus  FROM ticket as t  INNER JOIN cliente as c ON t.idUsuario = c.id_cliente INNER JOIN departamento d  ON t.idDepartamento = d.idDepartamento  INNER JOIN  estatus e  on e.idEstatus = t.idStatus where c.id_cliente = 1
-//$consulta_tablaTicket=Mysql::consulta("SELECT * FROM ticket WHERE serie= '$id_colsul' AND email_cliente='$email_consul'");
-$consulta_tablaTicket=Mysql::consulta("SELECT t.id, t.fecha, t.serie, t.asunto , t. mensaje, t.solucion, c.nombre_completo as Usuario, c.email_cliente as Correo, d.nombre as Departamento, e.Nombre as Estatus  FROM ticket as t  INNER JOIN cliente as c ON t.idUsuario = c.id_cliente INNER JOIN departamento d  ON t.idDepartamento = d.idDepartamento  INNER JOIN  estatus e  on e.idEstatus = t.idStatus where c.email_cliente = '$email_consul' and t.serie= '$id_colsul' ");
+$consulta_tablaTicket = Mysql::consulta("SELECT t.fecha,t.serie, e.Nombre as estado_ticket, c.nombre_completo, c.email_cliente, d.nombre as departamento, t.asunto, t.solucion, t.mensaje FROM ticket t LEFT JOIN cliente c ON t.idUsuario= c.id_cliente INNER JOIN estatus e ON e.idEstatus = t.idStatus INNER JOIN departamento d ON d.idDepartamento= t.idDepartamento WHERE t.serie = '$id_colsul' and c.email_cliente = '$email_consul';");
 if(mysqli_num_rows($consulta_tablaTicket)>=1){
   $lsT=mysqli_fetch_array($consulta_tablaTicket, MYSQLI_ASSOC);   
 ?>
@@ -60,7 +58,7 @@ if(mysqli_num_rows($consulta_tablaTicket)>=1){
                                           </div>
                                           <br>
                                           <div class="row">
-                                              <div class="col-sm-6"><strong>Nombre:</strong> <?php echo $lsT['nombre_usuario']; ?></div>
+                                              <div class="col-sm-6"><strong>Nombre:</strong> <?php echo $lsT['nombre_completo']; ?></div>
                                               <div class="col-sm-6"><strong>Email:</strong> <?php echo $lsT['email_cliente']; ?></div>
                                           </div>
                                           <br>
@@ -105,7 +103,7 @@ if(mysqli_num_rows($consulta_tablaTicket)>=1){
             <div class="row  animated fadeInDownBig">
                 <div class="col-sm-4">
                     <img src="img/error.png" alt="Image" class="img-responsive"/><br>
-                    <img src="img/SadTux.png" alt="Image" class="img-responsive"/>
+                    <img src="./img/Transp_ALCOMEX.png" alt="Image" class="img-responsive"/>
                     
                 </div>
                 <div class="col-sm-7 text-center">
