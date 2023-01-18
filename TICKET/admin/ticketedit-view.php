@@ -8,8 +8,8 @@
 		$cabecera="From: alcomex<correodepruebasutp@gmail.com>";
 		$mensaje_mail="Estimado usuario la solución a su problema es la siguiente : ".$solucion_edit;
 		$mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
-
-		if(MysqlQuery::Actualizar("ticket", "estado_ticket='$estado_edit', solucion='$solucion_edit'", "id='$id_edit'")){
+//  echo "<script> alert('" . $estado_edit . "' ); </script>";
+		if(MysqlQuery::Actualizar("ticket", "idStatus='$estado_edit', solucion='$solucion_edit'", "id='$id_edit'")){
 
 			echo '
                 <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
@@ -39,7 +39,7 @@
 
 	     
 	$id = MysqlQuery::RequestGet('id');
-	$sql = Mysql::consulta("SELECT * FROM ticket WHERE id= '$id'");
+	$sql = Mysql::consulta("SELECT t.id, t.fecha, t.serie, t.asunto, t.mensaje, t.solucion, c.nombre_completo , c.email_cliente, d.nombre as departamento, e.Nombre FROM ticket t INNER JOIN cliente c ON t.idUsuario = c.id_cliente INNER JOIN departamento d ON d.idDepartamento = t.idDepartamento INNER JOIN estatus e ON t.idStatus = e.idEstatus  WHERE t.id= $id");
 	$reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
 
 ?>
@@ -87,21 +87,34 @@
                             <div class='col-sm-10'>
                                 <div class="input-group">
                                     <select class="form-control" name="estado_ticket">
-                                        <option value="<?php echo $reg['estado_ticket']?>"><?php echo $reg['estado_ticket']?> (Actual)</option>
-                                        <option value="Pendiente">Pendiente</option>
-                                        <option value="En proceso">En proceso</option>
-                                        <option value="Resuelto">Resuelto</option>
+                                      <?php 
+                                        $sql = Mysql::consulta("SELECT * FROM estatus");
+                                        while( $reg1=mysqli_fetch_array($sql, MYSQLI_ASSOC)){
+                                          echo "
+                                            <option value='" . $reg1['idEstatus']  . "'>" .
+                                             $reg1['Nombre'];?>  
+                                            </option>
+                                            <?php
+                                          }
+                
+                                        ?> 
+                                        
+                                    
+                                        
                                       </select>
+
+
+                                      
                                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group">  
                           <label  class="col-sm-2 control-label">Nombre</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                  <input type="text" readonly="" class="form-control"  name="name_ticket" readonly="" value="<?php echo $reg['nombre_usuario']?>">
+                                  <input type="text" readonly="" class="form-control"  name="name_ticket" readonly="" value="<?php echo $reg['nombre_completo']?>">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
                               </div>
                           </div>

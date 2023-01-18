@@ -17,6 +17,15 @@ class Mysql{
         return $consul;
     }
 
+    public static function Desconectar($bd){
+
+        $des = mysqli_close(Mysql::Conectar());
+
+
+        return $des;
+
+    }
+
 }
 
 class MysqlQuery {

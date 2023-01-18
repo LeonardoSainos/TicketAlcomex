@@ -1,4 +1,4 @@
-<?php if($_SESSION['nombre']!="" && $_SESSION['tipo']=="admin"){ ?>    
+<?php if($_SESSION['nombre']!="" && $_SESSION['rol']==4046){ ?>    
         <?php 
             if(isset($_POST['id_del'])){
                 $id_user=MysqlQuery::RequestPost('id_del');
@@ -27,11 +27,11 @@
 
             $idA=$_SESSION['id'];
             /* Todos los admins*/
-            $num_admin=Mysql::consulta("SELECT * FROM administrador WHERE id_admin!='1' AND id_admin!='$idA'");
+            $num_admin=Mysql::consulta("SELECT * FROM cliente WHERE id_rol=4046");
             $num_total_admin = mysqli_num_rows($num_admin);
 
             /* Todos los users*/
-            $num_user=Mysql::consulta("SELECT * FROM cliente");
+            $num_user=Mysql::consulta("SELECT * FROM cliente WHERE id_rol!=4046");
             $num_total_user = mysqli_num_rows($num_user);
           
         ?>
@@ -69,7 +69,7 @@
                                 $regpagina = 15;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
 
-                                $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS * FROM cliente LIMIT $inicio, $regpagina");
+                                $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol!=4046  ORDER by cliente.nombre_completo LIMIT $inicio, $regpagina");
 
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
@@ -84,6 +84,9 @@
                                         <th class="text-center">Nombre completo</th>
                                         <th class="text-center">Nombre de usuario</th>
                                         <th class="text-center">Email</th>
+                                        <th class="text-center">Departamento</th>
+                                        <th class="text-center">Estatus</th>
+                                        <th class="text-center">Teléfono </th>
                                         <th class="text-center">Opciones</th>
                                     </tr>
                                 </thead>
@@ -97,9 +100,13 @@
                                         <td class="text-center"><?php echo $row['nombre_completo']; ?></td>
                                         <td class="text-center"><?php echo $row['nombre_usuario']; ?></td>
                                         <td class="text-center"><?php echo $row['email_cliente']; ?></td>
+                                        <td class="text-center"><?php echo $row['Depa']; ?> </td>
+                                        <td class="text-center"><?php echo $row['Esta'];?> </td>
+                                        <td class="text-center"><?php echo $row['celular'];?> </td>
+                                    
                                         <td class="text-center">
                                             <form action="" method="POST" style="display: inline-block;">
-                                                <input type="hidden" name="id_del" value="<?php echo $row['id_cliente']; ?>">
+                                                <input type="hidden" name="id_del" value='<?php echo $row["id_cliente"]; ?>'>
                                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                             </form>
                                         </td>
@@ -168,12 +175,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-4">
-                    <img src="./img/Stop.png" alt="Image" class="img-responsive animated slideInDown"/><br>
-                    <img src="./img/SadTux.png" alt="Image" class="img-responsive"/>
+                <img src="./img/Stop.png" alt="Image" class="img-responsive animated slideInDown"/><br>
+                 
+                     <img src="./img/Transp_ALCOMEX.png" alt="Image" class="img-responsive"/>
                     
                 </div>
                 <div class="col-sm-7 animated flip">
-                    <h1 class="text-danger">Lo sentimos esta página es solamente para administradores de LinuxStore</h1>
+                    <h1 class="text-danger">Lo sentimos esta página es solamente para administradores de alcomex</h1>
                     <h3 class="text-info text-center">Inicia sesión como administrador para poder acceder</h3>
                 </div>
                 <div class="col-sm-1">&nbsp;</div>

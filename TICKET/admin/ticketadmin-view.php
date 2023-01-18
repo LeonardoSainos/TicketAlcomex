@@ -1,4 +1,4 @@
-<?php if( $_SESSION['nombre']!="" && $_SESSION['clave']!="" && $_SESSION['tipo']=="admin"){ ?>
+<?php if( $_SESSION['nombre']!="" && $_SESSION['clave']!="" && $_SESSION['rol']==4046){ ?>
         <div class="container">
           <div class="row">
             <div class="col-sm-2">
@@ -34,21 +34,20 @@
                         '; 
                     }
                 }
-
                 /* Todos los tickets*/
-                $num_ticket_all=Mysql::consulta("SELECT * FROM ticket");
+                $num_ticket_all=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario, d.nombre as departamento, c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  ORDER BY t.fecha DESC ");
                 $num_total_all=mysqli_num_rows($num_ticket_all);
 
                 /* Tickets pendientes*/
-                $num_ticket_pend=Mysql::consulta("SELECT * FROM ticket WHERE estado_ticket='Pendiente'");
+                $num_ticket_pend=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , d.nombre as departamento , c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94574 OR (e.Nombre='PENDIENTE' OR e.Nombre='pendiente'))  ORDER BY t.fecha DESC");
                 $num_total_pend=mysqli_num_rows($num_ticket_pend);
 
                 /* Tickets en proceso*/
-                $num_ticket_proceso=Mysql::consulta("SELECT * FROM ticket WHERE estado_ticket='En proceso'");
+                $num_ticket_proceso=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario, d.nombre as departamento , c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94575 OR (e.Nombre='EN PROCESO' OR e.Nombre='En proceso'))  ORDER BY t.fecha DESC");
                 $num_total_proceso=mysqli_num_rows($num_ticket_proceso);
 
                 /* Tickets resueltos*/
-                $num_ticket_res=Mysql::consulta("SELECT * FROM ticket WHERE estado_ticket='Resuelto'");
+                $num_ticket_res=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94576 OR (e.Nombre='Resuelto' OR e.Nombre='RESUELTO'))  ORDER BY t.fecha DESC ;");
                 $num_total_res=mysqli_num_rows($num_ticket_res);
             ?>
 
@@ -72,24 +71,23 @@
                                 mysqli_set_charset($mysqli, "utf8");
 
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                                $regpagina = 15;
+                                $regpagina = 50;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
-
-                                
                                 if(isset($_GET['ticket'])){
                                     if($_GET['ticket']=="all"){
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS * FROM ticket LIMIT $inicio, $regpagina";
+                                        //SELECT SQL_CALC_FOUND_ROWS * FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento
+                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                     }elseif($_GET['ticket']=="pending"){
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS * FROM ticket WHERE estado_ticket='Pendiente' LIMIT $inicio, $regpagina";
+                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94574    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                     }elseif($_GET['ticket']=="process"){
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS * FROM ticket WHERE estado_ticket='En proceso' LIMIT $inicio, $regpagina";
-                                    }elseif($_GET['ticket']=="resolved"){
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS * FROM ticket WHERE estado_ticket='Resuelto' LIMIT $inicio, $regpagina";
+                                    $consulta = "SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94575    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
+                                      }elseif($_GET['ticket']=="resolved"){
+                                    $consulta = "SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94576    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                     }else{
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS * FROM ticket LIMIT $inicio, $regpagina";
+                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  ORDER BY t.fecha DESC LIMIT $inicio, $regpagina";
                                     }
                                 }else{
-                                    $consulta="SELECT SQL_CALC_FOUND_ROWS * FROM ticket LIMIT $inicio, $regpagina";
+                                    $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario,c.email_cliente, d.nombre as departamento , e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  ORDER BY t.fecha DESC LIMIT $inicio, $regpagina";
                                 }
 
 
@@ -111,7 +109,9 @@
                                         <th class="text-center">Estado</th>
                                         <th class="text-center">Nombre</th>
                                         <th class="text-center">Email</th>
+                                        <th class="text-center">Teléfono</th>
                                         <th class="text-center">Departamento</th>
+                                      
                                         <th class="text-center">Opciones</th>
                                     </tr>
                                 </thead>
@@ -127,6 +127,7 @@
                                         <td class="text-center"><?php echo $row['estado_ticket']; ?></td>
                                         <td class="text-center"><?php echo $row['nombre_usuario']; ?></td>
                                         <td class="text-center"><?php echo $row['email_cliente']; ?></td>
+                                        <td class="text-center"><?php echo $row['telefono_celular']; ?></td>
                                         <td class="text-center"><?php echo $row['departamento']; ?></td>
                                         <td class="text-center">
                                             <a href="./lib/pdf.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-success" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>

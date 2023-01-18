@@ -1,20 +1,24 @@
-<?php if($_SESSION['nombre']!="" && $_SESSION['tipo']=="admin"){ 
+<?php if($_SESSION['nombre']!="" && $_SESSION['rol']==4046){ 
 
     /* Guardar nuevo admin */
     if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST['admin_clave_reg'])){
 
         $nom_complete_save=MysqlQuery::RequestPost('nom_admin_reg');
-        $nom_admin_save=MysqlQuery::RequestPost('admin_reg');
+        $nom_usu_save=MysqlQuery::RequestPost('admin_reg');
         $pass_save=md5(MysqlQuery::RequestPost('admin_clave_reg'));
         $email_save=MysqlQuery::RequestPost('admin_email_reg');
+        $estatus= MysqlQuery:: RequestPost('Estatus'); 
+        $depa=MysqlQuery:: RequestPost('Departamento');
+        $cel = MysqlQuery::RequestPost('Telefono');
+      
 
-       if(MysqlQuery::Guardar("administrador", "nombre_completo, nombre_admin, clave, email_admin", "'$nom_complete_save', '$nom_admin_save', '$pass_save', '$email_save'")){
+       if(MysqlQuery::Guardar("cliente", "nombre_completo, nombre_usuario, clave, email_cliente, id_departamento,id_rol,idEstatus,telefono_celular", "'$nom_complete_save', '$nom_usu_save', '$pass_save', '$email_save',$depa," . 9947 ." ,$estatus,$cel")){
            echo '
                 <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="text-center">ADMINISTRADOR REGISTRADO</h4>
                     <p class="text-center">
-                        El administrador se registro con exito en el sistema
+                        El usuario se registro con éxito en el sistema
                     </p>
                 </div>
             ';
@@ -39,47 +43,70 @@
         if(isset($_POST['nom_admin_up']) && isset($_POST['admin_up']) && isset($_POST['old_nom_admin_up'])){
             $nom_complete_update=MysqlQuery::RequestPost('nom_admin_up');
             $nom_admin_update=MysqlQuery::RequestPost('admin_up');
-            $old_nom_admin_update=MysqlQuery::RequestPost('old_nom_admin_up');
+            //$old_nom_admin_update=MysqlQuery::RequestPost('old_nom_admin_up');
             $pass_admin_update=md5(MysqlQuery::RequestPost('admin_clave_up'));
+            $pass_admin_update1 = md5(MysqlQuery::RequestPost('admin_clave_up1'));
             $old_pass_admin_uptade=md5(MysqlQuery::RequestPost('old_admin_clave_up'));
             $email_admin_update=MysqlQuery::RequestPost('admin_email_up');
 
-            $sql=Mysql::consulta("SELECT * FROM administrador WHERE nombre_admin= '$old_nom_admin_update' AND clave='$old_pass_admin_uptade'");
-            if(mysqli_num_rows($sql)>=1){
-                if(MysqlQuery::Actualizar("administrador", "nombre_completo='$nom_complete_update', nombre_admin='$nom_admin_update', clave='$pass_admin_update', email_admin='$email_admin_update'", "nombre_admin='$old_nom_admin_update' and clave='$old_pass_admin_uptade'")){
-                    $_SESSION['nombre']=$nom_admin_update;
-                    $_SESSION['clave']=$pass_admin_update;
-                    echo '
-                        <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            <h4 class="text-center">ADMINISTRADOR ACTUALIZADO</h4>
-                            <p class="text-center">
-                                El administrador se actualizo con exito
-                            </p>
-                        </div>
-                    ';
-                }else{
-                    echo '
-                        <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            <h4 class="text-center">OCURRIÓ UN ERROR</h4>
-                            <p class="text-center">
-                                No hemos podido actualizar el administrador
-                            </p>
-                        </div>
-                    ';
-                }
-            }else{
-                echo '
-                    <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                        <h4 class="text-center">OCURRIÓ UN ERROR</h4>
-                        <p class="text-center">
-                            Usuario y clave incorrectos
-                        </p>
-                    </div>
-                ';
-           }
+            $sql=Mysql::consulta("SELECT * FROM cliente WHERE nombre_completo= '$nom_admin_update' AND clave='$old_pass_admin_uptade'");
+            if(mysqli_num_rows($sql)>0){
+                          if($pass_admin_update == $pass_admin_update1)
+                          {
+
+
+                              echo "<script> alert('Si entra despues de validar contraseñas'); </script>";
+                              if(MysqlQuery::Actualizar("cliente", "nombre_completo='$nom_complete_update', nombre_usuario='$nom_admin_update', clave='$pass_admin_update', email_cliente='$email_admin_update'", "nombre_usuario='$old_nom_admin_update' and clave='$old_pass_admin_uptade'"))
+                              {
+                                    $_SESSION['nombre']=$nom_admin_update;
+                                    $_SESSION['clave']=$pass_admin_update;
+                                    echo '
+                                        <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                            <h4 class="text-center">ADMINISTRADOR ACTUALIZADO</h4>
+                                            <p class="text-center">
+                                                El administrador se actualizo con exito
+                                            </p>
+                                        </div>
+                                    ';
+                              }
+                              else
+                              {
+                                echo '
+                                    <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                                        <p class="text-center">
+                                            No hemos podido actualizar el administrador
+                                        </p>
+                                    </div>
+                                ';
+                              }
+                           }
+                             else{
+                                     echo '
+                                    <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                                        <p class="text-center">
+                                           Las contraseñas no coinciden
+                                        </p>
+                                    </div>
+                                '; 
+
+                             }
+                        }
+                    else{
+                        echo '
+                            <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                                <p class="text-center">
+                                    Usuario y clave incorrectos
+                                </p>
+                            </div>
+                        ';
+          }
         }
         
         /*Script para eliminar cuenta*/
@@ -151,6 +178,46 @@
                               <label><i class="fa fa-envelope"></i>&nbsp;Email</label>
                               <input type="email" class="form-control"  name="admin_email_reg"  placeholder="Email administrador" required="">
                             </div>
+                          
+
+
+                            <div class="form-group">
+                              <label><i class="fa fa-user"></i>&nbsp;Departamento</label>
+                              <select class="form-control" name="Departamento">
+                                      <?php 
+                                        $sql = Mysql::consulta("SELECT * FROM departamento");
+                                        while( $d=mysqli_fetch_array($sql, MYSQLI_ASSOC)){
+                                        echo "
+                                            <option value='" . $d['idDepartamento'] . "'>";  echo  $d['nombre'];?>  
+                                            </option>
+                                            <?php
+                                          }
+                                        ?> 
+                                        
+                                    
+                                        
+                                      </select>
+                                </div>
+                            <div class="form-group">
+                              <label><i class="fa fa-info"></i>&nbsp;Estatus</label>
+                                <select class= "form-control" name="Estatus">
+                                <?php $sql = Mysql::consulta("SELECT * FROM ESTATUS");
+                                 while($e= mysqli_fetch_array($sql,MYSQLI_ASSOC)){
+                                  echo "<option value='" . $e['idEstatus'] .  "' >";
+                                  echo $e['Nombre']. "
+                                    </option>";
+                                 } 
+                                 ?>
+
+
+                                </select>
+
+
+                            </div>
+                            <div class="form-group">
+                              <label><i class="fa fa-phone"></i>&nbsp;Teléfono</label>
+                              <input type="phone" maxlength="10" class="form-control"  name="Telefono"  placeholder="Teléfono celular" required="">
+                            </div>
                                 <center><button type="submit" class="btn btn-success">Agregar administrador</button></center>
                           </form>
                         </div>
@@ -207,7 +274,7 @@
                          <div class="panel-body">
                             <?php
                                 $idad=$_SESSION['id'];
-                                $sql1=Mysql::consulta("SELECT * FROM administrador WHERE id_admin='$idad'");
+                                $sql1=Mysql::consulta("SELECT * FROM cliente WHERE id_cliente='$idad'");
                                 $reg1=mysqli_fetch_array($sql1, MYSQLI_ASSOC);
                             ?>
                              <form role="form" action="" method="POST">
@@ -216,25 +283,25 @@
                                <input type="text" class="form-control" value="<?php echo $reg1['nombre_completo']; ?>" name="nom_admin_up" placeholder="Nombre completo" required="" pattern="[a-zA-Z ]{1,40}" title="Nombre Apellido" maxlength="40">
                              </div>
                              <div class="form-group">
-                               <label><i class="fa fa-user"></i>&nbsp;Nombre de administrador anterior</label>
-                               <input type="text" class="form-control" value="<?php echo $reg1['nombre_admin']; ?>" name="old_nom_admin_up" placeholder="Nombre anterior de administrador" required="" pattern="[a-zA-Z0-9]{1,15}" title="Ejemplo7 maximo 15 caracteres" maxlength="15">
+                               <label><i class="fa fa-user"></i>&nbsp;Nombre de Usuario</label>
+                               <input type="text" class="form-control" value="<?php echo $reg1['nombre_usuario']; ?>" name="old_nom_admin_up" placeholder="Nombre anterior de administrador" required="" pattern="[a-zA-Z0-9]{1,15}" title="Ejemplo7 maximo 15 caracteres" maxlength="15">
                              </div>
-                             <div class="form-group has-success has-feedback">
-                               <label class="control-label"><i class="fa fa-user"></i>&nbsp;Nuevo nombre de administrador</label>
-                               <input type="text" id="input_user2" class="form-control" name="admin_up" placeholder="Nombre de administrador" required="" pattern="[a-zA-Z0-9]{1,15}" title="Ejemplo7 maximo 15 caracteres" maxlength="15">
-                               <div id="com_form2"></div>
-                             </div>
+                         
                              <div class="form-group">
                                <label><i class="fa fa-shield"></i>&nbsp;Contraseña anterior</label>
-                               <input type="password" class="form-control" name="old_admin_clave_up" placeholder="Contraseña anterior" required="">
+                               <input type="text" class="form-control" name="old_admin_clave_up" placeholder="Contraseña anterior" required="">
                              </div>
                                  <div class="form-group">
                                <label><i class="fa fa-shield"></i>&nbsp;Nueva contraseña</label>
-                               <input type="password" class="form-control" name="admin_clave_up" placeholder="Nueva contraseña" required="">
+                               <input type="text" class="form-control" name="admin_clave_up" placeholder="Nueva contraseña" required="">
+                             </div>
+                               <div class="form-group">
+                               <label><i class="fa fa-shield"></i>&nbsp;Confirmar contraseña</label>
+                               <input type="text" class="form-control" name="admin_clave_up1" placeholder="Confirmar contraseña" required="">
                              </div>
                              <div class="form-group">
                                <label><i class="fa fa-envelope"></i>&nbsp;Email</label>
-                               <input type="email" class="form-control" value="<?php echo $reg1['email_admin']; ?>" name="admin_email_up"  placeholder="Email administrador" required="">
+                               <input type="email" class="form-control" value="<?php echo $reg1['email_cliente']; ?>" name="admin_email_up"  placeholder="Email administrador" required="">
                              </div><button type="submit" class="btn btn-info">Actualizar datos</button>
                            </form>
                          </div>
@@ -252,11 +319,11 @@
         <div class="row">
             <div class="col-sm-4">
                 <img src="./img/Stop.png" alt="Image" class="img-responsive animated slideInDown"/><br>
-                <img src="./img/SadTux.png" alt="Image" class="img-responsive"/>
+                <img src="./img/transp_ALCOMEX.png" alt="Image" class="img-responsive"/>
                 
             </div>
             <div class="col-sm-7 animated flip">
-                <h1 class="text-danger">Lo sentimos esta página es solamente para administradores de LinuxStore</h1>
+                <h1 class="text-danger">Lo sentimos esta página es solamente para administradores de alcomex</h1>
                 <h3 class="text-info text-center">Inicia sesión como administrador para poder acceder</h3>
             </div>
             <div class="col-sm-1">&nbsp;</div>

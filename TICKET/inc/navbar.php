@@ -15,7 +15,7 @@
             <a class="navbar-brand" href="index.php"><img class="img-responsive"src="./img/Transp_ALCOMEX.png" alt="Texto" width="50" height="50"/>&nbsp;&nbsp; alcomex</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <?php if(isset($_SESSION['tipo']) && isset($_SESSION['nombre'])): ?>
+            <?php if(isset($_SESSION['rol']) && isset($_SESSION['nombre'])): ?>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -23,7 +23,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <!-- usuarios -->
-                        <?php if($_SESSION['tipo']=="user"): ?>
+                        <?php if($_SESSION['rol']==9947): ?>
                         <li>
                             <a href="#!"><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp;Mensajes</a>
                         </li>
@@ -33,7 +33,7 @@
                         <?php endif; ?>
 
                         <!-- admins -->
-                        <?php if($_SESSION['tipo']=="admin"): ?>
+                        <?php if($_SESSION['rol']== 4046): ?>
                         <li>
                             <a href="admin.php?view=ticketadmin"><span class="glyphicon glyphicon-envelope"></span> &nbsp; Administrar Tickets</a>
                         </li>
@@ -64,7 +64,7 @@
                     <a href="./index.php?view=soporte"><span class="glyphicon glyphicon-flag"></span>&nbsp;&nbsp;Soporte técnico</a>
                 </li>
 
-                <?php if(!isset($_SESSION['tipo']) && !isset($_SESSION['nombre'])): ?>
+                <?php if(!isset($_SESSION['rol']) && !isset($_SESSION['nombre'])): ?>
                 <li>
                     <a href="./index.php?view=registro"><i class="fa fa-users"></i>&nbsp;&nbsp;Registro</a>
                 </li>
