@@ -11,7 +11,7 @@
                                 El usuario fue eliminado del sistema con exito
                             </p>
                         </div>
-                    ';
+                    ';  
                 }else{
                     echo '
                         <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 

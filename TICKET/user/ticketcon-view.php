@@ -39,6 +39,13 @@ if(mysqli_num_rows($consulta_tablaTicket)>=1){
               <h2 class="text-info">Estado de ticket de soporte</h2>
               <p>Si su <strong>ticket</strong> no ha sido solucionado aún, espere pacientemente, estamos trabajando para poder resolver su problema y darle una solución.</p>
             </div>
+            <?php 
+           
+            $atiende = Mysql::consulta("SELECT c.id_cliente, c.nombre_usuario ,c.nombre_completo,c.email_cliente,c.telefono_celular,t.serie FROM cliente c INNER JOIN ticket t ON t.id_atiende = c.id_cliente WHERE t.serie = '$id_colsul';");
+            $reg1 = mysqli_fetch_array($atiende, MYSQLI_ASSOC);
+
+            
+            ?>
           </div><!--fin row well-->
           <div class="row">
               <div class="col-sm-12">
@@ -54,26 +61,31 @@ if(mysqli_num_rows($consulta_tablaTicket)>=1){
                                       <div class="col-sm-8">
                                           <div class="row">
                                               <div class="col-sm-6"><strong>Fecha:</strong> <?php echo $lsT['fecha']; ?></div>
-                                              <div class="col-sm-6"><strong>Estado:</strong> <?php echo $lsT['estado_ticket']; ?></div>
-                                          </div>
+                                              <div class="col-sm-6"><strong>Asunto:</strong> <?php echo $lsT['asunto']; ?></div>
+                                      
+                                            </div>
                                           <br>
                                           <div class="row">
-                                              <div class="col-sm-6"><strong>Nombre:</strong> <?php echo $lsT['nombre_completo']; ?></div>
+                                              <div class="col-sm-6"><strong>Creador:</strong> <?php echo $lsT['nombre_completo']; ?></div>
                                               <div class="col-sm-6"><strong>Email:</strong> <?php echo $lsT['email_cliente']; ?></div>
                                           </div>
                                           <br>
                                           <div class="row">
                                               <div class="col-sm-6"><strong>Departamento:</strong> <?php echo $lsT['departamento']; ?></div>
-                                              <div class="col-sm-6"><strong>Asunto:</strong> <?php echo $lsT['asunto']; ?></div>
-                                          </div>
+                                              <div class="col-sm-6"><strong>Estado:</strong> <?php echo $lsT['estado_ticket']; ?></div>
+                                       
+                                               </div>
                                           <br>
                                           <div class="row">
-                                              <div class="col-sm-12"><strong>Problema:</strong> <?php echo $lsT['mensaje']; ?></div>
-                                          </div>
+                                              <div class="col-sm-6"><strong>Problema:</strong> <?php echo $lsT['mensaje']; ?></div>
+                                              <div class="col-sm-6"><strong>Atendido por :</strong> <?php echo $reg1['nombre_completo']; ?></div>
+                                      
+                                            </div>
                                           <br>
                                           <div class="row">
                                               <div class="col-sm-12"><strong>Solución:</strong> <?php echo $lsT['solucion']; ?></div>
-                                          </div>
+                                             
+                                            </div>
                                       </div>
                                   </div>
                               </div>

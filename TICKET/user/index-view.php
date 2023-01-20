@@ -1,6 +1,6 @@
 <!--************ Imagen que reemplaza el carousel para dispositivos moviles ********-->
 <div id="img-linux-tux" class="container hidden-lg hidden-md hidden-sm">
-    <center><img src="img/slide-header.jpg" class="img-responsive img-rounded" alt="Image"></center>
+    <center><img src="img/trailers/3T.jpg" class="img-responsive img-rounded" alt="Image"></center>
 </div>
 
 <!--************************************Carousel******************************-->
@@ -57,7 +57,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-        <h1 class="text-center text-info">Distribuciones de GNU Linux en nuestros productos</h1>
+        <h1 class="text-center text-info">Periodicio mural</h1>
     </div>
   </div>
 </div>
