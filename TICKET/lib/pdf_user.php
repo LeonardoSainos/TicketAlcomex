@@ -45,7 +45,7 @@ $pdf->Cell (50,12,'Seguimiento:' . date("Y-m-d h:m:s"),1,1,'L');
 $pdf->Cell (50,12,'Creador:'.  $reg['nombre_usuario'],1,0,'L');
 $pdf->Cell (85,12,'',0,0,'C');
 $pdf->Cell (50,12,'Seguimiento:' . $reg1['nombre_usuario'],1,1,'L');
-$pdf->Cell(50, 60, 'Tipo de servicio: ' . $reg['departamento'],1,0,'L');
+$pdf->Cell(50, 60, utf8_decode('Área: ' . $reg['departamento']),1,0,'L');
 $pdf->Cell(42.5, 60, 'Asunto : ' . $reg['asunto'] ,1,0, 'L');
 $pdf->Cell(42.5, 60, 'Fecha de fin : ' . date("y-m-d") ,1,0, 'L');
 $pdf->Cell(50, 60, 'Estatus: ' . $reg['estado_ticket'],1,1,'L');
