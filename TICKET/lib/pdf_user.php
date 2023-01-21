@@ -30,12 +30,12 @@ $pdf->SetFont("Arial","b",9);
 
 
 //$pdf->Cell (0,5,utf8_decode('Alcomex'),0,1,'C');
-$pdf->Cell (0,5,utf8_decode('Solicitud de soporte técnico'),0,1,'C');
+$pdf->MultiCell (0,5,utf8_decode('Solicitud de soporte 
+técnico'),'','C',false);
 $pdf->Image('../img/transp_ALCOMEX.png',150,5,50);
 $pdf->Ln();
- 
 $pdf->Ln();
-$pdf->Ln();
+$pdf->Ln(); 
  
 $pdf->Cell (0,5,utf8_decode('Información de Ticket #'.utf8_decode($reg['serie'])),0,1,'C');
 $pdf->Ln();
@@ -46,8 +46,8 @@ $pdf->Cell (50,12,'Creador:'.  $reg['nombre_usuario'],1,0,'L');
 $pdf->Cell (85,12,'',0,0,'C');
 $pdf->Cell (50,12,'Seguimiento:' . $reg1['nombre_usuario'],1,1,'L');
 $pdf->Cell(50, 60, utf8_decode('Área: ' . $reg['departamento']),1,0,'L');
-$pdf->Cell(42.5, 60, 'Asunto : ' . $reg['asunto'] ,1,0, 'L');
-$pdf->Cell(42.5, 60, 'Fecha de fin : ' . date("y-m-d") ,1,0, 'L');
+$pdf->Cell(42.5, 60, 'Asunto: ' . $reg['asunto'] ,1,0, 'L');
+$pdf->Cell(42.5, 60, 'Fecha de fin: ' . date("y-m-d") ,1,0, 'L');
 $pdf->Cell(50, 60, 'Estatus: ' . $reg['estado_ticket'],1,1,'L');
 $pdf->Ln(10);
 $pdf->Cell(50, 10, utf8_decode('Solución:'),0,1,'L');
