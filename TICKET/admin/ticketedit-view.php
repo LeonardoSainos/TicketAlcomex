@@ -1,5 +1,7 @@
 <?php
-	if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST['estado_ticket'])){
+ 
+
+if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST['estado_ticket'])){
 		$id_edit=MysqlQuery::RequestPost('id_edit');
 		$estado_edit=  MysqlQuery::RequestPost('estado_ticket');
 		$solucion_edit=  MysqlQuery::RequestPost('solucion_ticket');
@@ -9,8 +11,7 @@
 		$mensaje_mail="Estimado usuario la solución a su problema es la siguiente : ".$solucion_edit;
 		$mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
 //  echo "<script> alert('" . $estado_edit . "' ); </script>";
-		if(MysqlQuery::Actualizar("ticket", "idStatus='$estado_edit', solucion='$solucion_edit'", "id='$id_edit'")){
-
+		if(MysqlQuery::Actualizar("ticket", "idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'")){
 			echo '
                 <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -23,7 +24,6 @@
 			if($radio_email=="option2"){
 				mail($email_edit, $asunto_edit, $mensaje_mail, $cabecera);
 			}
-
 		}else{
 			echo '
                 <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
@@ -56,8 +56,6 @@
             </div>
           </div>
         </div>
-            
-            
           <div class="container">
             <div class="col-sm-12">
                 <form class="form-horizontal" role="form" action="" method="POST">

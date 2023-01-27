@@ -1,4 +1,4 @@
-<?php if($_SESSION['nombre']!= "" && $_SESSION['rol']==9947){
+<?php if($_SESSION['nombre']!= "" && $_SESSION['rol']==9947 ||  $_SESSION['rol']==4046){
         
 
         if( isset($_POST['name_ticket']) && isset($_POST['email_ticket'])){
@@ -118,11 +118,22 @@
                           <label  class="col-sm-2 control-label">Departamento</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                <select  required  class="form-control" name="departamento_ticket">
-                                  <option value="Ventas">Ventas</option>
-                                  <option value="Software">Software</option>
-                                  <option value="Hardware">Hardware</option>
-                                </select>
+                              <select class="form-control" name="estado_ticket">
+                                      <?php 
+                                        $sql = Mysql::consulta("SELECT * FROM departamento");
+                                        while( $reg1=mysqli_fetch_array($sql, MYSQLI_ASSOC)){
+                                          echo "
+                                            <option value='" . $reg1['idDepartamento']  . "'>" .
+                                             $reg1['nombre'];?>  
+                                            </option>
+                                            <?php
+                                          }
+                
+                                        ?> 
+                                        
+                                    
+                                        
+                                      </select>
                                 <span class="input-group-addon"><i class="fa fa-users"></i></span>
                               </div> 
                           </div>
@@ -139,7 +150,7 @@
                         </div>
 
                         <div class="form-group">
-                          <label  class="col-sm-2 control-label">Problema de su producto</label>
+                          <label  class="col-sm-2 control-label">Detalles del problema</label>
                           <div class="col-sm-10">
                             <textarea class="form-control" rows="3" placeholder="Escriba el problema que presenta su producto" name="mensaje_ticket" required=""></textarea>
                           </div>
