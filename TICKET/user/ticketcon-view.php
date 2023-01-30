@@ -24,61 +24,112 @@ if(isset($_POST['del_ticket'])){
     ';
   }
 }
+
+$estatus = "";
 $email_consul=  MysqlQuery::RequestGet('email_consul');
 $id_colsul= MysqlQuery::RequestGet('id_consul');
 $consulta_tablaTicket = Mysql::consulta("SELECT t.fecha,t.serie, e.Nombre as estado_ticket, c.nombre_completo, c.email_cliente, d.nombre as departamento, t.asunto, t.solucion, t.mensaje FROM ticket t LEFT JOIN cliente c ON t.idUsuario= c.id_cliente INNER JOIN estatus e ON e.idEstatus = t.idStatus INNER JOIN departamento d ON d.idDepartamento= t.idDepartamento WHERE t.serie = '$id_colsul' and c.email_cliente = '$email_consul';");
 if(mysqli_num_rows($consulta_tablaTicket)>=1){
-  $lsT=mysqli_fetch_array($consulta_tablaTicket, MYSQLI_ASSOC);   
+  $lsT=mysqli_fetch_array($consulta_tablaTicket, MYSQLI_ASSOC);
+  
+
+  $atiende = Mysql::consulta("SELECT c.id_cliente, c.nombre_usuario ,c.nombre_completo,c.email_cliente,c.telefono_celular,t.serie FROM cliente c INNER JOIN ticket t ON t.id_atiende = c.id_cliente WHERE t.serie = '$id_colsul';");
+  $reg1 = mysqli_fetch_array($atiende, MYSQLI_ASSOC);
+
 ?>
         <div class="container">
             <div class="row well">
             <div class="col-sm-2">
                 <img src="img/status.png" class="img-responsive" alt="Image">
             </div>
-            <div class="col-sm-10 lead text-justify">
-              <h2 class="text-info">Estado de ticket de soporte</h2>
-              <p>Si su <strong>ticket</strong> no ha sido solucionado aún, espere pacientemente, estamos trabajando para poder resolver su problema y darle una solución.</p>
-            </div>
-            <?php 
-           
-            $atiende = Mysql::consulta("SELECT c.id_cliente, c.nombre_usuario ,c.nombre_completo,c.email_cliente,c.telefono_celular,t.serie FROM cliente c INNER JOIN ticket t ON t.id_atiende = c.id_cliente WHERE t.serie = '$id_colsul';");
-            $reg1 = mysqli_fetch_array($atiende, MYSQLI_ASSOC);
 
+            <?php
+
+
+            $semaforo = 0;
+            
+            if($lsT['estado_ticket']=='PENDIENTE' || $lsT['estado_ticket']=='Pendiente' || $lsT['estado_ticket']=='pendiente'){
+                echo '
+                <div class="col-sm-10 lead text-justify">
+                <h2 class="text-info">Estado de ticket de soporte</h2>
+                <p>Si su <strong>ticket</strong> no ha sido solucionado aún, espere pacientemente, estamos trabajando para poder resolver su problema y darle una solución.</p>
+              </div>                                
+                ';
+
+                $semaforo = 3;
+            }
+            else if($lsT['estado_ticket']=='EN PROCESO' || $lsT['estado_ticket']=='en proceso' || $lsT['estado_ticket']=='En proceso'){
+                echo '
+                <div class="col-sm-10 lead text-justify">
+                <h2 class="text-info">Estado de ticket de soporte</h2>
+                <p>Su <strong>ticket</strong> no ha sido solucionado aún, pero ya está en proceso. Espere pacientemente, estamos trabajando para poder resolver su problema y darle una solución.</p>
+              </div>                                
+                ';
+
+                $semaforo = 2;
+               }
+            else{
+
+                echo '
+                <div class="col-sm-10 lead text-justify">
+                <h2 class="text-info">Estado de ticket de soporte</h2>
+                    <p> Soporte técnico Alcomex le informa, que el número de ticket <b>#' .$lsT['serie'] . ' </b> ha sido revisado y resuelto a la brevedad. Sí tiene otra duda favor de abrir otro ticket.
+                    </p>
+               </div>                                
+                ';
+
+                $semaforo = 1;
+            }
+             //Soporte técnico le informa, que el número de ticket # ha siudo revisado y resuelto a la brevedad. Si
+            
             
             ?>
+          
+         
           </div><!--fin row well-->
           <div class="row">
               <div class="col-sm-12">
-                    <div class="panel panel-success">
+
+                     <?php 
+                     
+                     if($semaforo == 1){
+                         echo ' <div class="panel panel-success">';
+                     } else if($semaforo==2){
+                        echo ' <div class="panel panel-warning">';
+                     }else   echo ' <div class="panel panel-danger">';
+               
+                     
+                     ?>
+                   
                         <div class="panel-heading text-center"><h4><i class="fa fa-ticket"></i> Ticket &nbsp;#<?php echo $lsT['serie']; ?></h4></div>
                       <div class="panel-body">
                           <div class="container">
                               <div class="col-sm-12">
                                   <div class="row">
                                       <div class="col-sm-4">
-                                          <img class="img-responsive" alt="Image" src="img/soporte.jpg">
+                                          <img class="img-responsive" alt="Image" src="img/Support.png">
                                       </div>
                                       <div class="col-sm-8">
                                           <div class="row">
-                                              <div class="col-sm-6"><strong>Fecha:</strong> <?php echo $lsT['fecha']; ?></div>
-                                              <div class="col-sm-6"><strong>Asunto:</strong> <?php echo $lsT['asunto']; ?></div>
+                                              <div class="col-sm-4"><strong>Fecha:</strong> <?php echo $lsT['fecha']; ?></div>
+                                              <div class="col-sm-4"><strong>Asunto:</strong> <?php echo $lsT['asunto']; ?></div>
                                       
                                             </div>
                                           <br>
                                           <div class="row">
-                                              <div class="col-sm-6"><strong>Creador:</strong> <?php echo $lsT['nombre_completo']; ?></div>
-                                              <div class="col-sm-6"><strong>Email:</strong> <?php echo $lsT['email_cliente']; ?></div>
+                                              <div class="col-sm-4"><strong>Creador:</strong> <?php echo $lsT['nombre_completo']; ?></div>
+                                              <div class="col-sm-4"><strong>Email:</strong> <?php echo $lsT['email_cliente']; ?></div>
                                           </div>
                                           <br>
                                           <div class="row">
-                                              <div class="col-sm-6"><strong>Departamento:</strong> <?php echo $lsT['departamento']; ?></div>
-                                              <div class="col-sm-6"><strong>Estado:</strong> <?php echo $lsT['estado_ticket']; ?></div>
+                                              <div class="col-sm-4"><strong>Departamento:</strong> <?php echo $lsT['departamento']; ?></div>
+                                              <div class="col-sm-4"><strong>Estado:</strong> <?php echo $lsT['estado_ticket']; ?></div>
                                        
                                                </div>
                                           <br>
                                           <div class="row">
-                                              <div class="col-sm-6"><strong>Problema:</strong> <?php echo $lsT['mensaje']; ?></div>
-                                              <div class="col-sm-6"><strong>Atendido por :</strong> <?php echo $reg1['nombre_completo']; ?></div>
+                                              <div class="col-sm-4"><strong>Problema:</strong> <?php echo $lsT['mensaje']; ?></div>
+                                              <div class="col-sm-4"><strong>Atendido por :</strong> <?php echo $reg1['nombre_completo']; ?></div>
                                       
                                             </div>
                                           <br>

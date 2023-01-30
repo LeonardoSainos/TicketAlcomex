@@ -23,7 +23,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="text-center">REGISTRO EXITOSO</h4>
                     <p class="text-center">
-                        Cuenta creada exitosamente, ahora puedes iniciar sesión, ya eres usuario de soporte técnico alcomex.
+                        Cuenta creada exitosamente, ahora puedes iniciar sesión, ya eres usuario de soporte técnico Alcomex.
                     </p>
                 </div>
             ';

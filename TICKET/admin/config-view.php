@@ -39,78 +39,129 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
     
     
    /* Actualizar cuenta admin */
-    
-    if(isset($_POST['nombre']) && isset($_POST['nombre_usuario']) && isset($_POST['email_usuario'])){
+   if(isset($_POST['nombre']) && isset($_POST['nombre_usuario']) && isset($_POST['email_usuario'])){
+    if(MysqlQuery::RequestPost('newclave')!=""){
+      $newclave=md5(MysqlQuery::RequestPost('newclave'));
+    } else
+    $newclave = ".";
 
-        $CargarName = MysqlQuery::RequestPost('nombre_usuario');
-        $CargarClave =md5( MysqlQuery::RequestPost('clave'));
-        $nombre=MysqlQuery::RequestPost('nombre');
-        $usuario=MysqlQuery::RequestPost('nombre_usuario');
-        //$old_nom_admin_update=MysqlQuery::RequestPost('old_nom_admin_up');
-        $newclave=md5(MysqlQuery::RequestPost('newclave'));
-        $newclave1 = md5(MysqlQuery::RequestPost('newclave1'));
-        $clave=md5(MysqlQuery::RequestPost('clave'));
-        $email=MysqlQuery::RequestPost('email_usuario');
-          
-        $sql=Mysql::consulta("SELECT * FROM cliente WHERE nombre_usuario= '$CargarName' AND clave='$CargarClave'");
-        if(mysqli_num_rows($sql)>0){
-                      if($newclave == $newclave1)
+    if(MysqlQuery::RequestPost('newclave1')!=""){
+      $newclave1=md5(MysqlQuery::RequestPost('newclave1'));
+    } else
+    $newclave1 = "";
+
+    $CargarName = MysqlQuery::RequestPost('nombre_usuario');
+    $CargarClave =md5( MysqlQuery::RequestPost('clave'));
+
+    $nombre=MysqlQuery::RequestPost('nombre');
+    $usuario=MysqlQuery::RequestPost('nombre_usuario'); 
+    $clave=md5(MysqlQuery::RequestPost('clave'));
+    $email=MysqlQuery::RequestPost('email_usuario');
+    $celular=MysqlQuery::RequestPost('telefono');
+
+
+
+    $id = $_SESSION['id'];
+    $todo = Mysql::Consulta("SELECT * FROM cliente where id_cliente = $id");
+    $todo1 = mysqli_fetch_array($todo, MYSQLI_ASSOC);
+    $cccc = $todo1['nombre_usuario'];
+
+
+
+    $sql=Mysql::consulta("SELECT * FROM cliente WHERE (nombre_usuario= '$CargarName' OR  email_cliente= '$email' ) AND clave='$CargarClave'");
+    if(mysqli_num_rows($sql)>0)
+    {
+
+   
+
+                  if($newclave == $newclave1)
+                  {
+                       $cadena = "telefono_celular='$celular', nombre_completo='$nombre', nombre_usuario='$usuario', clave='$newclave', email_cliente='$email'";
+                        $cadena2= "nombre_usuario='$cccc' and clave='$CargarClave'";
+                       if(MysqlQuery::Actualizar("cliente", "$cadena", "$cadena2"))
                       {
-                      
-                        
-                          if(MysqlQuery::Actualizar("cliente", "nombre_completo='$nombre', nombre_usuario='$usuario', clave='$newclave', email_cliente='$email'", "nombre_usuario='$CargarName' and clave='$CargarClave'"))
-                          {
-                                $_SESSION['nombre']=$usuario;
-                                $_SESSION['clave']=$newclave;
-                                echo '
-                                    <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                        <h4 class="text-center">ADMINISTRADOR ACTUALIZADO</h4>
-                                        <p class="text-center">
-                                            El administrador se actualizo con exito
-                                        </p>
-                                    </div>
-                                ';
-                          }
-                          else
-                          {
+
+
+                          
+                            $_SESSION['nombre']=$usuario;
+                            $_SESSION['clave']=$newclave;
                             echo '
-                                <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                    <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                                    <h4 class="text-center">DATOS ACTUALIZADOS</h4>
                                     <p class="text-center">
-                                        No hemos podido actualizar el administrador
+                                        Datos y contraseña actualizados con exito
                                     </p>
                                 </div>
                             ';
-                          }
-                       }
-                         else{
-                                 echo '
-                                <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                      }
+                      else
+                      {
+                        echo '
+                            <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                                <p class="text-center">
+                                    No hemos podido actualizar tus datos y contraseña
+                                </p>
+                            </div>
+                        ';
+                      }
+                  }
+                  else if( $newclave=="." && $newclave1==""){
+                     if( MysqlQuery::Actualizar("cliente", "telefono_celular='$celular',nombre_completo='$nombre', nombre_usuario='$usuario',email_cliente='$email'", "nombre_usuario='$cccc' and clave='$CargarClave'"))
+                     {
+                            $_SESSION['nombre']=$usuario;
+                            
+                            echo '
+                                <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                    <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                                    <h4 class="text-center"> ACTUALIZADO</h4>
                                     <p class="text-center">
-                                       Las contraseñas no coinciden
+                                     Datos actualizados con éxito
                                     </p>
                                 </div>
-                            '; 
+                            ';
+                      }
+                      else
+                      {
+                        echo '
+                            <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                                <p class="text-center">
+                                    No hemos podido actualizar tus datos
+                                </p>
+                            </div>
+                        ';
+                      }
+                  }
+                  else{
+                             echo '
+                            <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                                <p class="text-center">
+                                   Las contraseñas no coinciden
+                                </p>
+                            </div>
+                        '; 
 
-                         }
-                    }
-                else{
-                    echo '
-                        <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            <h4 class="text-center">OCURRIÓ UN ERROR</h4>
-                            <p class="text-center">
-                                Usuario y clave incorrectos
-                            </p>
-                        </div>
-                    ';
-      }
-    }
-    
+                  }
+   }
+  else
+  {
+                echo '
+                    <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                        <p class="text-center">
+                            Usuario y clave incorrectos
+                        </p>
+                    </div>
+                ';
+  }
+}
     /*Script para eliminar cuenta*/
      if(isset($_POST['nom_admin_delete']) && isset($_POST['admin_clave__delete'])){
          $nom_admin_delete=MysqlQuery::RequestPost('nom_admin_delete');
@@ -295,17 +346,25 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                          </div>
                              <div class="form-group">
                            <label><i class="fa fa-key"></i>&nbsp;Nueva contraseña</label>
-                           <input type="password" minlength="8" class="form-control" name="newclave" placeholder="Nueva contraseña" required="">
+                           <input type="password" minlength="8" class="form-control" name="newclave" placeholder="Nueva contraseña"  >
                          </div>
                            <div class="form-group">
                            <label><i class="fa fa-key"></i>&nbsp;Confirmar contraseña</label>
-                           <input type="password" minlength="8" class="form-control" name="newclave1" placeholder="Confirmar contraseña" required="">
+                           <input type="password" minlength="8" class="form-control" name="newclave1" placeholder="Confirmar contraseña"  >
                          </div>
                          <div class="form-group">
                            <label><i class="fa fa-envelope"></i>&nbsp;Email</label>
                            <input type="email" class="form-control" value="<?php echo $reg1['email_cliente']; ?>" name="email_usuario"  placeholder="Email administrador" required="">
-                         </div><button type="submit" class="btn btn-info">Actualizar datos</button>
-                       </form>
+                         </div>
+                         
+                         <div class="form-group">
+                            <label ><i class="fa fa-phone"></i>&nbsp;&nbsp;Teléfono</label>
+                            <input type="tel" class="form-control" value="<?php echo $reg1['telefono_celular'] ?>" placeholder="Escriba su número celular" name="telefono" required="">
+                          </div>
+                         
+                         <button type="submit" class="btn btn-info">Actualizar datos</button>
+                             
+                        </form>
                      </div>
                    </div>
                    </div>
@@ -325,7 +384,7 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
             
         </div>
         <div class="col-sm-7 animated flip">
-            <h1 class="text-danger">Lo sentimos esta página es solamente para administradores de alcomex</h1>
+            <h1 class="text-danger">Lo sentimos esta página es solamente para administradores de Alcomex</h1>
             <h3 class="text-info text-center">Inicia sesión como administrador para poder acceder</h3>
         </div>
         <div class="col-sm-1">&nbsp;</div>

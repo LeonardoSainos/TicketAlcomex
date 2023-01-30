@@ -17,7 +17,7 @@ header('Content-Type: text/html; charset=UTF-8');
           <div class="row">
             <div class="col-sm-12">
               <div class="page-header">
-                <h1 class="animated lightSpeedIn">alcomex <small>México</small></h1>
+                <h1 class="animated lightSpeedIn">Alcomex <small>México</small></h1>
                 <span class="label label-danger">Transporte de logistica S.A de C.V</span>
                 
                 <p class="pull-right text-primary">

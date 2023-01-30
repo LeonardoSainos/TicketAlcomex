@@ -12,7 +12,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span> 
             </button>
-            <a class="navbar-brand" href="index.php"><img class="img-responsive"src="./img/Transp_ALCOMEX.png" alt="Texto" width="50" height="50"/>&nbsp;&nbsp; alcomex</a>
+            <a class="navbar-brand" href="index.php"><img class="img-responsive"src="./img/Transp_ALCOMEX.png" alt="Texto" width="50" height="50"/>&nbsp;&nbsp; Alcomex</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <?php if(isset($_SESSION['rol']) && isset($_SESSION['nombre'])): ?>
@@ -89,12 +89,12 @@
       <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title text-center text-primary" id="myModalLabel">Bienvenido a soporte técnico alcomex</h4>
+              <h4 class="modal-title text-center text-primary" id="myModalLabel">Bienvenido a soporte técnico Alcomex</h4>
             </div>
           <form action="" method="POST" style="margin: 20px;">
               <div class="form-group">
                   <label><span class="glyphicon glyphicon-user"></span>&nbsp;Usuario</label>
-                  <input type="text" class="form-control" name="nombre_login" placeholder="Escribe tu nombre de usuario" required=""/>
+                  <input type="text" class="form-control" name="nombre_login" placeholder="Escribe tu nombre de usuario o correo electronico" required=""/>
               </div>
               <div class="form-group">
                   <label><span class="glyphicon glyphicon-lock"></span>&nbsp;Contraseña</label>

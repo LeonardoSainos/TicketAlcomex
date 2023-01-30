@@ -25,11 +25,18 @@
           $asunto_ticket=MysqlQuery::RequestPost('asunto_ticket');        
           $mensaje_ticket=MysqlQuery::RequestPost('mensaje_ticket');
           $estado_ticket="Pendiente";
+
+
+
+
+
+
+          
           $cabecera="From: LinuxStore El Salvador<linuxstore@hifenix.com>";
           $mensaje_mail="¡Gracias por reportarnos su problema! Buscaremos una solución para su producto lo mas pronto posible. Su ID ticket es: ".$id_ticket;
           $mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
 
-          if(MysqlQuery::Guardar("ticket","nombre_usuario,email_cliente,departamento,asunto,mensaje,solucion,estado_ticket,serie", "'$nombre_ticket','$email_ticket','$departamento_ticket','$asunto_ticket','$mensaje_ticket','', '$estado_ticket','$id_ticket'")){
+          if(MysqlQuery::Guardar("ticket","serie,asunto,mensaje,idUsuario,idDepartamento,idStatus", "'$nombre_ticket','$email_ticket','$departamento_ticket','$asunto_ticket','$mensaje_ticket','', '$estado_ticket','$id_ticket'")){
              /*----------  Enviar correo con los datos del ticket
             mail($email_ticket, $asunto_ticket, $mensaje_mail, $cabecera)
             ----------*/
@@ -182,7 +189,7 @@
                 
             </div>
             <div class="col-sm-7 text-center">
-                <h1 class="text-danger">Lo sentimos esta página es solamente para usuarios registrados en soporte técnico alcomex</h1>
+                <h1 class="text-danger">Lo sentimos esta página es solamente para usuarios registrados en soporte técnico Alcomex</h1>
                 <h3 class="text-info">Inicia sesión para poder acceder</h3>
             </div>
             <div class="col-sm-1">&nbsp;</div>

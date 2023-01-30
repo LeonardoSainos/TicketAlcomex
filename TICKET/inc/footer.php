@@ -28,6 +28,6 @@
         </form>
       </div> -->
     </div>
-    <h4 class="text-center" style="color: #FFF;">alcomex CopyRight © <?php echo date("Y"); ?></h4>
+    <h4 class="text-center" style="color: #FFF;">Alcomex CopyRight © <?php echo date("Y"); ?></h4>
   </div>
 </footer>
