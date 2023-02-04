@@ -36,7 +36,7 @@
           $mensaje_mail="¡Gracias por reportarnos su problema! Buscaremos una solución para su producto lo mas pronto posible. Su ID ticket es: ".$id_ticket;
           $mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
 
-          if(MysqlQuery::Guardar("ticket","serie,asunto,mensaje,idUsuario,idDepartamento,idStatus", "'$nombre_ticket','$email_ticket','$departamento_ticket','$asunto_ticket','$mensaje_ticket','', '$estado_ticket','$id_ticket'")){
+          if(MysqlQuery::Guardar("ticket","serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende", "'$nombre_ticket','$email_ticket','$departamento_ticket','$asunto_ticket','$mensaje_ticket','', '$estado_ticket','$id_ticket'")){
              /*----------  Enviar correo con los datos del ticket
             mail($email_ticket, $asunto_ticket, $mensaje_mail, $cabecera)
             ----------*/
@@ -157,11 +157,53 @@
                         </div>
 
                         <div class="form-group">
+                          <label  class="col-sm-2 control-label">Técnico</label>
+                          <div class="col-sm-10">
+                              <div class='input-group'>
+                                          <select class="form-control" name="tecnico">
+                                            <?php
+                                            $t = Mysql::consulta("SELECT * from cliente Where id_rol = 9947");
+                                          //  $tecnicos = mysqli_fetch_array($t, MYSQLI_ASSOC);
+                                             if(mysqli_num_rows($t)>0){
+                                              $num = 1;
+                                              while($tecnicos = mysqli_fetch_array($t)){
+                                                     $c=  Mysql:: consulta("SELECT count(*) FROM ticket WHERE (fecha BETWEEN  date('Y-m-d 00:00:00') AND date('Y-m-d 23:59:59')) AND id_atiende=" . $tecnicos['id_cliente']);
+                                                      if(mysqli_num_rows($c)<=20){
+
+                                                        echo "<option value= '" . $tecnicos['id_cliente'] .  " '>".
+                                                       " Técnico " .  $num;
+                                                        //$tecnicos['nombre_usuario'] .
+                                                         "</option>
+                                                        ";
+                                                  $num++;
+                                                      }
+                                                     
+                                              }
+                                            }
+                                            else{
+
+                                              echo "<option> No hay técnicos </option>";
+                                            }
+                                           
+                                            ?>
+
+                                          </select>
+
+
+                                   <span class="input-group-addon"><i class="fa fa-laptop"></i></span>
+                              </div> 
+                          </div>
+                        </div>
+
+
+
+                        <div class="form-group">
                           <label  class="col-sm-2 control-label">Detalles del problema</label>
                           <div class="col-sm-10">
                             <textarea class="form-control" rows="3" placeholder="Escriba el problema que presenta su producto" name="mensaje_ticket" required=""></textarea>
                           </div>
                         </div>
+                        
 
                         <div class="form-group">
                           <div class="col-sm-offset-2 col-sm-10">
