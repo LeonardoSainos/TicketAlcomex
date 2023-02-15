@@ -1,4 +1,4 @@
-<?php if(!$_SESSION['nombre']==""&&!$_SESSION['rol']!=4046){ 
+<?php if(!$_SESSION['nombre']=="" && (!$_SESSION['rol']!=4046 || !$_SESSION['rol'])!=5267){ 
         
         /*Script para eliminar cuenta*/
         if(isset($_POST['usuario_delete']) && isset($_POST['clave_delete'])){

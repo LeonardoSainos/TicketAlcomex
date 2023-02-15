@@ -10,8 +10,15 @@
           $asunto="Registro de cuenta en LinuxStore";
         $cabecera="From: LinuxStore El Salvador<linuxstore@hifenix.com>";
         $mensaje_mail="Hola ".$nombre.", Gracias por registrarte en LinuxStore El Salvador. Los datos de cuenta son los siguientes:\nNombre Completo: ".$nombre."\nNombre de usuario: ".$usuario."\nClave: ".$clave."\nEmail: ".$email."\n Página principal: http://www.linuxstore.com/index.php";
+        
+        $correo= Mysql::consulta("SELECT * FROM cliente where email_cliente = '$email' or telefono_celular = '$telefono'");
+          
+        if(mysqli_num_rows($correo)<=0){
 
         if($clave == $clave1){
+
+
+
           if(MysqlQuery::Guardar("cliente", "nombre_completo, nombre_usuario, email_cliente, clave, id_departamento,id_rol,idEstatus,telefono_celular", "'$nombre', '$usuario', '$email', '$clave',2505, 9947,31448," . $telefono)){
 
             /*----------  Enviar correo con los datos de la cuenta 
@@ -52,10 +59,20 @@
               </p>
           </div>
       '; 
-
-
-
         }
+      }
+
+      else if (mysqli_num_rows($correo)>=1){
+        echo '
+        <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+            <p class="text-center">
+                ESTE CORREO  O NÚMERO DE TELÉFONO YA HA SIDO REGISTRADO.
+            </p>
+        </div>
+    '; 
+      }
          
     }
 ?>

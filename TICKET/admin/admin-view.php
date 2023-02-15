@@ -33,9 +33,15 @@
             $num_total_admin = mysqli_num_rows($num_admin);
 
             /* Todos los users*/
-            $num_user=Mysql::consulta("SELECT * FROM cliente WHERE id_rol !=4046");
+            $num_user=Mysql::consulta("SELECT * FROM cliente WHERE id_rol = 9947");
             $num_total_user = mysqli_num_rows($num_user);
-          
+
+
+            /*Todos los tecnicos */ 
+            $num_tec=Mysql::consulta("SELECT * FROM cliente WHERE id_rol =5267");
+            $num_total_tec = mysqli_num_rows($num_tec);
+
+
         ?>
         <div class="container">
           <div class="row">
@@ -56,6 +62,7 @@
                         <ul class="nav nav-pills nav-justified">
                             <li><a href="./admin.php?view=users"><i class="fa fa-users"></i>&nbsp;&nbsp;Usuarios&nbsp;&nbsp;<span class="badge"><?php echo $num_total_user; ?></span></a></li>
                             <li><a href="./admin.php?view=admin"><i class="fa fa-male"></i>&nbsp;&nbsp;Administradores&nbsp;&nbsp;<span class="badge"><?php echo $num_total_admin; ?></span></a></li>
+                            <li><a href="./admin.php?view=tec"><i class="fa fa-male"></i>&nbsp;&nbsp;Técnicos&nbsp;&nbsp;<span class="badge"><?php echo $num_total_tec; ?></span></a></li>
                         </ul>
                     </div>
                 </div>

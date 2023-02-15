@@ -28,9 +28,25 @@
                             <a href="#!"><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp;Mensajes</a>
                         </li>
                         <li>
-                            <a href="./index.php?view=configuracion"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Configuracion</a>
+                            <a href="./index.php?view=configuracion"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Configuración</a>
                         </li> 
                         <?php endif; ?>
+                        
+                         <!-- tecnico -->
+                         <?php if($_SESSION['rol']== 5267): ?>
+                        <li>
+                            <a href="tecni.php?view=ticketTecni"><span class="glyphicon glyphicon-envelope"></span> &nbsp; Tus Tickets</a>
+                        </li>
+                        <li>
+                            <a href="#!"><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp;Mensajes</a>
+                        </li>
+                       
+                        <li>
+                            <a href="tecni.php?view=config"><i class="fa fa-cogs"></i> &nbsp; Configuración</a>
+                        </li>
+                        <?php endif; ?> 
+
+
 
                         <!-- admins -->
                         <?php if($_SESSION['rol']== 4046): ?>
@@ -44,7 +60,7 @@
                             <a href="admin.php?view=admin"><span class="glyphicon glyphicon-user"></span> &nbsp;Administrar Administradores</a>
                         </li>
                         <li>
-                            <a href="admin.php?view=config"><i class="fa fa-cogs"></i> &nbsp; Configuracion</a>
+                            <a href="admin.php?view=config"><i class="fa fa-cogs"></i> &nbsp; Configuración</a>
                         </li>
                         <?php endif; ?> 
                         <li class="divider"></li>
@@ -106,6 +122,12 @@
                 <label>
                     <input type="radio" name="optionsRadios" value="user" checked>
                     Usuario
+                </label>
+             </div>
+             <div class="radio">
+                <label>
+                    <input type="radio" name="optionsRadios" value="tec" >
+                   Técnico
                 </label>
              </div>
              <div class="radio">

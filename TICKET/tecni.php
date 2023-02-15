@@ -4,7 +4,7 @@ include './lib/class_mysql.php';
 include './lib/config.php';
 header('Content-Type: text/html; charset=UTF-8');
 
-if($_SESSION['rol']!=4046){
+if($_SESSION['rol']!=5267){
     session_start(); 
     session_unset();
     session_destroy();
@@ -14,7 +14,7 @@ if($_SESSION['rol']!=4046){
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Administracion</title>
+        <title>Técnico</title>
         <?php include "./inc/links.php"; ?>        
     </head>
     <body>   
@@ -23,7 +23,7 @@ if($_SESSION['rol']!=4046){
           <div class="row">
             <div class="col-sm-12">
               <div class="page-header">
-                <h1 class="animated lightSpeedIn">Panel Administrativo</h1>
+                <h1 class="animated lightSpeedIn">Panel técnico</h1>
                 <span class="label label-danger">Alcomex S.A de C.V</span>
                 <p class="pull-right text-primary">
                   <strong>
@@ -35,9 +35,9 @@ if($_SESSION['rol']!=4046){
           </div>
         </div>
         <?php
-            $WhiteList=["ticketadmin","ticketedit","users","admin","config","tec"];
-            if(isset($_GET['view']) && in_array($_GET['view'], $WhiteList) && is_file("./admin/".$_GET['view']."-view.php")){
-                include "./admin/".$_GET['view']."-view.php";
+            $WhiteList=["ticketTecni","ticketedit","users","tecni","config","tec"];
+            if(isset($_GET['view']) && in_array($_GET['view'], $WhiteList) && is_file("./tecni/".$_GET['view']."-view.php")){
+                include "./tecni/".$_GET['view']."-view.php";
             }else{
                 echo '<h2 class="text-center">Lo sentimos, la opción que ha seleccionado no se encuentra disponible</h2>';
             }

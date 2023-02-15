@@ -1,10 +1,8 @@
-<?php if($_SESSION['nombre']!="" && $_SESSION['rol']==4046){ ?>    
+<?php if($_SESSION['nombre']!="" && $_SESSION['rol']== 5267){ ?>    
         <?php 
             if(isset($_POST['id_del'])){
                 $id_user=MysqlQuery::RequestPost('id_del');
-                $eliminar= MysqlQuery::Eliminar("cliente", "id_cliente='$id_user'");
-                echo $eliminar;
-                if($eliminar){
+                if(MysqlQuery::Eliminar("cliente", "id_cliente='$id_user'")){
                 echo '
                         <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -77,9 +75,11 @@
                                 $regpagina = 15;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
 
-                                $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS cliente.id_cliente, cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=9947  ORDER by cliente.nombre_completo LIMIT $inicio, $regpagina");
+                                $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS cliente.id_cliente, cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=5267  ORDER by cliente.nombre_completo LIMIT $inicio, $regpagina");
+
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
-                                $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);                        
+                                $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
+                        
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
                                 if(mysqli_num_rows($selusers)>0):
                             ?>
@@ -111,30 +111,10 @@
                                         <td class="text-center"><?php echo $row['celular'];?> </td>
                                     
                                         <td class="text-center">
-                                            <form id="formulario" action="" method="POST" style="display: inline-block;">
-                                            <button data-toggle='modal' data-target='#pregunta' type="button" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                    
+                                            <form action="" method="POST" style="display: inline-block;">
+                                                <input type="hidden" name="id_del" value='<?php echo $row["id_cliente"]; ?>'>
+                                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                             </form>
-
-                                            <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                         <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                            <div style="text-align:center; background: red; color:white;" class="modal-header">
-                                                                <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar al usuario (Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
-                                                             </div>
-                                                            <div class="modal-body">
-                                                                
-                                                            </div>
-                                                            <div style="align-items:center; justify-content:center;"class="modal-footer">
-                                                                <center>
-                                                                   <input form="formulario" type="hidden" name="id_del" value="<?php echo $row['id_cliente']; ?>">       
-                                                                    <button form="formulario" type="submit"  class="btn btn-danger">SI</button>
-                                                                   <button type="button" class="btn btn-warning" data-dismiss="modal">CANCELAR</button>
-                                                                </center>
-                                                            </div>
-                                                            </div>
-                                                        </div>    
-</div>
-
                                         </td>
                                     </tr>
                                     <?php
@@ -158,7 +138,7 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=users&pagina=<?php echo $pagina-1; ?>" aria-label="Previous">
+                                        <a href="./admin.php?view=tec&pagina=<?php echo $pagina-1; ?>" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
@@ -168,9 +148,9 @@
                                 <?php
                                     for($i=1; $i <= $numeropaginas; $i++ ){
                                         if($pagina == $i){
-                                            echo '<li class="active"><a href="./admin.php?view=users&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li class="active"><a href="./admin.php?view=tec&pagina='.$i.'">'.$i.'</a></li>';
                                         }else{
-                                            echo '<li><a href="./admin.php?view=users&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li><a href="./admin.php?view=tec&pagina='.$i.'">'.$i.'</a></li>';
                                         }
                                     }
                                 ?>
@@ -184,7 +164,7 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=users&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
+                                        <a href="./admin.php?view=tec&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>

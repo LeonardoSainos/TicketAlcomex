@@ -1,4 +1,4 @@
-<?php if($_SESSION['nombre']!= "" && $_SESSION['rol']==9947 ||  $_SESSION['rol']==4046){
+<?php if($_SESSION['nombre']!= "" && ($_SESSION['rol']==9947 ||  $_SESSION['rol']==4046 || $_SESSION['rol']==5267 )){
         
 
         if( isset($_POST['name_ticket']) && isset($_POST['email_ticket'])){
@@ -24,9 +24,9 @@
           $departamento_ticket=MysqlQuery::RequestPost('departamento_ticket');
           $asunto_ticket=MysqlQuery::RequestPost('asunto_ticket');        
           $mensaje_ticket=MysqlQuery::RequestPost('mensaje_ticket');
-          $estado_ticket="Pendiente";
-
-
+ 
+          $id = $_SESSION['id'];
+          $tecnico = MysqlQuery::RequestPost('tecnico');
 
 
 
@@ -36,7 +36,7 @@
           $mensaje_mail="¡Gracias por reportarnos su problema! Buscaremos una solución para su producto lo mas pronto posible. Su ID ticket es: ".$id_ticket;
           $mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
 
-          if(MysqlQuery::Guardar("ticket","serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende", "'$nombre_ticket','$email_ticket','$departamento_ticket','$asunto_ticket','$mensaje_ticket','', '$estado_ticket','$id_ticket'")){
+          if(MysqlQuery::Guardar("ticket","serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende", "'$id_ticket','$asunto_ticket','$mensaje_ticket',$id,'$departamento_ticket',94574,$tecnico")){
              /*----------  Enviar correo con los datos del ticket
             mail($email_ticket, $asunto_ticket, $mensaje_mail, $cabecera)
             ----------*/
@@ -125,7 +125,7 @@
                           <label  class="col-sm-2 control-label">Departamento</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                              <select class="form-control" name="estado_ticket">
+                              <select class="form-control" name="departamento_ticket">
                                       <?php 
                                         $sql = Mysql::consulta("SELECT * FROM departamento");
                                         while( $reg1=mysqli_fetch_array($sql, MYSQLI_ASSOC)){
@@ -162,7 +162,7 @@
                               <div class='input-group'>
                                           <select class="form-control" name="tecnico">
                                             <?php
-                                            $t = Mysql::consulta("SELECT * from cliente Where id_rol = 9947");
+                                            $t = Mysql::consulta("SELECT * from cliente Where id_rol = 5267 ");
                                           //  $tecnicos = mysqli_fetch_array($t, MYSQLI_ASSOC);
                                              if(mysqli_num_rows($t)>0){
                                               $num = 1;
@@ -182,7 +182,7 @@
                                             }
                                             else{
 
-                                              echo "<option> No hay técnicos </option>";
+                                              echo "<option> No hay técnicos  disponibles</option>";
                                             }
                                            
                                             ?>

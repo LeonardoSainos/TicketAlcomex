@@ -7,7 +7,7 @@ header('Content-Type: text/html; charset=UTF-8');
 <!DOCTYPE html>
 <html>
     <head>
-        <title>alcomex soporte técnico</title>
+        <title>Alcomex soporte técnico</title>
         <link rel="icon" href="favicon.png">
         <?php include "./inc/links.php"; ?>        
     </head>
@@ -32,6 +32,8 @@ header('Content-Type: text/html; charset=UTF-8');
         <?php
             if(isset($_GET['view'])){
                 $content=$_GET['view'];
+
+               
                 $WhiteList=["index","productos","soporte","ticket","ticketcon","registro","configuracion"];
                 if(in_array($content, $WhiteList) && is_file("./user/".$content."-view.php")){
                     include "./user/".$content."-view.php";
@@ -39,11 +41,12 @@ header('Content-Type: text/html; charset=UTF-8');
         ?>
                 <div class="container">
                     <div class="row">
+
                         <div class="col-sm-4">
                             <img src="./img/Stop.png" alt="Image" class="img-responsive"/><br>
                             <img src="./img/SadTux.png" alt="Image" class="img-responsive"/>
-                            
                         </div>
+                      
                         <div class="col-sm-7 text-center">
                             <h1 class="text-danger">Lo sentimos, la opción que ha seleccionado no se encuentra disponible</h1>
                             <h3 class="text-info">Por favor intente nuevamente</h3>
