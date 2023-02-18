@@ -177,8 +177,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                                       </select>
      
                                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-
-
+                                   
                               </div> 
                           </div>
                         </div>
@@ -227,3 +226,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                       </form>
             </div><!--col-md-12-->
           </div><!--container-->
+
+
+
+       

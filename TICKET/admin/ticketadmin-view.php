@@ -106,6 +106,7 @@
                             <table class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
+                                        <th class="text-center"></th>
                                         <th class="text-center">#</th>
                                         <th class="text-center">Fecha</th>
                                         <th class="text-center">Serie</th>
@@ -124,6 +125,7 @@
                                         while ($row=mysqli_fetch_array($selticket, MYSQLI_ASSOC)): 
                                     ?>
                                     <tr>
+                                       <td class="text-center"> <input type="checkbox" name="Tickets[]" value="<?php  echo $row['id'];?>" /></td>    
                                         <td class="text-center"><?php echo $ct; ?></td>
                                         <td class="text-center"><?php echo $row['fecha']; ?></td>
                                         <td class="text-center"><?php echo $row['serie']; ?></td>
@@ -160,7 +162,7 @@
                                                             </div>
                                                             </div>
                                                         </div>    
-</div>
+                                                    </div>
 
 
                                         </td>
@@ -169,6 +171,10 @@
                                         $ct++;
                                         endwhile; 
                                     ?>
+
+                                         <tr> 
+                                           <td  class= "text-center" colspan="10"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
+                                        </tr>
                                 </tbody>
                             </table>
                             <?php else: ?>

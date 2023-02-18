@@ -11,3 +11,12 @@
 <script src="./js/jquery-2.1.0.min.js"></script>
 <script src="./js/bootstrap.js"></script>
 <script src="./js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="/TICKET/js/jquery-1.10.2.js"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+<script src="/TICKET/js/bootstrap.js"></script>
+    <!-- METISMENU SCRIPTS -->
+<script src="/TICKET/js/jquery.metisMenu.js"></script>
+    <!-- CUSTOM SCRIPTS -->
+<script src="/TICKET/js/custom.js"></script>
+
+<script type="text/javascript" src="./js/funciones_panel.js"></script> 
