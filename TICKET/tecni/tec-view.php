@@ -86,6 +86,7 @@
                             <table class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
+                                        <th class="text-center"></th>
                                         <th class="text-center">#</th>
                                         <th class="text-center">Nombre completo</th>
                                         <th class="text-center">Nombre de usuario</th>
@@ -102,6 +103,8 @@
                                         while ($row=mysqli_fetch_array($selusers, MYSQLI_ASSOC)): 
                                     ?>
                                     <tr>
+                                    <td class="text-center"> <input type="checkbox" name="Tickets[]" value="<?php  echo $row['id_cliente'];?>" /></td>
+                                    
                                         <td class="text-center"><?php echo $ct; ?></td>
                                         <td class="text-center"><?php echo $row['nombre_completo']; ?></td>
                                         <td class="text-center"><?php echo $row['nombre_usuario']; ?></td>
@@ -121,6 +124,10 @@
                                         $ct++;
                                         endwhile; 
                                     ?>
+
+                                        <tr> 
+                                           <td  class= "text-center" colspan="9"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
+                                        </tr>
                                 </tbody>
                             </table>
                             <?php else: ?>

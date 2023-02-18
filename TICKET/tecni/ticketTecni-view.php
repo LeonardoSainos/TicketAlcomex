@@ -88,7 +88,7 @@
                                 $regpagina = 50;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
                                 if(isset($_GET['ticket'])){
-                                    if($_GET['ticket']=="all"){
+                                    if($_GET['ticket']=="tecni"){
                                         //SELECT SQL_CALC_FOUND_ROWS * FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento
                                         $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                     }elseif($_GET['ticket']=="pending"){
@@ -117,6 +117,7 @@
                             <table class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
+                                        <th class="text-center"></th>
                                         <th class="text-center">#</th>
                                         <th class="text-center">Fecha</th>
                                         <th class="text-center">Serie</th>
@@ -135,6 +136,8 @@
                                         while ($row=mysqli_fetch_array($selticket, MYSQLI_ASSOC)): 
                                     ?>
                                     <tr>
+                                    <td class="text-center"> <input type="checkbox" name="Tickets[]" value="<?php  echo $row['id'];?>" /></td>
+                                     
                                         <td class="text-center"><?php echo $ct; ?></td>
                                         <td class="text-center"><?php echo $row['fecha']; ?></td>
                                         <td class="text-center"><?php echo $row['serie']; ?></td>
@@ -181,6 +184,9 @@
                                         $ct++;
                                         endwhile; 
                                     ?>
+                                      <tr> 
+                                           <td  class= "text-center" colspan="9"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
+                                        </tr>
                                 </tbody>
                             </table>
                             <?php else: ?>
