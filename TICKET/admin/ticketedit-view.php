@@ -55,7 +55,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                 <img src="./img/Edit.png" alt="Image" class="img-responsive animated tada">
             </div>
             <div class="col-sm-9">
-                <a href="./admin.php?view=ticketadmin" class="btn btn-primary btn-sm pull-right"><i class="fa fa-reply"></i>&nbsp;&nbsp;Volver administrar Tickets</a>
+                <a href="./admin.php?view=ticketadmin" class="btn btn-warning btn-sm pull-right"><i class="fa fa-reply"></i>&nbsp;&nbsp;Volver administrar Tickets</a>
             </div>
           </div>
         </div>
@@ -219,7 +219,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                     
                         <div class="form-group">
                           <div class="col-sm-offset-2 col-sm-10 text-center">
-                              <button type="submit" class="btn btn-info">Actualizar ticket</button>
+                              <button type="submit" class="btn btn-warning">Actualizar ticket</button>
                           </div>
                         </div>
 

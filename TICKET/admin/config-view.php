@@ -66,10 +66,9 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
     $todo1 = mysqli_fetch_array($todo, MYSQLI_ASSOC);
     $cccc = $todo1['nombre_usuario'];
 
-
-
+    $cd= Mysql:: consulta("SELECT * FROM cliente WHERE (email_cliente = '$email' OR nombre_usuario='$CargarName') AND id_cliente<>$id");
     $sql=Mysql::consulta("SELECT * FROM cliente WHERE (nombre_usuario= '$CargarName' OR  email_cliente= '$email' ) AND clave='$CargarClave'");
-    if(mysqli_num_rows($sql)>0)
+    if(mysqli_num_rows($sql)>0 && mysqli_num_rows($cd)<=0)
     {
 
    
@@ -156,7 +155,7 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                         <h4 class="text-center">OCURRIÓ UN ERROR</h4>
                         <p class="text-center">
-                            Usuario y clave incorrectos
+                        Este error puede ocurrir por las siguientes razones:  clave incorrecta o correo ya existente en el sistema 
                         </p>
                     </div>
                 ';
@@ -166,9 +165,9 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
      if(isset($_POST['nom_admin_delete']) && isset($_POST['admin_clave__delete'])){
          $nom_admin_delete=MysqlQuery::RequestPost('nom_admin_delete');
          $clave_admin_delete=md5(MysqlQuery::RequestPost('admin_clave__delete'));
-         $sql=Mysql::consulta("SELECT * FROM administrador WHERE nombre_admin= '$nom_admin_delete' AND clave='$clave_admin_delete'");
+         $sql=Mysql::consulta("SELECT * FROM cliente WHERE nombre_usuario= '$nom_admin_delete' AND clave='$clave_admin_delete'");
          if(mysqli_num_rows($sql)>=1){
-            if(MysqlQuery::Eliminar("administrador", "nombre_admin='$nom_admin_delete' and clave='$clave_admin_delete'")){
+            if(MysqlQuery::Eliminar("cliente", "nombre_usuario='$nom_admin_delete' and clave='$clave_admin_delete'")){
                 echo '<script type="text/javascript"> window.location="eliminar.php"; </script>';
             }else{
                 echo '
@@ -254,15 +253,13 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                         <div class="form-group">
                           <label><i class="fa fa-info"></i>&nbsp;Estatus</label>
                             <select class= "form-control" name="Estatus">
-                            <?php $sql = Mysql::consulta("SELECT * FROM ESTATUS");
+                            <?php $sql = Mysql::consulta("SELECT * FROM ESTATUS  WHERE idEstatus<>94574 AND (idEstatus<>94575 AND idEstatus <>94576)");
                              while($e= mysqli_fetch_array($sql,MYSQLI_ASSOC)){
                               echo "<option value='" . $e['idEstatus'] .  "' >";
                               echo $e['Nombre']. "
                                 </option>";
                              } 
                              ?>
-
-
                             </select>
 
 

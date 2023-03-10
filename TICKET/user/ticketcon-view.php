@@ -145,16 +145,35 @@ if(mysqli_num_rows($consulta_tablaTicket)>=1){
                       <div class="panel-footer text-center">
                           <div class="row">
                               <h4>Opciones</h4>
+
+                              <?php
+                              
+                              if($_SESSION['rol']==4046)
+                              {
+                                
+                              ?>
                               <div class="col-sm-6">
                                   <form action="" method="POST">
                                       <input type="text" value="<?php echo $lsT['serie']; ?>" name="del_ticket" hidden="">
                                       <button class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span>&nbsp;  Eliminar ticket</button>
                                   </form>
-                              </div>
+                              </div>                            
                               <br class="hidden-lg hidden-md hidden-sm">
                               <div class="col-sm-6">
                                    <button id="save" class="btn btn-success" data-id="<?php echo $lsT['serie']; ?>"><span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Guardar ticket en PDF</button>
                               </div>
+                              <?php
+                              }
+                              else{
+                             ?>
+                                <br class="hidden-lg hidden-md hidden-sm">
+                              <div class="col-sm-12">
+                                   <button id="save" class="btn btn-success" data-id="<?php echo $lsT['serie']; ?>"><span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Guardar ticket en PDF</button>
+                              </div>
+                             <?php
+                                
+                             
+                              }?>
                           </div>
                       </div>
                     </div>
@@ -175,7 +194,7 @@ if(mysqli_num_rows($consulta_tablaTicket)>=1){
                     <h3 class="text-warning"><i class="fa fa-check"></i> Los datos ingresados no son correctos.</h3>
                     <br>
                     <h3 class="text-primary"> Por favor verifique que su <strong>id ticket</strong> y <strong>email</strong> sean correctos, e intente nuevamente.</h3>
-                    <h4><a href="./index.php?view=soporte" class="btn btn-primary"><i class="fa fa-reply"></i> Regresar a soporte</a></h4>
+                    <h4><a href="./index.php?view=soporte" class="btn btn-warning"><i class="fa fa-reply"></i> Regresar a soporte</a></h4>
                 </div>
                 <div class="col-sm-1">&nbsp;</div>
             </div>

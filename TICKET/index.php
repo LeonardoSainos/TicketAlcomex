@@ -11,16 +11,18 @@ header('Content-Type: text/html; charset=UTF-8');
         <link rel="icon" href="favicon.png">
         <?php include "./inc/links.php"; ?>        
     </head>
-    <body>   
+    <body style="background-image:'/img/Transpo_ALCOMEX.png';" >   
         <?php include "./inc/navbar.php"; ?>
         <div class="container">
           <div class="row">
             <div class="col-sm-12">
               <div class="page-header">
                 <h1 class="animated lightSpeedIn">Alcomex <small>México</small></h1>
-                <span class="label label-danger">Transporte de logistica S.A de C.V</span>
-                
-                <p class="pull-right text-primary">
+             
+
+          
+                <span class="label label-warning">Transporte de logistica S.A de C.V</span>
+                   <p class="pull-right text-primary">
                   <strong>
                   <?php include "./inc/timezone.php"; ?>
                  </strong>

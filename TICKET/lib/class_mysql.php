@@ -89,4 +89,12 @@ class MysqlQuery {
         }
         return $sql;
     }
+
+
+    public static function ProcedimientoEliminarDepartamentos($nombre,$id){
+    if(!$sql = Mysql::consulta("CALL $nombre($id)")){
+        die("Error al ejecutar el procedimiento");
+    }
+    return $sql;
+    }
 }

@@ -12,7 +12,7 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
     $cel = MysqlQuery::RequestPost('Telefono');
   
 
-   if(MysqlQuery::Guardar("cliente", "nombre_completo, nombre_usuario, clave, email_cliente, id_departamento,id_rol,idEstatus,telefono_celular", "'$nom_complete_save', '$nom_usu_save', '$pass_save', '$email_save',$depa," . 4046 ." ,$estatus,$cel")){
+   if(MysqlQuery::Guardar("cliente", "nombre_completo, nombre_usuario, clave, email_cliente, id_departamento,id_rol,idEstatus,telefono_celular", "'$nom_complete_save', '$nom_usu_save', '$pass_save', '$email_save',$depa," . 9947  ." ,$estatus,$cel")){
        echo '
             <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -33,11 +33,9 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
             </div>
         ';
    } 
-}
-
-
-    
-    
+}   
+ 
+   
    /* Actualizar cuenta admin */
    if(isset($_POST['nombre']) && isset($_POST['nombre_usuario']) && isset($_POST['email_usuario'])){
     if(MysqlQuery::RequestPost('newclave')!=""){
@@ -67,9 +65,9 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
     $cccc = $todo1['nombre_usuario'];
 
 
-
+    $cd= Mysql:: consulta("SELECT * FROM cliente WHERE (email_cliente = '$email' OR nombre_usuario='$CargarName') AND id_cliente<>$id");
     $sql=Mysql::consulta("SELECT * FROM cliente WHERE (nombre_usuario= '$CargarName' OR  email_cliente= '$email' ) AND clave='$CargarClave'");
-    if(mysqli_num_rows($sql)>0)
+    if(mysqli_num_rows($sql)>0 && mysqli_num_rows($cd)<=0)
     {
 
    
@@ -156,7 +154,7 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                         <h4 class="text-center">OCURRIÓ UN ERROR</h4>
                         <p class="text-center">
-                            Usuario y clave incorrectos
+                        Este error puede ocurrir por las siguientes razones:  clave incorrecta o correo ya existente en el sistema 
                         </p>
                     </div>
                 ';
@@ -166,9 +164,9 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
      if(isset($_POST['nom_admin_delete']) && isset($_POST['admin_clave__delete'])){
          $nom_admin_delete=MysqlQuery::RequestPost('nom_admin_delete');
          $clave_admin_delete=md5(MysqlQuery::RequestPost('admin_clave__delete'));
-         $sql=Mysql::consulta("SELECT * FROM administrador WHERE nombre_admin= '$nom_admin_delete' AND clave='$clave_admin_delete'");
+         $sql=Mysql::consulta("SELECT * FROM cliente WHERE nombre_usuario= '$nom_admin_delete' AND clave='$clave_admin_delete'");
          if(mysqli_num_rows($sql)>=1){
-            if(MysqlQuery::Eliminar("administrador", "nombre_admin='$nom_admin_delete' and clave='$clave_admin_delete'")){
+            if(MysqlQuery::Eliminar("cliente", "nombre_usuario='$nom_admin_delete' and clave='$clave_admin_delete'")){
                 echo '<script type="text/javascript"> window.location="eliminar.php"; </script>';
             }else{
                 echo '
@@ -176,7 +174,7 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                         <h4 class="text-center">OCURRIÓ UN ERROR</h4>
                         <p class="text-center">
-                            No hemos podido eliminar el administrador
+                            No hemos podido eliminar el usuario
                         </p>
                     </div>
                 ';
@@ -200,7 +198,7 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
           <img src="./img/config.png" alt="Image" class="img-responsive">
         </div>
         <div class="col-sm-9">
-          <p class="lead text-info">Bienvenido administrador, aqui podra agregar nuevos administradores, actualizar sus datos de cuenta y podra eliminar su cuenta si lo desea.</p>
+          <p class="lead text-info">Bienvenido técnico, aquí podra agregar nuevos usuarios, actualizar sus datos de cuenta y podrá eliminar su cuenta si lo desea.</p>
         </div>
       </div><!--fin row-->
       
@@ -211,7 +209,7 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
               <div class="row">
                   <div class="col-sm-12">
                     <div class="panel panel-success">
-                    <div class="panel-heading text-center"><i class="fa fa-plus"></i>&nbsp;<strong>Agregar nuevo administrador</strong></div>
+                    <div class="panel-heading text-center"><i class="fa fa-plus"></i>&nbsp;<strong>Agregar nuevo usuario</strong></div>
                     <div class="panel-body">
                         <form role="form" action="" method="post">
                         <div class="form-group">
@@ -254,7 +252,7 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                         <div class="form-group">
                           <label><i class="fa fa-info"></i>&nbsp;Estatus</label>
                             <select class= "form-control" name="Estatus">
-                            <?php $sql = Mysql::consulta("SELECT * FROM ESTATUS");
+                            <?php $sql = Mysql::consulta("SELECT * FROM ESTATUS  WHERE idEstatus<>94574 AND (idEstatus<>94575 AND idEstatus <>94576)");
                              while($e= mysqli_fetch_array($sql,MYSQLI_ASSOC)){
                               echo "<option value='" . $e['idEstatus'] .  "' >";
                               echo $e['Nombre']. "

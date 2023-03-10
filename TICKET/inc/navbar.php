@@ -3,6 +3,8 @@
         include "./process/login.php";
     }
 ?>
+
+
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -25,7 +27,7 @@
                         <!-- usuarios -->
                         <?php if($_SESSION['rol']==9947): ?>
                         <li>
-                            <a href="#!"><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp;Mensajes</a>
+                            <a  href="#!"><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp;Mensajes</a>
                         </li>
                         <li>
                             <a href="./index.php?view=configuracion"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Configuración</a>
@@ -34,7 +36,7 @@
                         
                          <!-- tecnico -->
                          <?php if($_SESSION['rol']== 5267): ?>
-                        <li>
+                        <li >
                             <a href="tecni.php?view=ticketTecni"><span class="glyphicon glyphicon-envelope"></span> &nbsp; Tus Tickets</a>
                         </li>
                         <li>
@@ -46,7 +48,7 @@
                         </li>
                         <?php endif; ?> 
 
-
+                          
 
                         <!-- admins -->
                         <?php if($_SESSION['rol']== 4046): ?>
@@ -57,7 +59,8 @@
                             <a href="admin.php?view=users"><span class="glyphicon glyphicon-user"></span> &nbsp;Administrar Usuarios</a>
                         </li>
                         <li>
-                            <a href="admin.php?view=admin"><span class="glyphicon glyphicon-user"></span> &nbsp;Administrar Administradores</a>
+ 
+                            <a href="admin.php?view=depa"><span class="glyphicon glyphicon-briefcase"></span> &nbsp;Administrar Departamentos</a>
                         </li>
                         <li>
                             <a href="admin.php?view=config"><i class="fa fa-cogs"></i> &nbsp; Configuración</a>
@@ -69,15 +72,15 @@
                 </li>
             </ul>
             <?php endif; ?>
-            <ul class=" nav navbar-nav navbar-right">
+            <ul class=" nav  navbar-nav navbar-right">
                 <li>
                     <a href="./index.php"><span class="glyphicon glyphicon-home"></span> &nbsp; Inicio</a>
                 </li>
+             <!--   <li>
+                    <a  class="hoverr" href="./index.php?view=productos"><span class="glyphicon glyphicon-shopping-cart"></span> &nbsp; Productos</a>
+                </li> -->
                 <li>
-                    <a href="./index.php?view=productos"><span class="glyphicon glyphicon-shopping-cart"></span> &nbsp; Productos</a>
-                </li>
-                <li>
-                    <a href="./index.php?view=soporte"><span class="glyphicon glyphicon-flag"></span>&nbsp;&nbsp;Soporte técnico</a>
+                    <a href="./index.php?view=soporte"><span class="glyphicon glyphicon-earphone"></span>&nbsp;&nbsp;Soporte técnico</a>
                 </li>
 
                 <?php if(!isset($_SESSION['rol']) && !isset($_SESSION['nombre'])): ?>
@@ -94,7 +97,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Buscar">
                 </div>
-                <button type="button" class="btn btn-success">Buscar</button>
+                <button type="button" class="btn btn-warning">Buscar</button>
             </form>
         </div>
     </div>
@@ -137,7 +140,7 @@
                 </label>
              </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary btn-sm">Iniciar sesión</button>
+                <button type="submit" class="btn btn-warning btn-sm">Iniciar sesión</button>
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
               </div>
           </form>

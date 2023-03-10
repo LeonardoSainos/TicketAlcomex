@@ -160,8 +160,8 @@
                                             <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                          <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
-                                                            <div style="text-align:center; background: red; color:white;" class="modal-header">
-                                                                <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar a este Ticket (Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
+                                                            <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
+                                                                <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar este Ticket (Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
                                                             
                                                             </div>
                                                             <div class="modal-body">
@@ -170,8 +170,8 @@
                                                             <div style="align-items:center; justify-content:center;"class="modal-footer">
                                                                 <center>
                                                                    <input form="formulario" type="hidden" name="id_del" value="<?php echo $row['id']; ?>">       
-                                                                    <button form="formulario" type="submit"  class="btn btn-danger">SI</button>
-                                                                   <button type="button" class="btn btn-warning" data-dismiss="modal">CANCELAR</button>
+                                                                    <button form="formulario" type="submit"  class="btn btn-success">SI</button>
+                                                                   <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
                                                                 
                                                                 </center>
                                                             </div>
@@ -185,7 +185,7 @@
                                         endwhile; 
                                     ?>
                                       <tr> 
-                                           <td  class= "text-center" colspan="9"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
+                                           <td  class= "text-center" colspan="10"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
                                         </tr>
                                 </tbody>
                             </table>

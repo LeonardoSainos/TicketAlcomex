@@ -52,7 +52,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                 <img src="./img/Edit.png" alt="Image" class="img-responsive animated tada">
             </div>
             <div class="col-sm-9">
-                <a href="./admin.php?view=ticketadmin" class="btn btn-primary btn-sm pull-right"><i class="fa fa-reply"></i>&nbsp;&nbsp;Volver administrar Tickets</a>
+                <a href="./tecni.php?view=ticketTecni" class="btn btn-primary btn-sm pull-right"><i class="fa fa-reply"></i>&nbsp;&nbsp;Volver administrar Tickets</a>
             </div>
           </div>
         </div>

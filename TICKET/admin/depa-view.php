@@ -2,10 +2,10 @@
         <div class="container">
           <div class="row">
             <div class="col-sm-2">
-              <img src="./img/msj.png" alt="Image" class="img-responsive animated tada">
+              <img src="./img/depa.png"  stlyle="max-width: 100%;"alt="Image" class="img-responsive animated tada">
             </div>
             <div class="col-sm-10">
-              <p class="lead text-info">Bienvenido administrador, aqui se muestran todos los Tickets de Alcomex los cuales podra eliminar, modificar e imprimir.</p>
+              <p class="lead text-info">Bienvenido administrador, aqui se muestran todos los departamentos de trabajo de Alcomex los cuales podra eliminar, modificar e imprimir.</p>
             </div>
           </div>
         </div>
@@ -13,7 +13,7 @@
                 if(isset($_POST['id_dele'])){
                     $id = MysqlQuery::RequestPost('id_dele');
  
-                    if(MysqlQuery::Eliminar("ticket", "serie='$id'")){
+                    if(MysqlQuery::ProcedimientoEliminarDepartamentos("Depa", "$id")){
                         echo '
                             <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -35,32 +35,17 @@
                         '; 
                     }
                 }
-                /* Todos los tickets*/
-                $num_ticket_all=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario, d.nombre as departamento, c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  ORDER BY t.fecha DESC ");
-                $num_total_all=mysqli_num_rows($num_ticket_all);
-
-                /* Tickets pendientes*/
-                $num_ticket_pend=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , d.nombre as departamento , c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94574 OR (e.Nombre='PENDIENTE' OR e.Nombre='pendiente'))  ORDER BY t.fecha DESC");
-                $num_total_pend=mysqli_num_rows($num_ticket_pend);
-
-                /* Tickets en proceso*/
-                $num_ticket_proceso=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario, d.nombre as departamento , c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94575 OR (e.Nombre='EN PROCESO' OR e.Nombre='En proceso'))  ORDER BY t.fecha DESC");
-                $num_total_proceso=mysqli_num_rows($num_ticket_proceso);
-
-                /* Tickets resueltos*/
-                $num_ticket_res=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94576 OR (e.Nombre='Resuelto' OR e.Nombre='RESUELTO'))  ORDER BY t.fecha DESC ;");
-                $num_total_res=mysqli_num_rows($num_ticket_res);
+                /* Todos los departamentos*/
+                $num_depa_all=Mysql::consulta("SELECT DISTINCT d.idDepartamento,d.nombre,d.correo,d.descripcion, e.Nombre, c.nombre_completo, c.email_cliente FROM departamento d INNER JOIN estatus e ON d.idEstatus = e.idEstatus INNER JOIN cliente c ON d.idJefe = c.id_cliente");
+                $num_total_all=mysqli_num_rows($num_depa_all);
             ?>
 
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="nav nav-pills nav-justified">
-                            <li><a href="./admin.php?view=ticketadmin&ticket=all"><i class="fa fa-list"></i>&nbsp;&nbsp;Todos los tickets&nbsp;&nbsp;<span class="badge"><?php echo $num_total_all; ?></span></a></li>
-                            <li><a href="./admin.php?view=ticketadmin&ticket=pending"><i class="fa fa-envelope"></i>&nbsp;&nbsp;Tickets pendientes&nbsp;&nbsp;<span class="badge"><?php echo $num_total_pend; ?></span></a></li>
-                            <li><a href="./admin.php?view=ticketadmin&ticket=process"><i class="fa fa-folder-open"></i>&nbsp;&nbsp;Tickets en proceso&nbsp;&nbsp;<span class="badge"><?php echo $num_total_proceso; ?></span></a></li>
-                            <li><a href="./admin.php?view=ticketadmin&ticket=resolved"><i class="fa fa-thumbs-o-up"></i>&nbsp;&nbsp;Tickets resueltos&nbsp;&nbsp;<span class="badge"><?php echo $num_total_res; ?></span></a></li>
-                        </ul>
+                            <li><a href="#"><i class="fa fa-list"></i>&nbsp;&nbsp;Todos los departamentos&nbsp;&nbsp;<span class="badge"><?php echo $num_total_all; ?></span></a></li>
+                         </ul>
                     </div>
                 </div>
                 <br>
@@ -74,22 +59,9 @@
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
                                 $regpagina = 50;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
-                                if(isset($_GET['ticket'])){
-                                    if($_GET['ticket']=="all"){
-                                        //SELECT SQL_CALC_FOUND_ROWS * FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
-                                    }elseif($_GET['ticket']=="pending"){
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94574    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
-                                    }elseif($_GET['ticket']=="process"){
-                                    $consulta = "SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94575    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
-                                      }elseif($_GET['ticket']=="resolved"){
-                                    $consulta = "SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94576    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
-                                    }else{
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  ORDER BY t.fecha DESC LIMIT $inicio, $regpagina";
-                                    }
-                                }else{
-                                    $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario,c.email_cliente, d.nombre as departamento , e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  ORDER BY t.fecha DESC LIMIT $inicio, $regpagina";
-                                }
+                               
+                                    $consulta= "SELECT SQL_CALC_FOUND_ROWS d.idDepartamento,d.nombre,d.correo,d.descripcion, e.Nombre, c.nombre_completo, c.email_cliente FROM departamento d INNER JOIN estatus e ON d.idEstatus = e.idEstatus INNER JOIN cliente c ON d.idJefe = c.id_cliente   ORDER BY d.nombre ASC LIMIT $inicio, $regpagina";
+                         
 
 
                                 $selticket=mysqli_query($mysqli,$consulta);
@@ -106,14 +78,12 @@
                                     <tr>
                                         <th class="text-center"></th>
                                         <th class="text-center">#</th>
-                                        <th class="text-center">Fecha</th>
-                                        <th class="text-center">Serie</th>
-                                        <th class="text-center">Estado</th>
                                         <th class="text-center">Nombre</th>
-                                        <th class="text-center">Email</th>
-                                        <th class="text-center">Teléfono</th>
-                                        <th class="text-center">Departamento</th>
-                                      
+                                        <th class="text-center">Correo</th>
+                                        <th class="text-center">Descripción</th>
+                                        <th class="text-center">Estatus</th>
+                                        <th class="text-center">Líder</th>
+                                        <th class="text-center">Contacto líder</th>        
                                         <th class="text-center">Opciones</th>
                                     </tr>
                                 </thead>
@@ -123,19 +93,18 @@
                                         while ($row=mysqli_fetch_array($selticket, MYSQLI_ASSOC)): 
                                     ?>
                                     <tr>
-                                       <td class="text-center"> <input type="checkbox" name="Tickets[]" value="<?php  echo $row['id'];?>" /></td>    
+                                       <td class="text-center"> <input type="checkbox" name="Depas[]" value="<?php  echo $row['idDepartamento'];?>" /></td>    
                                         <td class="text-center"><?php echo $ct; ?></td>
-                                        <td class="text-center"><?php echo $row['fecha']; ?></td>
-                                        <td class="text-center"><?php echo $row['serie']; ?></td>
-                                        <td class="text-center"><?php echo $row['estado_ticket']; ?></td>
-                                        <td class="text-center"><?php echo $row['nombre_usuario']; ?></td>
-                                        <td class="text-center"><?php echo $row['email_cliente']; ?></td>
-                                        <td class="text-center"><?php echo $row['telefono_celular']; ?></td>
-                                        <td class="text-center"><?php echo $row['departamento']; ?></td>
+                                        <td class="text-center"><?php echo $row['nombre']; ?></td>
+                                        <td class="text-center"><?php echo $row['correo']; ?></td>
+                                        <td class="text-center"><?php echo $row['descripcion']; ?></td>
+                                        <td class="text-center"><?php echo $row['Nombre']; ?></td>          
+                                        <td class="text-center"><?php echo $row['nombre_completo']; ?></td>
+                                        <td class="text-center"><?php echo $row['email_cliente']; ?></td>  
+                                        <td style="display:none"  ><?php echo $row['idDepartamento']; ?></td>  
                                         <td class="text-center">
-                                            <a href="./lib/pdf.php?id_del=<?php echo $row['serie']; ?>" class="btn btn-sm btn-success" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
-
-                                            <a href="admin.php?view=ticketedit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                            
+                                            <a href="admin.php?view=depaedit&id=<?php echo $row['idDepartamento']; ?>" class="btn btn-sm btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                 <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
                                                 <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class="dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                    
                                        
@@ -143,7 +112,7 @@
                                             <div class="modal-dialog" role="document">
                                                <div class="modal-content">
                                                <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
-                                                   <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar este ticket(Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
+                                                   <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar este Departamento(Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
                                                
                                                </div>
                                                <div class="modal-body">
@@ -165,6 +134,9 @@
 
 
                                         </td>
+
+                                    
+                                    
                                     </tr>
                                     <?php
                                         $ct++;
@@ -172,7 +144,7 @@
                                     ?>
 
                                          <tr> 
-                                           <td  class= "text-center" colspan="10"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
+                                           <td  class= "text-center" colspan="9"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
                                         </tr>
                                 </tbody>
                             </table>
@@ -265,10 +237,10 @@
 <script>
         $('.dropbtn').on('click',function () {
         $tr=$(this).closest("#tabla tbody tr");
-       var datos=$tr.children("#tabla tbody td").map(function() {
+       var datos=$tr.children("#tabla tbody tr td").map(function() {
        return $(this).text(); 
         });
-       $("#borrar_id").val(datos[3]);                                           
+       $("#borrar_id").val(datos[8]);                                           
         });
 
         

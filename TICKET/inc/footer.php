@@ -1,5 +1,5 @@
 <footer>
-  <div class="container">
+  <div style="height:100%" class="container">
     <div class="row">
       <div class="col-sm-4">
         <h4 class="text-info">Siguenos</h4>

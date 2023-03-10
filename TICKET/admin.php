@@ -24,7 +24,7 @@ if($_SESSION['rol']!=4046){
             <div class="col-sm-12">
               <div class="page-header">
                 <h1 class="animated lightSpeedIn">Panel Administrativo</h1>
-                <span class="label label-danger">Alcomex S.A de C.V</span>
+                <span class="label label-warning">Alcomex S.A de C.V</span>
                 <p class="pull-right text-primary">
                   <strong>
                   <?php include "./inc/timezone.php"; ?>
@@ -35,7 +35,7 @@ if($_SESSION['rol']!=4046){
           </div>
         </div>
         <?php
-            $WhiteList=["ticketadmin","ticketedit","users","admin","config","tec"];
+            $WhiteList=["ticketadmin","ticketedit","users","admin","config","tec","depa","depaedit"];
             if(isset($_GET['view']) && in_array($_GET['view'], $WhiteList) && is_file("./admin/".$_GET['view']."-view.php")){
                 include "./admin/".$_GET['view']."-view.php";
             }else{

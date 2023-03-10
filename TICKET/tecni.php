@@ -24,7 +24,7 @@ if($_SESSION['rol']!=5267){
             <div class="col-sm-12">
               <div class="page-header">
                 <h1 class="animated lightSpeedIn">Panel técnico</h1>
-                <span class="label label-danger">Alcomex S.A de C.V</span>
+                <span class="label label-warning">Alcomex S.A de C.V</span>
                 <p class="pull-right text-primary">
                   <strong>
                   <?php include "./inc/timezone.php"; ?>

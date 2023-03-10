@@ -13,24 +13,30 @@
     <li data-target="#carousel-example-generic" data-slide-to="1"></li>
     <li data-target="#carousel-example-generic" data-slide-to="2"></li>
     <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="4"></li>
   </ol>
     <div class="carousel-inner">
        <div class="item active">
-           <img src="img/Trailers/track1.jpg" alt="">
+           <img style="max-width: 1920; min-width: 1920; max-height: 1000; min-height: 1000;" src="img/trailers/2T.jpg" alt="">
           <div class="carousel-caption">
-              HP Pavilion 14-b180la
+             
           </div>
+       </div>
+       <div class="item">
+       <img style="max-width: 1920; min-width: 1920; max-height: 1000; min-height: 1000;"  src="img/Trailers/track1.jpg" alt="">
+          <div class="carousel-caption">
+             </div>
        </div>
        <div class="item">
        <img style="max-width: 1920; min-width: 1920; max-height: 1000; min-height: 1000;"  src="img/Trailers/1T.jpg" alt="">
           <div class="carousel-caption">
-              TOSHIBA C45-ASP4307FL
+         
           </div>
        </div>
        <div class="item ">
        <img src="img/Trailers/camioneta.jpg" alt="">
           <div class="carousel-caption">
-              HP ProDesk 600 SFF i5-4570
+     
           </div>
         </div>
         <div class="item ">
@@ -138,7 +144,7 @@
 <script>
     $(document).ready(function(){
         $("#carousel-example-generic").carousel({
-            interval: 4000,
+            interval: 3000,
         });
     });
 </script>

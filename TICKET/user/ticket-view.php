@@ -1,4 +1,4 @@
-<?php if($_SESSION['nombre']!= "" && ($_SESSION['rol']==9947 ||  $_SESSION['rol']==4046 || $_SESSION['rol']==5267 )){
+<?php if(isset($_SESSION['nombre']) && ($_SESSION['rol']==9947 ||  $_SESSION['rol']==4046 || $_SESSION['rol']==5267 )){
         
 
         if( isset($_POST['name_ticket']) && isset($_POST['email_ticket'])){
@@ -16,9 +16,7 @@
           $numero_filas_total=$numero_filas+1;
           $id_ticket="TK".$codigo."N".$numero_filas_total;
           /*Fin codigo numero de ticket*/
-
-
-         // $fecha_ticket= MysqlQuery::RequestPost('fecha_ticket');
+           // $fecha_ticket= MysqlQuery::RequestPost('fecha_ticket');
           $nombre_ticket= MysqlQuery::RequestPost('name_ticket');
           $email_ticket=MysqlQuery::RequestPost('email_ticket');
           $departamento_ticket=MysqlQuery::RequestPost('departamento_ticket');
@@ -27,13 +25,9 @@
  
           $id = $_SESSION['id'];
           $tecnico = MysqlQuery::RequestPost('tecnico');
-
-
-
-
-          
+         
           $cabecera="From: LinuxStore El Salvador<linuxstore@hifenix.com>";
-          $mensaje_mail="¡Gracias por reportarnos su problema! Buscaremos una solución para su producto lo mas pronto posible. Su ID ticket es: ".$id_ticket;
+          $mensaje_mail="¡Gracias por reportarnos su problema! Buscaremos una solución para su producto lo más pronto posible. Su ID ticket es: ".$id_ticket;
           $mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
 
           if(MysqlQuery::Guardar("ticket","serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende", "'$id_ticket','$asunto_ticket','$mensaje_ticket',$id,'$departamento_ticket',94574,$tecnico")){
@@ -105,7 +99,7 @@
                           <label  class="col-sm-2 control-label">Nombre</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                <input type="text" class="form-control" placeholder="Nombre" required="" pattern="[a-zA-Z ]{1,30}"  required  name="name_ticket" title="Nombre Apellido" value="<?php echo $_SESSION['nombre_completo']; ?>" >
+                                <input type="text" class="form-control" placeholder="Nombre" required="" pattern="[a-zA-Z ]{1,60}"   name="name_ticket" title="Nombre Apellido" value="<?php echo $_SESSION['nombre_completo']; ?>" >
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
                               </div>
                           </div>
@@ -120,7 +114,6 @@
                               </div> 
                           </div>
                         </div>
-
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Departamento</label>
                           <div class="col-sm-10">
@@ -135,11 +128,7 @@
                                             </option>
                                             <?php
                                           }
-                
-                                        ?> 
-                                        
-                                    
-                                        
+                                        ?>                                        
                                       </select>
                                 <span class="input-group-addon"><i class="fa fa-users"></i></span>
                               </div> 
@@ -150,7 +139,7 @@
                           <label  class="col-sm-2 control-label">Asunto</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                <input type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" required="">
+                                <input type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="20" required="">
                                 <span class="input-group-addon"><i class="fa fa-paperclip"></i></span>
                               </div> 
                           </div>
@@ -160,6 +149,8 @@
                           <label  class="col-sm-2 control-label">Técnico</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
+
+                                          
                                           <select class="form-control" name="tecnico">
                                             <?php
                                             $t = Mysql::consulta("SELECT * from cliente Where id_rol = 5267 ");
@@ -167,8 +158,8 @@
                                              if(mysqli_num_rows($t)>0){
                                               $num = 1;
                                               while($tecnicos = mysqli_fetch_array($t)){
-                                                     $c=  Mysql:: consulta("SELECT count(*) FROM ticket WHERE (fecha BETWEEN  date('Y-m-d 00:00:00') AND date('Y-m-d 23:59:59')) AND id_atiende=" . $tecnicos['id_cliente']);
-                                                      if(mysqli_num_rows($c)<=20){
+                                                     $c=  Mysql:: consulta("SELECT * FROM ticket WHERE (fecha BETWEEN '" . date('Y-m-d') . " 00:00:00' AND '" .  date('Y-m-d'). " 23:59:59' ) AND id_atiende=" . $tecnicos['id_cliente']);
+                                                     if(mysqli_num_rows($c)<=20){
 
                                                         echo "<option value= '" . $tecnicos['id_cliente'] .  " '>".
                                                        " Técnico " .  $num;
@@ -177,8 +168,7 @@
                                                         ";
                                                   $num++;
                                                       }
-                                                     
-                                              }
+                                                   }
                                             }
                                             else{
 
@@ -200,14 +190,14 @@
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Detalles del problema</label>
                           <div class="col-sm-10">
-                            <textarea class="form-control" rows="3" placeholder="Escriba el problema que presenta su producto" name="mensaje_ticket" required=""></textarea>
+                            <textarea class="form-control" rows="3" placeholder= "Describa su problema" name="mensaje_ticket" required=""></textarea>
                           </div>
                         </div>
                         
 
                         <div class="form-group">
                           <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-info">Abrir ticket</button>
+                            <button type="submit" class="btn btn-warning">Abrir ticket</button>
                           </div>
                         </div>
                              </fieldset> 

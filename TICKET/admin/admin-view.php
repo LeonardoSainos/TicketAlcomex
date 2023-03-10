@@ -89,6 +89,7 @@
                             <table class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
+                                        <th class="text-center"></th>
                                         <th class="text-center">#</th>
                                         <th class="text-center">Nombre completo</th>
                                         <th class="text-center">Nombre de usuario</th>
@@ -105,6 +106,7 @@
                                         while ($row=mysqli_fetch_array($seladmin, MYSQLI_ASSOC)): 
                                     ?>
                                     <tr>
+                                        <td class="text-center"><input type="checkbox" name="Usuarios[]" value="<?php echo $row['id_cliente']; ?>"></td>
                                         <td class="text-center"><?php echo $ct; ?></td>
                                         <td class="text-center"><?php echo $row['nombre_completo']; ?></td>
                                         <td class="text-center"><?php echo $row['nombre_usuario']; ?></td>
@@ -113,16 +115,43 @@
                                         <td class="text-center"><?php echo $row['Esta'];?> </td>
                                         <td class="text-center"><?php echo $row['celular'];?> </td>
                                         <td class="text-center">
-                                            <form action="" method="POST" style="display: inline-block;">
-                                                <input type="hidden" name="id_del" value='<?php echo $row['id_cliente']; ?>'>
-                                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                                            </form>
+                                                  <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
+                                                 <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class=" dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                    
+                                       
+                                                    <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                         <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                            <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
+                                                                <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar al usuario (Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
+                                                            
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                
+                                                            </div>
+                                                            <div style="align-items:center; justify-content:center;"class="modal-footer">
+                                                                <center>
+                                                                <form id="formulario" action="" method="POST" style="display: inline-block;">                                             
+                                        
+                                                                   <input  type="hidden" name="id_dele"  id="borrar_id" >       
+                                                                    <button   name="ide" type="submit"  class="btn btn-success">SI</button>
+                                                                   <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
+                                                                </form>                        
+                                                                </center>
+                                                            </div>
+                                                            </div>
+                                                        </div>    
+                                                    </div>
+
+
                                         </td>
                                     </tr>
                                     <?php
                                         $ct++;
                                         endwhile; 
                                     ?>
+                                    <tr>
+                                        <td class="text-center"  colspan="9"> Seleccionar :<input onclick="MarcarCheckBox(this);"  type="checkbox" /> Todos | Ninguno </td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <?php else: ?>
@@ -197,3 +226,17 @@
 <?php
 }
 ?>
+
+
+
+<script>
+        $('.dropbtn').on('click',function () {
+        $tr=$(this).closest("#tabla tbody tr");
+       var datos=$tr.children("#tabla tbody td").map(function() {
+       return $(this).text(); 
+        });
+       $("#borrar_id").val(datos[4]);                                           
+        });
+
+        
+</script> 

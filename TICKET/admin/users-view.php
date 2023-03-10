@@ -4,7 +4,7 @@
                 $id_user=MysqlQuery::RequestPost('id_dele');
          
                     $eliminar= "email_cliente='$id_user'";
-                    echo $eliminar;
+      
                 if(MysqlQuery::Eliminar("cliente", $eliminar)){
                 echo '
                         <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
@@ -123,8 +123,8 @@
                                                     <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                          <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
-                                                            <div style="text-align:center; background: red; color:white;" class="modal-header">
-                                                                <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar a este Ticket (Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
+                                                            <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
+                                                                <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar al usuario (Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
                                                             
                                                             </div>
                                                             <div class="modal-body">
@@ -135,8 +135,8 @@
                                                                 <form id="formulario" action="" method="POST" style="display: inline-block;">                                             
                                         
                                                                    <input  type="hidden" name="id_dele"  id="borrar_id" >       
-                                                                    <button   name="ide" type="submit"  class="btn btn-danger">SI</button>
-                                                                   <button type="button" class="btn btn-warning" data-dismiss="modal">CANCELAR</button>
+                                                                    <button   name="ide" type="submit"  class="btn btn-success">SI</button>
+                                                                   <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
                                                                 </form>                        
                                                                 </center>
                                                             </div>

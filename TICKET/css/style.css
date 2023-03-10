@@ -18,3 +18,24 @@ body{
 footer{
 	background-color: black;
 }
+
+
+
+ 
+nav ul li a:hover{
+  color:#E67E22;
+  background-color: black;
+ background: black;
+  
+  }
+
+/*
+  
+tr td:hover{
+	  color: #E67E22;  
+	  background-color: #E67E22;
+	  background: #E67E22;
+  }
+
+ 
+*/
