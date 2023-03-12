@@ -17,9 +17,9 @@
                         echo '
                             <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                <h4 class="text-center">TICKET ELIMINADO</h4>
+                                <h4 class="text-center">DEPARTAMENTO ELIMINADO</h4>
                                 <p class="text-center">
-                                    El ticket fue eliminado del sistema con exito
+                                    El departamento fue eliminado del sistema con exito
                                 </p>
                             </div>
                         ';
@@ -29,7 +29,7 @@
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                                 <h4 class="text-center">OCURRIÓ UN ERROR</h4>
                                 <p class="text-center">
-                                    No hemos podido eliminar el ticket
+                                    No hemos podido eliminar el departamento
                                 </p>
                             </div>
                         '; 
@@ -52,6 +52,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
+                            
+
+
+                            
                             <?php
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
@@ -64,14 +68,14 @@
                          
 
 
-                                $selticket=mysqli_query($mysqli,$consulta);
+                                $seldepa=mysqli_query($mysqli,$consulta);
 
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
                         
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
 
-                                if(mysqli_num_rows($selticket)>0):
+                                if(mysqli_num_rows($seldepa)>0):
                             ?>
                             <table id="tabla" class="table table-hover table-striped table-bordered">
                                 <thead class="thead-dark">
@@ -90,7 +94,7 @@
                                 <tbody>
                                     <?php
                                         $ct=$inicio+1;
-                                        while ($row=mysqli_fetch_array($selticket, MYSQLI_ASSOC)): 
+                                        while ($row=mysqli_fetch_array($seldepa, MYSQLI_ASSOC)): 
                                     ?>
                                     <tr>
                                        <td class="text-center"> <input type="checkbox" name="Depas[]" value="<?php  echo $row['idDepartamento'];?>" /></td>    
@@ -149,13 +153,13 @@
                                 </tbody>
                             </table>
                             <?php else: ?>
-                                <h2 class="text-center">No hay tickets registrados en el sistema</h2>
+                                <h2 class="text-center">No hay departamentos registrados en el sistema</h2>
                             <?php endif; ?>
                         </div>
                         <?php 
                             if($numeropaginas>=1):
-                            if(isset($_GET['ticket'])){
-                                $ticketselected=$_GET['ticket'];
+                            if(isset($_GET['depa'])){
+                                $ticketselected=$_GET['depa'];
                             }else{
                                 $ticketselected="all";
                             }
@@ -170,7 +174,7 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=ticketadmin&ticket=<?php echo $ticketselected; ?>&pagina=<?php echo $pagina-1; ?>" aria-label="Previous">
+                                        <a href="./admin.php?view=depa&depa=<?php echo $ticketselected; ?>&pagina=<?php echo $pagina-1; ?>" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
@@ -180,9 +184,9 @@
                                 <?php
                                     for($i=1; $i <= $numeropaginas; $i++ ){
                                         if($pagina == $i){
-                                            echo '<li class="active"><a href="./admin.php?view=ticketadmin&ticket='.$ticketselected.'&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li class="active"><a href="./admin.php?view=depa&depa='.$ticketselected.'&pagina='.$i.'">'.$i.'</a></li>';
                                         }else{
-                                            echo '<li><a href="./admin.php?view=ticketadmin&ticket='.$ticketselected.'&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li><a href="./admin.php?view=depa&depa='.$ticketselected.'&pagina='.$i.'">'.$i.'</a></li>';
                                         }
                                     }
                                 ?>
@@ -196,7 +200,7 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=ticketadmin&ticket=<?php echo $ticketselected; ?>&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
+                                        <a href="./admin.php?view=depa&depa=<?php echo $ticketselected; ?>&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>

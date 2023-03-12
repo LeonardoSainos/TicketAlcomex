@@ -35,11 +35,11 @@ if($_SESSION['rol']!=4046){
           </div>
         </div>
         <?php
-            $WhiteList=["ticketadmin","ticketedit","users","admin","config","tec","depa","depaedit"];
+            $WhiteList=["ticketadmin","ticketedit","users","admin","config","tec","depa","depaedit","useredit"];
             if(isset($_GET['view']) && in_array($_GET['view'], $WhiteList) && is_file("./admin/".$_GET['view']."-view.php")){
                 include "./admin/".$_GET['view']."-view.php";
             }else{
-                echo '<h2 class="text-center">Lo sentimos, la opción que ha seleccionado no se encuentra disponible</h2>';
+                echo '<h2 class="text-center">Lo sentimos,la opción que ha seleccionado no se encuentra disponible</h2>';
             }
         ?>
 
