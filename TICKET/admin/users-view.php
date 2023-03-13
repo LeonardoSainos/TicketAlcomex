@@ -1,5 +1,7 @@
 <?php if($_SESSION['nombre']!="" && $_SESSION['rol']==4046){ ?>    
         <?php 
+
+        /*Eliminar */
             if(isset($_POST['id_dele'])){
                 $id_user=MysqlQuery::RequestPost('id_dele');
          
@@ -11,9 +13,9 @@
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                             <h4 class="text-center">USUARIO ELIMINADO</h4>
                             <p class="text-center">
-                                El usuario fue eliminado del sistema con exito
+                                El usuario fue eliminado del sistema con éxito
 
-                                '. $eliminar .'
+                            
                             </p>
                         </div>
                     ';  
@@ -28,6 +30,51 @@
                         </div>
                     ';
                 }
+            }
+
+            // Guardar nuevo usuario
+            else if(isset($_POST['Gnombre']) && isset($_POST['Gapellidos']) && isset($_POST['Gcorreo'] )){
+                $N = MysqlQuery :: RequestPost('Gnombre');
+                $A = MysqlQuery :: RequestPost('Gapellidos');
+                $Ncompleto = $N . " " . $A;
+                $Gcorreo = MysqlQuery :: RequestPost('Gcorreo');
+                $Departamento = MysqlQuery :: RequestPost('Gdepartamento');
+                $Rol = MysqlQuery :: RequestPost('Grol');
+                $Estatus = MysqlQuery :: RequestPost('Gestatus');
+                $Telefono = MysqlQuery :: RequestPost('Gtelefono');
+                $Gusuario = Mysqlquery:: RequestPost('Gusuario');
+                $Verificar = Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" . $Gcorreo ."' OR telefono_celular = ' " . $Telefono  . "'");
+                if(mysqli_num_rows($Verificar)<=0){
+                    if(MysqlQuery::Guardar("cliente", "nombre_completo, nombre_usuario, email_cliente,id_departamento,id_rol,idEstatus,telefono_celular", "'$Ncompleto', '$Gusuario', '$Gcorreo',$Departamento, $Rol,$Estatus,' $Telefono'"))
+                    {
+                        echo '
+                        <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="text-center">REGISTRO EXITOSO</h4>
+                            <p class="text-center">
+                                Cuenta creada exitosamente, resetea la contraseña del usuario para que posteriormente se le notifique que ya puede iniciar sesión.
+                            </p>
+                        </div>
+                    ';
+
+                    }
+                }
+                else{
+
+
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                        <p class="text-center">
+                        Este correo o número de teléfono ya han sido registrados.
+                        </p>
+                    </div>
+                '; 
+
+
+                     }
+
             }
 
             $idA=$_SESSION['id'];
@@ -51,7 +98,7 @@
                 <img src="./img/card_identy.png" alt="Image" class="img-responsive animated flipInY">
             </div>
             <div class="col-sm-10">
-              <p class="lead text-info">Bienvenido administrador, en esta página se muestran todos los usuarios  registrados en soporte técnico Alcomex, usted podra eliminarlos si lo desea.</p>
+              <p class="lead text-info">Bienvenido administrador, en esta página se muestran todos los <strong>Usuarios </strong> registrados en soporte técnico Alcomex, usted podra eliminarlos si lo desea.</p>
             </div>
           </div>
         </div>
@@ -59,21 +106,22 @@
         <br><br>
         
         <div class="container">
-        <div class='btn-group'>
+                                       <div class='btn-group'>
                                                 <button class='btn dropdown-toggle btn-warning' data-toggle='dropdown' value='Más'>
                                                     Más
                                                 <span class='caret'></span>
                                                 </button>
                                                 <ul class='dropdown-menu'>
                                                 <!-- dropdown menu links -->
-                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
-                                                  
+                                                        
+                                                        <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
-                                                    
-                                                    
-                                                          
-                                                </ul>
-                                                </div>
+                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
+                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
+                                                        <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input class='btn btn-link ' style='text-decoration:none;'  type="submit" name="Resetear" value=" Resetear contraseña" /> </a></li>  
+                                            
+                                                    </ul>
+                                          </div>  
                                                 <br><br>
                 <div class="row">
                     <div class="col-md-12 text-center">
@@ -256,48 +304,78 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="container">
                             <div class="modal" tabindex="-1" id="modal1" >
                                 <div class="modal-dialog modal-xlg  modal-dialog-centered">
                                     <div class="modal-content">
                                     <div class="modal-header" style="background: black; text-align:center;">
                                         <button class="close" data-dismiss="modal">&times;</button>
-                                          <h1 style="color: white;">Agregar un nuevo usuario</h1>
+                                          <h1 style="color: white;">Agregar  nuevo usuario</h1>
                                         </div>
                                           <div class="modal-body">
-                                            <form id="add"class="formu"  action= "" method="post">
-                                                  <h1>Formulario para crear usuario nuevo </h1>
-                                                <br>
+                                            <form id="add" class="formu"  action= "" method="POST">
                                                 
-                                                <label for="name">Nombre:</label>
-                                                <input REQUIRED  class="formu form-control" type="text" name="name" placeholder="Nombre">
+                                                
+                                                <div class="form-group">
+                                               <label class="col-sm-2 control-label">Nombre:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                             <input REQUIRED  class="formu form-control" type="text" name="Gnombre" placeholder="Nombre" maxlength="75">
+                                                             <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                           
+                                                        </div>
+                                                      </div>
+                                                </div> 
                                                 <br>
-                                                <label for="apellidos">Apellidos :</label>
-                                                <input REQUIRED  class=" formu form-control" type="text" name="apellidos" placeholder="Apellidos">
-                                                <br>
-                                                <label for="contraseña">La contraseña se debe resetear desde la lista de usuarios para seguridad del usuario</label>
+                                                <br> <br>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Apellidos:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                          <input REQUIRED  class=" formu form-control" type="text" name="Gapellidos" placeholder="Apellidos" maxlength="70">
+                                                          <span class="input-group-addon"><i class="fa fa-user-o"></i></span>
+                           
+                                                        </div>
+                                                      </div>
+                                                </div>
+                                             
+                                                    <br>
                                                    <br>
-                                                   <br>
-                                                <label for="correo">Correo:</label>
-                                                <input  REQUIRED  class="formu form-control" type="email" name="correo" placeholder="Correo electronico">
+                                                   <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Correo:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                           <input  REQUIRED  class="formu form-control" type="email" name="Gcorreo" placeholder="Correo electronico" maxlength="70">
+                                                           <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                           
+                                                        </div>
+                                                      </div>
+                                                   </div>
                                                 <br>
-                                                <?php $E=Mysql::consulta("SELECT * FROM estatus");
+                                                <br>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Usuario:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                           <input  REQUIRED  class="formu form-control" type="text" name="Gusuario" placeholder="Nombre de usuario" maxlength="70">
+                                                           <span class="input-group-addon"><i class="fa fa-address-book"></i></span>
+                           
+                                                        </div>
+                                                      </div>
+                                                   </div>
+                                                <br>
+                                                <br>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Estatus:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                <?php $E=Mysql::consulta("SELECT * FROM estatus WHERE ((idEstatus = 31448 OR idEstatus = 94573 ) OR   (idEstatus = 19231 OR idEstatus =  25542 ) ) ORDER BY Nombre");
                                                 echo "
-                                                <label for='estatus'>Estatus :</label>
+                                            
                                                 
-                                                <select REQUIRED  class='formu form-control'name='estatus'>";
+                                                <select REQUIRED  class='formu form-control'name='Gestatus'>";
                                                 if ($E) {
                                                     while ($EST=mysqli_fetch_array($E,MYSQLI_ASSOC)) {
                                                         echo"  <option value=" .$EST['idEstatus']. ">" .$EST['Nombre']. "</option>";
@@ -307,12 +385,19 @@
                                                 
                                                  echo "</select>"
                                                 ?>
-                                                <br>
+                                                  <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                           
+                                                        </div>
+                                                      </div>
+                                                   </div>
+                                                <br><br>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Rol:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
                                                 <?php $E=Mysql::consulta("SELECT * FROM rol ");
                                                 echo "
-                                                <label for='rol'>Rol:</label>
-                                                
-                                                <select REQUIRED  class='formu form-control'name='rol'>";
+                                                   <select REQUIRED  class='formu form-control'name='Grol'>";
                                                 if ($E) {
                                                     while ($EST=mysqli_fetch_array($E,MYSQLI_ASSOC)) {
                                                         echo"  <option value=" .$EST['idRol']. ">" .$EST['Nombre']. "</option>";
@@ -320,12 +405,23 @@
                                                 }
                                                  echo "</select>"
                                                 ?>
+                                                          <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+                           
+                                                        </div>
+                                                      </div>
+                                                </div>
                                                 <br>
+                                                <br>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Departamento: </label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                        
                                                 <?php $E=Mysql::consulta("SELECT nombre,idDepartamento From departamento");
                                                 echo "
-                                                <label for='departamento'>Departamento:</label>
-                                                
-                                                <select REQUIRED  class='formu form-control'name='departamento'>";
+                                                    
+                                                <select REQUIRED  class='formu form-control'name='Gdepartamento'>";
                                                 if ($E) {
                                                     while ($EST=mysqli_fetch_array($E,MYSQLI_ASSOC)) {
                                                         echo"  <option value=" .$EST['idDepartamento']. ">" .$EST['nombre']. "</option>";
@@ -333,14 +429,25 @@
                                                 }
                                                  echo "</select>"
                                                 ?>
-                                                
-                                                   <br>
-                                                   <label for="correo">Teléfono:</label>
-                                                <input  REQUIRED  class="formu form-control" type="tel" name="telefono" placeholder="Número de celular" maxlenght="10"/>
-                                              
+                                                               <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                      <br><br>
+                                                   <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Teléfono:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                              <input  REQUIRED  class="formu form-control" type="tel" name="Gtelefono" placeholder="Número de celular"  maxlength="10"/>
+                                                             <span class="input-group-addon"><i class="fa fa-phone-square"></i></span>
+                                                        </div>
+                                                      </div>
+                                                   </div><br><br>
                                                 
                                                 <!--id_usuario	id_estatus	id_rol	nombre	apellidos	id_departamento	contraseña	correo	id_zona	fecha_creacion	fecha_actualizacion	
   -->                                      <div class="modal-footer">
+
+                                                    
                                                   <input class="btn btn-warning" type="submit" value="Crear usuario">
                                                 <input class="btn btn-success"  onclick="funcion_reiniciar('add');"type="button" value="Restablecer">
                                                 <button class="btn btn-danger" data-dismiss="modal">Cancelar </button>

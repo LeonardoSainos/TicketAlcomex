@@ -10,6 +10,8 @@
           </div>
         </div>
             <?php
+
+            // ELIMINAR DEPARTAMENTOS
                 if(isset($_POST['id_dele'])){
                     $id = MysqlQuery::RequestPost('id_dele');
  
@@ -35,12 +37,68 @@
                         '; 
                     }
                 }
+
+                //AÑADIR NUEVO DEPARTAMENTO
+
+                else if(isset($_POST['Gnombre']) && isset($_POST['Gcorreo']) && isset($_POST['Gdescripcion'])){
+                    $Gnombre = MysqlQuery:: RequestPost('Gnombre');
+                    $Gcorreo = MysqlQuery :: RequestPost('Gcorreo');
+                    $Gdescripcion = MysqlQuery:: RequestPost('Gdescripcion');
+                    $Gestatus = MysqlQuery :: RequestPost('Gestatus');
+                    $Glider = MysqlQuery :: RequestPost('Glider');
+
+                    $Existe = Mysql::consulta("SELECT * FROM departamento WHERE correo = '" . $Gcorreo . "' OR nombre = '" . $Gnombre . "'");
+                    if(mysqli_num_rows($Existe)<=0){
+                        if(MysqlQuery :: Guardar("departamento","nombre,correo,descripcion,idEstatus,idJefe","'$Gnombre','$Gcorreo','$Gdescripcion',$Gestatus, $Glider")){
+                            echo '
+                            <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="text-center">REGISTRO EXITOSO</h4>
+                                <p class="text-center">
+                                    Departamento creado correctamente.
+                                </p>
+                            </div>
+                        ';
+                        }
+                    }
+                    else{
+                        echo '
+                        <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                            <p class="text-center">
+                                Este correo o departamento ya han sido registrados.
+                            </p>
+                        </div>
+                    '; 
+
+                    }
+
+                }
                 /* Todos los departamentos*/
                 $num_depa_all=Mysql::consulta("SELECT DISTINCT d.idDepartamento,d.nombre,d.correo,d.descripcion, e.Nombre, c.nombre_completo, c.email_cliente FROM departamento d INNER JOIN estatus e ON d.idEstatus = e.idEstatus INNER JOIN cliente c ON d.idJefe = c.id_cliente");
                 $num_total_all=mysqli_num_rows($num_depa_all);
             ?>
+            
 
             <div class="container">
+            <br><br>
+            <div class='btn-group'>
+                                                <button class='btn dropdown-toggle btn-warning' data-toggle='dropdown' value='Más'>
+                                                    Más
+                                                <span class='caret'></span>
+                                                </button>
+                                                <ul class='dropdown-menu'>
+                                                <!-- dropdown menu links -->
+                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-lock'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo"> </li>
+                                                  
+                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
+                                                    
+                                                    
+                                                          
+                                                </ul>
+                                          </div>
+                                       
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="nav nav-pills nav-justified">
@@ -234,6 +292,120 @@
 
 
                                                       
+
+
+<div class="container">
+                            <div class="modal" tabindex="-1" id="modal1" >
+                                <div class="modal-dialog modal-xlg  modal-dialog-centered">
+                                    <div class="modal-content">
+                                    <div class="modal-header" style="background: black; text-align:center;">
+                                        <button class="close" data-dismiss="modal">&times;</button>
+                                          <h1 style="color: white;">Agregar nuevo departamento</h1>
+                                        </div>
+                                          <div class="modal-body">
+                                            <form id="add" class="formu"  action= "" method="POST">
+                                                
+                                                
+                                                <div class="form-group">
+                                               <label class="col-sm-2 control-label">Nombre:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                             <input REQUIRED  class="formu form-control" type="text" name="Gnombre" placeholder="Nombre" maxlength="75">
+                                                             <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                           
+                                                        </div>
+                                                      </div>
+                                                </div> 
+                                                      <br> <br>  <br>
+                                                   <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Correo:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                           <input  REQUIRED  class="formu form-control" type="email" name="Gcorreo" placeholder="Correo electronico" maxlength="70">
+                                                           <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                           
+                                                        </div>
+                                                      </div>
+                                                   </div>
+                                                <br>
+                                                <br>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Descripción:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                           <input  REQUIRED  class="formu form-control" type="text" name="Gdescripcion" placeholder="Descripción" maxlength="150">
+                                                           <span class="input-group-addon"><i class="fa fa-address-book"></i></span>
+                           
+                                                        </div>
+                                                      </div>
+                                                   </div>
+                                                <br>
+                                                <br>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Estatus:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                                <?php $E=Mysql::consulta("SELECT * FROM estatus WHERE ((idEstatus = 31448 OR idEstatus = 94573 ) OR   (idEstatus = 19231 OR idEstatus =  25542 ) ) ORDER BY Nombre");
+                                                                echo "     
+                                                                <select REQUIRED  class='formu form-control'name='Gestatus'>";
+                                                                if ($E) {
+                                                                    while ($EST=mysqli_fetch_array($E,MYSQLI_ASSOC)) {
+                                                                        echo"  <option value=" .$EST['idEstatus']. ">" .$EST['Nombre']. "</option>";
+                                                                    }
+                                                                }      
+                                                                echo "</select>"
+                                                                ?>
+                                                        <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                                                        </div>
+                                                      </div>
+                                                   </div>
+                                                <br><br>
+
+
+                                    
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Encargado:</label>
+                                                      <div class='col-sm-10'>
+                                                        <div class="input-group">
+                                                                    <?php $E=Mysql::consulta("SELECT * FROM cliente ORDER BY nombre_completo");
+                                                                    echo "
+                                                                        
+                                                                    <select REQUIRED  class='formu form-control'name='Glider'>";
+                                                                    if ($E) {
+                                                                        while ($EST=mysqli_fetch_array($E,MYSQLI_ASSOC)) {
+                                                                            echo"  <option value=" .$EST['id_cliente']. ">" .$EST['nombre_completo']. "</option>";
+                                                                        }
+                                                                    }
+                                                                    echo "</select>"
+                                                                    ?>
+                                                               <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                      <br><br>
+                                                 <br><br>
+                                                
+                                                <!--id_usuario	id_estatus	id_rol	nombre	apellidos	id_departamento	contraseña	correo	id_zona	fecha_creacion	fecha_actualizacion	
+  -->                                      <div class="modal-footer">
+
+                                                    
+                                                  <input class="btn btn-warning" type="submit" value="Crear departamento">
+                                                <input class="btn btn-success"  onclick="funcion_reiniciar('add');"type="button" value="Restablecer">
+                                                <button class="btn btn-danger" data-dismiss="modal">Cancelar </button>
+
+                                          </div>
+                                            </form>
+
+                                        </div>
+                                              
+                                        </div>
+                                    </div>
+                                </div>
+                                     <!--FIN DEL MODAL -->
+                            </div>
 
 
 

@@ -53,6 +53,20 @@
             ?>
 
             <div class="container">
+            <div class='btn-group'> <br><br> 
+                                                <button class='btn dropdown-toggle btn-warning' data-toggle='dropdown' value='Más'>
+                                                    Más
+                                                <span class='caret'></span>
+                                                </button>
+                                                <ul class='dropdown-menu'>
+                                              <!-- dropdown menu links -->
+                                             <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
+                                                    
+                                                    
+                                                          
+                                                </ul>
+                                                <br><br>
+                                          </div>
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="nav nav-pills nav-justified">
