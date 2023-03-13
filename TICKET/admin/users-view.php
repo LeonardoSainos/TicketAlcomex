@@ -115,10 +115,10 @@
                                                 <!-- dropdown menu links -->
                                                         
                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
-                                                        <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input class='btn btn-link ' style='text-decoration:none;'  type="submit" name="Resetear" value=" Resetear contraseña" /> </a></li>  
+                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
+                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
+                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
+                                                        <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" name="Resetear" value=" Resetear contraseña" /> </a></li>  
                                             
                                                     </ul>
                                           </div>  
@@ -151,6 +151,7 @@
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
                                 if(mysqli_num_rows($selusers)>0):
                             ?>
+                            <form id="acciones" method="POST" action="../TICKET/admin/acciones-view.php">
                             <table id="tabla" class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
@@ -227,6 +228,8 @@
                                 
                                 </tbody>
                             </table>
+                            </form> 
+                            
 
 
                          

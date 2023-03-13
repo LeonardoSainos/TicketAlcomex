@@ -35,7 +35,7 @@ if($_SESSION['rol']!=4046){
           </div>
         </div>
         <?php
-            $WhiteList=["ticketadmin","ticketedit","users","admin","config","tec","depa","depaedit","useredit"];
+            $WhiteList=["ticketadmin","ticketedit","users","admin","config","tec","depa","depaedit","useredit","acciones"];
             if(isset($_GET['view']) && in_array($_GET['view'], $WhiteList) && is_file("./admin/".$_GET['view']."-view.php")){
                 include "./admin/".$_GET['view']."-view.php";
             }else{
