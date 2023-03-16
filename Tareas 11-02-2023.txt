@@ -1,0 +1,50 @@
+	TAREAS POR HACER HOY:
+1.-En administrador, poder actualizar técnico  /////////////////////////////////////
+2.- Solo asignar tickets a técnicos  ////////////////////////////        
+3.- En tabla de tickets poder ver quien los atiende//////////
+4..- Agregar un check box en las tablas de tickets y usuarios //////////////////
+5.- Modal para confirmaciíon de eliminar //////////////////////////
+6.- Arreglar los cierres de sesión inesperados en tecnico.////////////////////////////////
+7.- Limitar consultas solo con sus usuarios ////////////////////////////
+
+
+
+
+24-02-2023
+
+1.- Arreglar diseño de index ***
+2.- Productos eliminar ///////////////////////////
+3.- Propiedad hover en nav bar de acuerdo al logotipo ////////////////////////
+4.- Color de tablas ////////////////////////////////
+5.- Agregar botón de "más" en tickets, departamentos  y usuarios***  ////////////////////////////
+6.-  Añadir un buscador***
+7.-Logotipo en index ***
+8.- Funcionalidad en los checkbox**** 
+9.- Añadir área de departamentos  ///////////////////////////
+10.- Bug de base de datos tabla ticket   //////////////////////////////////////////////
+11.- Atributo imagen en ticket y bd.table ticket *****
+12.- Logotipo en parte del sistema      ////////////////
+13.- Reseteo de contraseña***
+14.- Añadir usuario***  ////////////////////////////
+15.- CRUD departamento*** //////////////////////////
+16.- Funcionalidad de envio de correo*** 
+17.- Copias de seguridad diarias ***
+18.- Bug al superar los 20 tickets /////////////////////////
+19-. CRUD Usuario**** ///////////////////////////////
+20.- Añadir seccion "Mis tickets en administracion"*****
+21.- Bug en pdf***
+22.- Bug en eliminar tickets administración /////////////////////////////
+23.- Procedimiento almacenados comenzar /////////////////////////////////
+24.- Procedimiento almacenado al elimianr usuario, actualizar departamento en caso de que sea jefe, cambiar quien atiende un ticket o eliminar su ticket y por ultimo eliminar usuario**** 
+25.- Procedimiento almacenado al eliminar ticket, cambiar quien atiende dicho usuario **
+26 .-Como montar un servidor web en equipo de computo**
+
+ 
+ 27-.- Desabilitar bloqueos ticket en administrador
+ 28.- Limite de 20 tickets añadir a cola 
+ 29.- Bloquear edicion de nombre y correo en tecnico al crear ticket
+ 30.- Programador de fechas de baja y tener un registro de  
+31 .- Cambiar consulta en usuarios bloqueados ni disponibles para tickets 
+32.- En pdf cambiar Fecha por creado 
+33.- Filtros de busqueda 
+ 

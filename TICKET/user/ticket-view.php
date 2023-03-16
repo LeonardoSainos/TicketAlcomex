@@ -99,7 +99,7 @@
                           <label  class="col-sm-2 control-label">Nombre</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                <input type="text" class="form-control" placeholder="Nombre" required="" pattern="[a-zA-Z ]{1,60}"   name="name_ticket" title="Nombre Apellido" value="<?php echo $_SESSION['nombre_completo']; ?>" >
+                                <input type="text" readonly="" class="form-control" placeholder="Nombre" required="" pattern="[a-zA-Z ]{1,60}"   name="name_ticket" title="Nombre Apellido" value="<?php echo $_SESSION['nombre_completo']; ?>" >
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
                               </div>
                           </div>
@@ -109,7 +109,7 @@
                           <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                <input type="email" class="form-control" id="inputEmail3" required  placeholder="Email" name="email_ticket" required="" title="Ejemplo@dominio.com" value="<?php echo $_SESSION['email']; ?>" >
+                                <input readonly="" type="email" class="form-control" id="inputEmail3" required  placeholder="Email" name="email_ticket" required="" title="Ejemplo@dominio.com" value="<?php echo $_SESSION['email']; ?>" >
                                 <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
                               </div> 
                           </div>
@@ -153,7 +153,7 @@
                                           
                                           <select class="form-control" name="tecnico">
                                             <?php
-                                            $t = Mysql::consulta("SELECT * from cliente Where id_rol = 5267 ");
+                                            $t = Mysql::consulta("SELECT * FROM cliente WHERE id_rol = 5267 AND  idEstatus<> 25542 ");
                                           //  $tecnicos = mysqli_fetch_array($t, MYSQLI_ASSOC);
                                              if(mysqli_num_rows($t)>0){
                                               $num = 1;

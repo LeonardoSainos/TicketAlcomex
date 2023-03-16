@@ -4,7 +4,7 @@
     $radio=MysqlQuery::RequestPost('optionsRadios');
     if($nombre!="" && $contra!="" && $radio!=""){
         if($radio=="admin"){
-            $sql=Mysql::consulta("SELECT * FROM cliente WHERE ((nombre_usuario= '$nombre' OR email_cliente='$nombre') AND clave='$contra') and id_rol = 4046");
+            $sql=Mysql::consulta("SELECT * FROM cliente WHERE ((nombre_usuario= '$nombre' OR email_cliente='$nombre') AND clave='$contra') AND (id_rol = 4046   AND idEstatus <> 25542 )");
             if(mysqli_num_rows($sql)>0){
                 $reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
                 $_SESSION['nombre']=$reg['nombre_usuario'];
@@ -13,6 +13,7 @@
                 $_SESSION['email']=$reg['email_cliente'];
                 $_SESSION['clave']=$contra;
                 $_SESSION['rol'] = $reg['id_rol'];
+                $_SESSION['estatus'] = $reg['idEstatus'];
 //                $_SESSION['tipo']="admin";
             }else{
                echo '
@@ -26,7 +27,7 @@
                 '; 
             }
         }elseif($radio=="user"){
-            $sql=Mysql::consulta("SELECT * FROM cliente WHERE ((nombre_usuario = '$nombre' OR email_cliente  = '$nombre') AND clave='$contra' ) and id_rol = 9947");
+            $sql=Mysql::consulta("SELECT * FROM cliente WHERE ((nombre_usuario = '$nombre' OR email_cliente  = '$nombre') AND clave='$contra' ) AND (id_rol = 9947 AND idEstatus<> 25542)");
             if(mysqli_num_rows($sql)>0){
                 $reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
                 $_SESSION['nombre']=$reg['nombre_usuario'];
@@ -35,6 +36,7 @@
                 $_SESSION['email']=$reg['email_cliente'];
                 $_SESSION['clave']=$contra;
                 $_SESSION['rol'] = $reg['id_rol'];
+                $_SESSION['estatus'] = $reg['idEstatus'];
                // $_SESSION['tipo']="user";
             }
             else{
@@ -53,7 +55,7 @@
 
         }
         elseif($radio=="tec" ){
-            $sql=Mysql::consulta("SELECT * FROM cliente WHERE ((nombre_usuario = '$nombre' OR email_cliente  = '$nombre') AND clave='$contra' ) and id_rol = 5267");
+            $sql=Mysql::consulta("SELECT * FROM cliente WHERE ((nombre_usuario = '$nombre' OR email_cliente  = '$nombre') AND clave='$contra' )AND (id_rol = 5267 AND idEstatus<> 25542)");
             if(mysqli_num_rows($sql)>0){
                 $reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
                 $_SESSION['nombre']=$reg['nombre_usuario'];
@@ -62,6 +64,7 @@
                 $_SESSION['email']=$reg['email_cliente'];
                 $_SESSION['clave']=$contra;
                 $_SESSION['rol'] = $reg['id_rol'];
+                $_SESSION['estatus'] = $reg['idEstatus'];
                // $_SESSION['tipo']="user";
             }
             else{

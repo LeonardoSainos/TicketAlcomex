@@ -7,7 +7,7 @@ header('Content-Type: text/html; charset=UTF-8');
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Alcomex soporte técnico</title>
+         <title>Alcomex soporte técnico</title>
         <link rel="icon" href="favicon.png">
         <?php include "./inc/links.php"; ?>        
     </head>

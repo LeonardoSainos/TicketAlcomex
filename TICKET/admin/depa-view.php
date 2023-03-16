@@ -370,7 +370,7 @@
                                                     <label class="col-sm-2 control-label">Encargado:</label>
                                                       <div class='col-sm-10'>
                                                         <div class="input-group">
-                                                                    <?php $E=Mysql::consulta("SELECT * FROM cliente ORDER BY nombre_completo");
+                                                                    <?php $E=Mysql::consulta("SELECT * FROM cliente WHERE idEstatus<> 25542 ORDER BY nombre_completo ");
                                                                     echo "
                                                                         
                                                                     <select REQUIRED  class='formu form-control'name='Glider'>";

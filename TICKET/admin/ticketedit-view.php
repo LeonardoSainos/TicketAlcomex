@@ -1,5 +1,4 @@
 <?php
- 
 
 if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST['estado_ticket'])){
 		$id_edit=MysqlQuery::RequestPost('id_edit');
@@ -7,14 +6,14 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
 		$solucion_edit=  MysqlQuery::RequestPost('solucion_ticket');
 		$radio_email=  MysqlQuery::RequestPost('optionsRadios');
     $Atiende_edit = MysqlQuery :: RequestPost('id_atiende');
-
+    $fecha = MysqlQuery :: RequestPost('fecha_ticket');
 
 
 		$cabecera="From: alcomex<correodepruebasutp@gmail.com>";
 		$mensaje_mail="Estimado usuario la solución a su problema es la siguiente : ".$solucion_edit;
 		$mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
 //  echo "<script> alert('" . $estado_edit . "' ); </script>";
-		if(MysqlQuery::Actualizar("ticket", "id_atiende='$Atiende_edit', idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'")){
+		if(MysqlQuery::Actualizar("ticket", "fecha='$fecha',id_atiende='$Atiende_edit', idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'")){
 			echo '
                 <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -67,7 +66,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                             <label class="col-sm-2 control-label">Fecha:</label>
                             <div class='col-sm-10'>
                                 <div class="input-group">
-                                    <input class="form-control" readonly="" type="text" name="fecha_ticket" readonly="" value="<?php echo $reg['fecha']?>">
+                                    <input class="form-control"  title="El formato debe contener fecha y hora"    pattern="[0-9]{4}-[0-9]{2}-[0-9]{2} [0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}" type="text" name="fecha_ticket"  value="<?php echo $reg['fecha']?>">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                 </div>
                             </div>

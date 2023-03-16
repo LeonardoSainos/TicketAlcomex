@@ -3,6 +3,7 @@ require "./fpdf/fpdf.php";
 include './class_mysql.php';
 include './config.php';
 //require '../inc/timezone.php';
+header('Content-Type: text/html; charset=UTF-8');  
 
 $id = MysqlQuery::RequestGet('id_del');
 $sql = Mysql::consulta("SELECT t.id_atiende, t.fecha,t.serie, e.Nombre as estado_ticket, c.nombre_completo, c.nombre_usuario,c.email_cliente, d.nombre as departamento, t.asunto, t.solucion, t.mensaje,t.fecha_actualizacion as actualizacion FROM ticket t LEFT JOIN cliente c ON t.idUsuario= c.id_cliente INNER JOIN estatus e ON e.idEstatus = t.idStatus INNER JOIN departamento d ON d.idDepartamento= t.idDepartamento WHERE t.serie = '$id';");
@@ -41,22 +42,22 @@ $pdf->SetFont("Arial","b",10);
 $pdf->Cell (0,5,utf8_decode('Información de Ticket #'.utf8_decode($reg['serie'])),0,1,'L');
 $pdf->Ln();
 $pdf->SetFont("Arial","b",9);
-$pdf->Cell (50,16,'Fecha:'.  $reg['fecha'],1,0,'C');
+$pdf->Cell (50,16,'Creado:'.  $reg['fecha'],1,0,'C');
 $pdf->SetFont("Arial","b",11);
 $pdf->Cell (85,32,'SOLICITUD DE SERVICIO TI',1,0,'C');
 $pdf->SetFont("Arial","b",9);
 $pdf->Cell (50,16,'Actualizado:' .$reg['actualizacion'],1,1,'L');
-$pdf->Cell (50,16,'Creador:'.  $reg['nombre_usuario'],1,0,'L');
+$pdf->Cell (50,16,'Creador:'.  utf8_decode($reg['nombre_usuario']),1,0,'L');
 $pdf->Cell (85,16,'',0,0,'C');
-$pdf->Cell (50,16,'Seguimiento:' . $reg1['nombre_usuario'],1,1,'L');
+$pdf->Cell (50,16,'Seguimiento:' . utf8_decode($reg1['nombre_usuario']),1,1,'L');
 $pdf->Cell(50, 60, utf8_decode('Área: ' . $reg['departamento']),1,0,'L');
-$pdf->Cell(42.5, 60, 'Asunto: ' . $reg['asunto'] ,1,0, 'L');
+$pdf->Cell(42.5, 60, 'Asunto: ' . utf8_decode($reg['asunto']) ,1,0, 'L');
 $pdf->Cell(42.5, 60, 'Fecha de fin: ' . date("Y-m-d") ,1,0, 'L');
-$pdf->Cell(50, 60, 'Estatus: ' . $reg['estado_ticket'],1,1,'L');
+$pdf->Cell(50, 60, 'Estatus: ' . utf8_decode($reg['estado_ticket']),1,1,'L');
 $pdf->Ln(10);
 $pdf->Cell(50, 10, utf8_decode('Solución:'),0,1,'L');
 
-$pdf->Cell(185, 60, $reg['solucion'],1,1,'L');
+$pdf->Cell(185, 60, utf8_decode($reg['solucion']),1,1,'L');
 
 $pdf->Ln(30);
 

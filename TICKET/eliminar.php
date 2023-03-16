@@ -20,7 +20,7 @@
             <div class="col-md-12 text-center">
               <img src="img/delete.png" alt="">
               <h1 class="text-danger">Su cuenta ha sido eliminada exitosamente</h1>
-              <h3 class="text-primary">Todos los datos asociados a tu cuenta han sido eliminados exitosamente, si deseas volver a ser usuario de LinuxStore puedes registrarte nuevamente.</h3>
+              <h3 class="text-primary">Todos los datos asociados a tu cuenta han sido eliminados exitosamente, si deseas volver a ser usuario de Alcomex puedes registrarte nuevamente.</h3>
             </div>
           </div>
           <br><br>
