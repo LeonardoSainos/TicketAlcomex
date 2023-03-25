@@ -91,10 +91,11 @@ class MysqlQuery {
     }
 
 
-    public static function ProcedimientoEliminarDepartamentos($nombre,$id){
-    if(!$sql = Mysql::consulta("CALL $nombre($id)")){
-        die("Error al ejecutar el procedimiento");
+    public static function ProcedimientoAlmacenado($nombre, $parametros){
+    if(!$sql = Mysql::consulta("CALL $nombre($parametros)")){
+        die("Error al ejecutar el procedimiento almacenado");
     }
     return $sql;
+
     }
 }

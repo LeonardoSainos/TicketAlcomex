@@ -12,8 +12,12 @@
             <?php
                 if(isset($_POST['id_dele'])){
                     $id = MysqlQuery::RequestPost('id_dele');
- 
-                    if(MysqlQuery::Eliminar("ticket", "serie='$id'")){
+                  
+                
+                    $user = $_SESSION['id'];
+                    if(MysqlQuery::Eliminar("ticket", "id=$id")){
+                        MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'Eliminar','".date("Y-m-d H:i:s") ."','ticket'");
+        
                         echo '
                             <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -60,7 +64,7 @@
                                                 </button>
                                                 <ul class='dropdown-menu'>
                                               <!-- dropdown menu links -->
-                                             <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
+                                             <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
                                                     
                                                     
                                                           
@@ -126,8 +130,7 @@
                                         <th class="text-center">Nombre</th>
                                         <th class="text-center">Email</th>
                                         <th class="text-center">Teléfono</th>
-                                        <th class="text-center">Departamento</th>
-                                      
+                                        <th class="text-center">Departamento</th>     
                                         <th class="text-center">Opciones</th>
                                     </tr>
                                 </thead>
@@ -137,7 +140,7 @@
                                         while ($row=mysqli_fetch_array($selticket, MYSQLI_ASSOC)): 
                                     ?>
                                     <tr>
-                                       <td class="text-center"> <input type="checkbox" name="Tickets[]" value="<?php  echo $row['id'];?>" /></td>    
+                                       <td class="text-center"> <input  form="acciones" type="checkbox" name="Tickets[]"  value="<?php  echo $row['id'];?>" /></td>    
                                         <td class="text-center"><?php echo $ct; ?></td>
                                         <td class="text-center"><?php echo $row['fecha']; ?></td>
                                         <td class="text-center"><?php echo $row['serie']; ?></td>
@@ -146,50 +149,28 @@
                                         <td class="text-center"><?php echo $row['email_cliente']; ?></td>
                                         <td class="text-center"><?php echo $row['telefono_celular']; ?></td>
                                         <td class="text-center"><?php echo $row['departamento']; ?></td>
+                                        <td style= "display:none" class="text-center"><?php echo $row['id'];?></td>
                                         <td class="text-center">
                                             <a href="./lib/pdf.php?id_del=<?php echo $row['serie']; ?>" class="btn btn-sm btn-success" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
-
                                             <a href="admin.php?view=ticketedit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                 <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
-                                                <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class="dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                    
-                                       
-                                       <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                               <div class="modal-content">
-                                               <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
-                                                   <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar este ticket(Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
-                                               
-                                               </div>
-                                               <div class="modal-body">
-                                                   
-                                               </div>
-                                               <div style="align-items:center; justify-content:center;"class="modal-footer">
-                                                   <center>
-                                                   <form id="formularios" action="" method="POST" style="display: inline-block;">                                             
-                           
-                                                      <input  type="hidden" name="id_dele"  id="borrar_id" >       
-                                                       <button     type="submit"  class="btn btn-success">SI</button>
-                                                      <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
-                                                   </form>                        
-                                                   </center>
-                                               </div>
-                                               </div>
-                                           </div>    
-                                       </div>
-
-
+                                                <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class="dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                                                        
                                         </td>
                                     </tr>
                                     <?php
                                         $ct++;
                                         endwhile; 
                                     ?>
-
                                          <tr> 
                                            <td  class= "text-center" colspan="10"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
                                         </tr>
                                 </tbody>
                             </table>
+                            <form id="acciones" method="POST" action="../TICKET/admin/accionesTicket-view.php">
+                              <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre'] ;?>"/>
+                              <input type="hidden" name="rol"value="<?php echo $_SESSION['rol'];?>"/>
+                              <input type="hidden" name="id" value="<?php echo $_SESSION['id'];?>"/>
+                            </form>
                             <?php else: ?>
                                 <h2 class="text-center">No hay tickets registrados en el sistema</h2>
                             <?php endif; ?>
@@ -272,8 +253,30 @@
 
 
                                                       
-
-
+<!-- MODAL PARA ELIMINAR -->
+<div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                               <div class="modal-content">
+                                               <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
+                                                   <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar este ticket(Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
+                                               
+                                               </div>
+                                               <div class="modal-body">
+                                                   
+                                               </div>
+                                               <div style="align-items:center; justify-content:center;"class="modal-footer">
+                                                   <center>
+                                                   <form id="formularios" action="" method="POST" style="display: inline-block;">                                             
+                           
+                                                      <input  type="hidden" name="id_dele"  id="borrar_id" >       
+                                                       <button     type="submit"  class="btn btn-success">SI</button>
+                                                      <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
+                                                   </form>                        
+                                                   </center>
+                                               </div>
+                                               </div>
+                                           </div>    
+                                       </div>
 
 
 <script>
@@ -282,7 +285,7 @@
        var datos=$tr.children("#tabla tbody td").map(function() {
        return $(this).text(); 
         });
-       $("#borrar_id").val(datos[3]);                                           
+       $("#borrar_id").val(datos[9]);                                           
         });
 
         

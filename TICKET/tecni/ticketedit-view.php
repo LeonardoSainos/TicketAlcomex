@@ -1,7 +1,7 @@
 <?php
  
 
-if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST['estado_ticket'])){
+if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST['estado_ticket']) && isset($_SESSION['id'])){
 		$id_edit=MysqlQuery::RequestPost('id_edit');
 		$estado_edit=  MysqlQuery::RequestPost('estado_ticket');
 		$solucion_edit=  MysqlQuery::RequestPost('solucion_ticket');
@@ -12,7 +12,10 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
 		$mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
 //  echo "<script> alert('" . $estado_edit . "' ); </script>";
 		if(MysqlQuery::Actualizar("ticket", "idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'")){
-			echo '
+      $id = $_SESSION['id'];                            
+      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','ticket'"))
+ 
+      echo '
                 <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="text-center">TICKET Actualizado</h4>

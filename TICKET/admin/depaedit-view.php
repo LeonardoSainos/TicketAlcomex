@@ -9,7 +9,11 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre']) && isset($_POST['correo']
 	   
 	 
 		if(MysqlQuery::Actualizar("departamento", "nombre = '$nombre', correo='$correo', descripcion= '$descripcion',idEstatus='$estado',idJefe='$lider'", "idDepartamento='$id_edit'")){
-			echo '
+      $id = $_SESSION['id'];                            
+      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','departamento'"))
+ 
+    
+      echo '
                 <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="text-center">Departamento Actualizado</h4>

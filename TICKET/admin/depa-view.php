@@ -10,22 +10,27 @@
           </div>
         </div>
             <?php
-
+          
             // ELIMINAR DEPARTAMENTOS
                 if(isset($_POST['id_dele'])){
                     $id = MysqlQuery::RequestPost('id_dele');
- 
-                    if(MysqlQuery::ProcedimientoEliminarDepartamentos("Depa", "$id")){
+                  
+                    if($id!=null || $id!=""){
+                                $eliminar = MysqlQuery::ProcedimientoAlmacenado("Depa", "$id");
+                                $idM = $_SESSION['id'];                            
+                                MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$idM,'Eliminar','".date("Y-m-d H:i:s") ."','departamento'");
+        
                         echo '
                             <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                                 <h4 class="text-center">DEPARTAMENTO ELIMINADO</h4>
                                 <p class="text-center">
-                                    El departamento fue eliminado del sistema con exito
+                                    El departamento fue eliminado del sistema con éxito
                                 </p>
                             </div>
                         ';
-                    }else{
+                    }
+                    else{
                         echo '
                             <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -81,23 +86,14 @@
             ?>
             
 
-            <div class="container">
-            <br><br>
-            <div class='btn-group'>
-                                                <button class='btn dropdown-toggle btn-warning' data-toggle='dropdown' value='Más'>
-                                                    Más
-                                                <span class='caret'></span>
-                                                </button>
-                                                <ul class='dropdown-menu'>
-                                                <!-- dropdown menu links -->
-                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-lock'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo"> </li>
-                                                  
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
-                                                    
-                                                    
-                                                          
-                                                </ul>
-                                          </div>
+            <div class="container"><br><br>
+                            <div class='btn-group'>
+                                 <button class='btn dropdown-toggle btn-warning' data-toggle='dropdown' value='Más'>Más<span class='caret'></span></button>
+                                   <ul class='dropdown-menu'>
+                                           <li class=><span style='margin-left:22px'class='glyphicon glyphicon-lock'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo"> </li>
+                                       <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>                                                                                                  
+                                   </ul>
+                            </div>
                                        
                 <div class="row">
                     <div class="col-md-12">
@@ -106,28 +102,19 @@
                          </ul>
                     </div>
                 </div>
+
                 <br>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            
-
-
-                            
                             <?php
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
-
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
                                 $regpagina = 50;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
-                               
                                     $consulta= "SELECT SQL_CALC_FOUND_ROWS d.idDepartamento,d.nombre,d.correo,d.descripcion, e.Nombre, c.nombre_completo, c.email_cliente FROM departamento d INNER JOIN estatus e ON d.idEstatus = e.idEstatus INNER JOIN cliente c ON d.idJefe = c.id_cliente   ORDER BY d.nombre ASC LIMIT $inicio, $regpagina";
-                         
-
-
                                 $seldepa=mysqli_query($mysqli,$consulta);
-
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
                         
@@ -135,6 +122,7 @@
 
                                 if(mysqli_num_rows($seldepa)>0):
                             ?>
+                             
                             <table id="tabla" class="table table-hover table-striped table-bordered">
                                 <thead class="thead-dark">
                                     <tr>
@@ -155,7 +143,7 @@
                                         while ($row=mysqli_fetch_array($seldepa, MYSQLI_ASSOC)): 
                                     ?>
                                     <tr>
-                                       <td class="text-center"> <input type="checkbox" name="Depas[]" value="<?php  echo $row['idDepartamento'];?>" /></td>    
+                                       <td class="text-center"> <input type="checkbox" form="acciones" name="Depas[]" value="<?php  echo $row['idDepartamento'];?>" /></td>    
                                         <td class="text-center"><?php echo $ct; ?></td>
                                         <td class="text-center"><?php echo $row['nombre']; ?></td>
                                         <td class="text-center"><?php echo $row['correo']; ?></td>
@@ -165,40 +153,12 @@
                                         <td class="text-center"><?php echo $row['email_cliente']; ?></td>  
                                         <td style="display:none"  ><?php echo $row['idDepartamento']; ?></td>  
                                         <td class="text-center">
-                                            
                                             <a href="admin.php?view=depaedit&id=<?php echo $row['idDepartamento']; ?>" class="btn btn-sm btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
-                                                <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class="dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                    
+                                             <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
+                                             <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class="dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                    
                                        
-                                       <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                               <div class="modal-content">
-                                               <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
-                                                   <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar este Departamento(Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
-                                               
-                                               </div>
-                                               <div class="modal-body">
-                                                   
-                                               </div>
-                                               <div style="align-items:center; justify-content:center;"class="modal-footer">
-                                                   <center>
-                                                   <form id="formularios" action="" method="POST" style="display: inline-block;">                                             
-                           
-                                                      <input  type="hidden" name="id_dele"  id="borrar_id" >       
-                                                       <button     type="submit"  class="btn btn-success">SI</button>
-                                                      <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
-                                                   </form>                        
-                                                   </center>
-                                               </div>
-                                               </div>
-                                           </div>    
-                                       </div>
-
-
+                                       
                                         </td>
-
-                                    
-                                    
                                     </tr>
                                     <?php
                                         $ct++;
@@ -206,10 +166,16 @@
                                     ?>
 
                                          <tr> 
-                                           <td  class= "text-center" colspan="9"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
+                                           <td  class= "text-center" colspan="9"> Seleccionar : <input form="acciones"  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
                                         </tr>
                                 </tbody>
                             </table>
+                            <form id="acciones" method="POST" action="../TICKET/admin/accionesDepartamento-view.php">
+                              <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre'] ;?>"/>
+                              <input type="hidden" name="rol"value="<?php echo $_SESSION['rol'];?>"/>
+                              <input type="hidden" name="id" value="<?php echo $_SESSION['id'];?>"/>
+                              </form>
+                            
                             <?php else: ?>
                                 <h2 class="text-center">No hay departamentos registrados en el sistema</h2>
                             <?php endif; ?>
@@ -293,7 +259,7 @@
 
                                                       
 
-
+<!-- Modal para insertar -->
 <div class="container">
                             <div class="modal" tabindex="-1" id="modal1" >
                                 <div class="modal-dialog modal-xlg  modal-dialog-centered">
@@ -407,6 +373,29 @@
                                      <!--FIN DEL MODAL -->
                             </div>
 
+<!--MODAL PARA ELIMINAR -->
+<div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                               <div class="modal-content">
+                                               <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
+                                                   <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar este Departamento(Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
+                                               
+                                               </div>
+                                               <div class="modal-body">
+                                                   
+                                               </div>
+                                               <div style="align-items:center; justify-content:center;"class="modal-footer">
+                                                   <center>
+                                                   <form id="formularios" action="" method="POST" style="display: inline-block;">                                             
+                                                      <input form="formularios" type="hidden" name="id_dele"  id="borrar_id" >       
+                                                       <button form="formularios"    type="submit"  class="btn btn-success">SI</button>
+                                                      <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
+                                                   </form>                        
+                                                   </center>
+                                               </div>
+                                               </div>
+                                           </div>    
+                                       </div>
 
 
 
@@ -418,6 +407,5 @@
         });
        $("#borrar_id").val(datos[8]);                                           
         });
-
-        
+       
 </script> 

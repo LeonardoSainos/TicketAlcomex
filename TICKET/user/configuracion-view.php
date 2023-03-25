@@ -67,7 +67,9 @@
                        if(MysqlQuery::Actualizar("cliente", "$cadena", "$cadena2"))
                       {
 
-
+                        $id = $_SESSION['id'];                            
+                        if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','cliente'"))
+                   
                           
                             $_SESSION['nombre']=$usuario;
                             $_SESSION['clave']=$newclave;
@@ -97,6 +99,9 @@
                   else if( $newclave=="." && $newclave1==""){
                      if( MysqlQuery::Actualizar("cliente", "telefono_celular='$celular',nombre_completo='$nombre', nombre_usuario='$usuario',email_cliente='$email'", "nombre_usuario='$cccc' and clave='$CargarClave'"))
                      {
+                      $id = $_SESSION['id'];                            
+                      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','cliente'"))
+                 
                             $_SESSION['nombre']=$usuario;
                             
                             echo '

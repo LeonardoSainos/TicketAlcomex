@@ -6,7 +6,10 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
 	 $rol= MysqlQuery::RequestPost('rol_cliente');
 	 
 		if(MysqlQuery::Actualizar("cliente", "id_departamento = '$departamento', id_rol='$rol', idEstatus= '$estado'", "id_cliente='$id_edit'")){
-			echo '
+      $id = $_SESSION['id'];                            
+      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','cliente'")){
+ 
+      echo '
                 <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="text-center">Usuario Actualizado</h4>
@@ -14,7 +17,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
                         El usuario fue actualizado con exito
                     </p>
                 </div>
-            ';
+            ';}
 			 
 		}else{
 			echo '

@@ -152,6 +152,10 @@
                                 if(mysqli_num_rows($selusers)>0):
                             ?>
                             <form id="acciones" method="POST" action="../TICKET/admin/acciones-view.php">
+                            <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre'] ;?>"/>
+                            <input type="hidden" name="rol"value="<?php echo $_SESSION['rol'];?>"/>
+                            <input type="hidden" name="id" value="<?php echo $_SESSION['id'];?>"/>
+                            
                             <table id="tabla" class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
@@ -186,42 +190,12 @@
                                                   <a href="admin.php?view=useredit&id=<?php echo $row['id_cliente']; ?>" class="btn btn-sm btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                       
                                                   <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class=" dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                    
-                                             
-                                                    <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                         <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                            <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
-                                                                <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar al usuario (Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
-                                                            
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                
-                                                            </div>
-                                                            <div style="align-items:center; justify-content:center;"class="modal-footer">
-                                                                <center>
-                                                                <form id="formulario" action="" method="POST" style="display: inline-block;">                                             
-                                        
-                                                                   <input  type="hidden" name="id_dele"  id="borrar_id" >       
-                                                                    <button   name="ide" type="submit"  class="btn btn-success">SI</button>
-                                                                   <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
-                                                                </form>                        
-                                                                </center>
-                                                            </div>
-                                                            </div>
-                                                        </div>    
-                                                    </div>
-
-
                                         </td>
                                     </tr>
-
                                       <?php
                                         $ct++;
-
-                                        
                                         }
                                     ?>
-
                                         <tr> 
                                            <td  class= "text-center" colspan="9"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
                                         </tr>
@@ -306,7 +280,7 @@
 ?>
 
 
-
+<!-- Formulario para guardar user -->
 <div class="container">
                             <div class="modal" tabindex="-1" id="modal1" >
                                 <div class="modal-dialog modal-xlg  modal-dialog-centered">
@@ -466,6 +440,31 @@
                                      <!--FIN DEL MODAL -->
                             </div>
 
+<!-- Formulario para elliminar user-->
+<div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                         <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                            <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
+                                                                <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar al usuario (Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
+                                                            
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                
+                                                            </div>
+                                                            <div style="align-items:center; justify-content:center;"class="modal-footer">
+                                                                <center>
+                                                                <form id="formulario" action="" method="POST" style="display: inline-block;">                                             
+                                        
+                                                                   <input  type="hidden" name="id_dele"  id="borrar_id" >       
+                                                                    <button   name="ide" type="submit"  class="btn btn-success">SI</button>
+                                                                   <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
+                                                                </form>                        
+                                                                </center>
+                                                            </div>
+                                                            </div>
+                                                        </div>    
+                                                    </div>
+
 
 <script>
         $('.dropbtn').on('click',function () {
@@ -475,6 +474,4 @@
         });
        $("#borrar_id").val(datos[4]);                                           
         });
-
-        
 </script> 
