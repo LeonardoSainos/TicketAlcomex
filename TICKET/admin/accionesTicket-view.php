@@ -14,8 +14,7 @@ if($_POST['nombre']!="" && $_POST['rol']==4046 && $_POST['id']){
         if(@$_POST['Tickets']!=null)
         {
             foreach ($_POST['Tickets'] as  $IdTicket)
-            {     
-            
+            {       
                  $llamar=MysqlQuery::Eliminar("ticket", "id=$IdTicket");
                  MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'Eliminar','".date("Y-m-d H:i:s") ."','ticket'");
             }
