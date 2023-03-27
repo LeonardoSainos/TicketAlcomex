@@ -10,7 +10,7 @@
           </div>
         </div>
             <?php
-          
+               $iid= $_SESSION['id'];
             // ELIMINAR DEPARTAMENTOS
                 if(isset($_POST['id_dele'])){
                     $id = MysqlQuery::RequestPost('id_dele');
@@ -55,6 +55,9 @@
                     $Existe = Mysql::consulta("SELECT * FROM departamento WHERE correo = '" . $Gcorreo . "' OR nombre = '" . $Gnombre . "'");
                     if(mysqli_num_rows($Existe)<=0){
                         if(MysqlQuery :: Guardar("departamento","nombre,correo,descripcion,idEstatus,idJefe","'$Gnombre','$Gcorreo','$Gdescripcion',$Gestatus, $Glider")){
+                            MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Insertar','".date("Y-m-d H:i:s") ."','departamento'");
+
+                     
                             echo '
                             <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>

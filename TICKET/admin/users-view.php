@@ -1,6 +1,6 @@
 <?php if($_SESSION['nombre']!="" && $_SESSION['rol']==4046){ ?>    
         <?php 
-
+                $iid= $_SESSION['id'];
         /*Eliminar */
             if(isset($_POST['id_dele'])){
                 $id_user=MysqlQuery::RequestPost('id_dele');
@@ -46,7 +46,10 @@
                 $Verificar = Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" . $Gcorreo ."' OR telefono_celular = ' " . $Telefono  . "'");
                 if(mysqli_num_rows($Verificar)<=0){
                     if(MysqlQuery::Guardar("cliente", "nombre_completo, nombre_usuario, email_cliente,id_departamento,id_rol,idEstatus,telefono_celular", "'$Ncompleto', '$Gusuario', '$Gcorreo',$Departamento, $Rol,$Estatus,' $Telefono'"))
-                    {
+                    {   
+                        MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Insertar','".date("Y-m-d H:i:s") ."','cliente'");
+
+                     
                         echo '
                         <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>

@@ -55,38 +55,33 @@ if(@$_POST['Desbloquear'])
   //ELIMINAR USUARIO 
     if(@$_POST['Eliminar'])
     {
-
         if(@$_POST['Usuarios']!=null)
         {
-            foreach ($_POST['Usuarios'] as  $IdAlumno) {        
-
-                $llamar="CALL Borrar($IdAlumno)";
-                 $procedimiento_almacenado= mysqli_query($conexion,$llamar);
-                
+            foreach ($_POST['Usuarios'] as  $IdDepa)
+            {        
+                $llamar=MysqlQuery:: ProcedimientoAlmacenado("DeleteUsers","$IdDepa");
+                MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'Eliminar','".date("Y-m-d H:i:s") ."','cliente'");
             }
-            if($procedimiento_almacenado)
+
+            if($llamar)
             {
-            echo "<script>alert('Usuario eliminado');
+            echo "<script>alert('Usuarios eliminados');
             window.history.go(-1);
             </script>";
             }
-            else if($procedimiento_almacenado==null)
+            else  
             {
-                echo "<script>alert('Algo falló, revisa que el usuario no este agregado en un equipo, rol , categoria , departamento, etc ');</script>";
+                echo "<script>alert('Algo falló, revisa tu conexión a Internet');</script>";
             }
         }
-
-
-    
-
-        else  if(@$_POST['Usuarios']==null) {
+        else  if(@$_POST['Depas']==null) {
             ?>
             <script>
              alert("No haz seleccionado ningún usuario");
              window.history.go(-1);
             </script>
             <?php
-        }
+        } 
     }   
 
     //RESETEAR CONTRASEÑA 

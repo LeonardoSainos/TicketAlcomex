@@ -20,8 +20,16 @@
 
 
           if(MysqlQuery::Guardar("cliente", "nombre_completo, nombre_usuario, email_cliente, clave, id_departamento,id_rol,idEstatus,telefono_celular", "'$nombre', '$usuario', '$email', '$clave',2505, 9947,31448," . $telefono)){
+                $nuevo = Mysql::consulta("SELECT * FROM cliente WHERE  fecha_creacion = '" . date("Y-m-d H:i:s") . "'");
+                $nuevo1 = mysqli_fetch_array($nuevo,MYSQLI_ASSOC);
+                $newFecha = $nuevo1['Fecha_creacion'];
+                $newid = $nuevo1['id_cliente'];
+                MysqlQuery::ProcedimientoAlmacenado("NuevoUsuario","$newid,'Insertar','".date("Y-m-d H:i:s") ."','cliente'");
 
-            /*----------  Enviar correo con los datos de la cuenta 
+                     
+
+
+                /*----------  Enviar correo con los datos de la cuenta 
                 mail($email, $asunto, $mensaje_mail, $cabecera);
             ----------*/
 

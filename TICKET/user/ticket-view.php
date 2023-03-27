@@ -1,5 +1,5 @@
 <?php if(isset($_SESSION['nombre']) && ($_SESSION['rol']==9947 ||  $_SESSION['rol']==4046 || $_SESSION['rol']==5267 )){
-        
+        $iid= $_SESSION['id'];
 
         if( isset($_POST['name_ticket']) && isset($_POST['email_ticket'])){
 
@@ -31,7 +31,11 @@
           $mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
 
           if(MysqlQuery::Guardar("ticket","serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende", "'$id_ticket','$asunto_ticket','$mensaje_ticket',$id,'$departamento_ticket',94574,$tecnico")){
-             /*----------  Enviar correo con los datos del ticket
+            MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Insertar','".date("Y-m-d H:i:s") ."','ticket'");
+
+                     
+            
+            /*----------  Enviar correo con los datos del ticket
             mail($email_ticket, $asunto_ticket, $mensaje_mail, $cabecera)
             ----------*/
             
