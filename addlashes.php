@@ -8,5 +8,5 @@ echo utf8_encode(strftime("%A %#d de %B del %Y"));
 $str = " <br> La clase es Hola'mundo?";
 //La clase es Hola\'mundo?
 echo addslashes($str);
-echo "<br> " . date("Y-m-d H:i:s")
+echo "<br> " . date("Y-m-d H:i:s") . "condición";
 ?>

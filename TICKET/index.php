@@ -2,11 +2,12 @@
 session_start();
 include './lib/class_mysql.php';
 include './lib/config.php';
-header('Content-Type: text/html; charset=UTF-8');  
+   
 ?>
 <!DOCTYPE html>
 <html>
     <head>
+         <meta charset="UTF8"/>
          <title>Alcomex soporte técnico</title>
         <link rel="icon" href="favicon.png">
         <?php include "./inc/links.php"; ?>        
@@ -21,7 +22,7 @@ header('Content-Type: text/html; charset=UTF-8');
              
 
           
-                <span class="label label-warning">Transporte de logistica S.A de C.V</span>
+                <span class="label label-warning">Transporte de logística S.A de C.V</span>
                    <p class="pull-right text-primary">
                   <strong>
                   <?php include "./inc/timezone.php"; ?>

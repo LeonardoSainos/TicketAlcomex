@@ -1,5 +1,8 @@
 <?php if(!$_SESSION['nombre']=="" && ($_SESSION['rol']==9947)){ 
         
+     
+ 
+      $iid= $_SESSION['id'];
         /*Script para eliminar cuenta*/
         if(isset($_POST['usuario_delete']) && isset($_POST['clave_delete'])){
           $usuario_delete=MysqlQuery::RequestPost('usuario_delete');
@@ -9,6 +12,8 @@
 
           if(mysqli_num_rows($sql)>=1){
              MysqlQuery::Eliminar("cliente", "nombre_usuario='$usuario_delete' and clave='$clave_delete'");
+             MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Eliminar','".date("Y-m-d H:i:s") ."','cliente'");
+      
              echo '<script type="text/javascript"> window.location="eliminar.php"; </script>';
           }else{
             echo '
@@ -177,11 +182,11 @@
                     <form action="" method="post" role="form">
                     <div class="form-group">
                       <label class="text-primary"><i class="fa fa-male"></i>&nbsp;&nbsp;Nombre completo</label>
-                      <input value="<?php echo $reg1['nombre_completo'] ?>" type="text" class="form-control" placeholder="Nombre completo" name="nombre" required="" pattern="[a-zA-Z ]{1,40}" title="Nombre Apellido" maxlength="40">
+                      <input value="<?php echo $reg1['nombre_completo'] ?>" type="text" class="form-control" placeholder="Nombre completo" name="nombre" required=""   title="Nombre Apellido" maxlength="65">
                     </div>
                     <div class="form-group">
                       <label class="text-danger"><i class="fa fa-user"></i>&nbsp;&nbsp;Nombre de usuario actual</label>
-                      <input value="<?php echo $reg1['nombre_usuario'] ?>" type="text" class="form-control" placeholder="Nombre de usuario actual" name="nombre_usuario" required="" pattern="[a-zA-Z0-9 ]{1,30}" title="Ejemplo7" maxlength="20">
+                      <input value="<?php echo $reg1['nombre_usuario'] ?>" type="text" class="form-control" placeholder="Nombre de usuario actual" name="nombre_usuario" required=""   maxlength="30">
                     </div>
                    
                     <div class="form-group">

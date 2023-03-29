@@ -1,5 +1,5 @@
 <?php if($_SESSION['nombre']!="" && $_SESSION['rol']== 5267){ 
-
+$iid= $_SESSION['id'];
 /* Guardar nuevo admin */
 if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST['admin_clave_reg'])){
 
@@ -78,8 +78,8 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                         $cadena2= "nombre_usuario='$cccc' and clave='$CargarClave'";
                        if(MysqlQuery::Actualizar("cliente", "$cadena", "$cadena2"))
                       {
-                        $id = $_SESSION['id'];                            
-                        if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','cliente'"))
+                        $iid = $_SESSION['id'];                            
+                        if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Actualizar','".date("Y-m-d H:i:s") ."','cliente'"))
                    
 
 
@@ -173,6 +173,8 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
          $sql=Mysql::consulta("SELECT * FROM cliente WHERE nombre_usuario= '$nom_admin_delete' AND clave='$clave_admin_delete'");
          if(mysqli_num_rows($sql)>=1){
             if(MysqlQuery::Eliminar("cliente", "nombre_usuario='$nom_admin_delete' and clave='$clave_admin_delete'")){
+              MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Eliminar','".date("Y-m-d H:i:s") ."','cliente'");
+      
                 echo '<script type="text/javascript"> window.location="eliminar.php"; </script>';
             }else{
                 echo '

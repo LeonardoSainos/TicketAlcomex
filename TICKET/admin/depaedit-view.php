@@ -1,5 +1,6 @@
 <?php
 if(isset($_POST['id_edit']) && isset($_POST['nombre']) && isset($_POST['correo'])){
+  
 		$id_edit=MysqlQuery::RequestPost('id_edit');
         $nombre = MysqlQuery::RequestPost('nombre');
         $correo = MysqlQuery::RequestPost('correo');
@@ -10,7 +11,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre']) && isset($_POST['correo']
 	 
 		if(MysqlQuery::Actualizar("departamento", "nombre = '$nombre', correo='$correo', descripcion= '$descripcion',idEstatus='$estado',idJefe='$lider'", "idDepartamento='$id_edit'")){
       $id = $_SESSION['id'];                            
-      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','departamento'"))
+      MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','departamento'");
  
     
       echo '

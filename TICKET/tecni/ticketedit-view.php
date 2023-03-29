@@ -161,7 +161,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Solución</label>
                           <div class="col-sm-10">
-                            <textarea class="form-control" rows="3"  name="solucion_ticket" required=""><?php echo $reg['solucion']?></textarea>
+                            <textarea class="form-control" rows="3"  name="solucion_ticket" ><?php echo $reg['solucion']?></textarea>
                           </div>
                         </div>
                     

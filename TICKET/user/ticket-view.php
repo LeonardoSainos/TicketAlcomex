@@ -103,7 +103,7 @@
                           <label  class="col-sm-2 control-label">Nombre</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                <input type="text" readonly="" class="form-control" placeholder="Nombre" required="" pattern="[a-zA-Z ]{1,60}"   name="name_ticket" title="Nombre Apellido" value="<?php echo $_SESSION['nombre_completo']; ?>" >
+                                <input type="text" readonly="" class="form-control" placeholder="Nombre" required=""   name="name_ticket"   value="<?php echo $_SESSION['nombre_completo']; ?>" >
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
                               </div>
                           </div>

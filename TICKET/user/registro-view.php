@@ -93,11 +93,11 @@
             <form role="form" action="" method="POST">
             <div class="form-group">
               <label><i class="fa fa-male"></i>&nbsp;Nombre completo</label>
-              <input type="text" class="form-control" name="nombre" placeholder="Nombre completo" required="" pattern="[a-zA-Z ]{1,40}" title="Nombre Apellido" maxlength="40">
+              <input type="text" class="form-control" name="nombre" placeholder="Nombre completo" required=""   title="Nombre Apellido" maxlength="65">
             </div>
             <div class="form-group has-success has-feedback">
               <label class="control-label"><i class="fa fa-user"></i>&nbsp;Nombre de usuario</label>
-              <input type="text" id="input_user" class="form-control" name="nombre_usuario" placeholder="Nombre de usuario" required="" pattern="[a-zA-Z0-9]{1,15}" title="Ejemplo7 maximo 15 caracteres" maxlength="20">
+              <input type="text" id="input_user" class="form-control" name="nombre_usuario" placeholder="Nombre de usuario" required="" pattern="[a-zA-Z0-9]{1,15}" title="Máximo 15 caracteres" maxlength="20">
               <div id="com_form"></div>
             </div>
             <div class="form-group">

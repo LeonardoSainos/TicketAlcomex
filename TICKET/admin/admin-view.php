@@ -8,6 +8,8 @@
                 $eliminar= "email_cliente='$id_admin'";
               
                 if(MysqlQuery::Eliminar("cliente", "$eliminar")){
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Eliminar','".date("Y-m-d H:i:s") ."','cliente'");
+      
                     echo '
                         <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>

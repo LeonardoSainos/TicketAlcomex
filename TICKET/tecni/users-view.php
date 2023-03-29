@@ -3,6 +3,7 @@
             if(isset($_POST['id_del'])){
                 $id_user=MysqlQuery::RequestPost('id_del');
                 if(MysqlQuery::Eliminar("cliente", "id_cliente='$id_user'")){
+                    
                 echo '
                         <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>

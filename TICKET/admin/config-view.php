@@ -1,5 +1,5 @@
 <?php if($_SESSION['nombre']!="" && $_SESSION['rol']==4046){ 
-
+$iid = $_SESSION['id'];
 /* Guardar nuevo admin */
 if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST['admin_clave_reg'])){
 
@@ -60,7 +60,7 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
     $celular=MysqlQuery::RequestPost('telefono');
 
 
-
+      
     $id = $_SESSION['id'];
     $todo = Mysql::Consulta("SELECT * FROM cliente where id_cliente = $id");
     $todo1 = mysqli_fetch_array($todo, MYSQLI_ASSOC);
@@ -174,6 +174,8 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
          $sql=Mysql::consulta("SELECT * FROM cliente WHERE nombre_usuario= '$nom_admin_delete' AND clave='$clave_admin_delete'");
          if(mysqli_num_rows($sql)>=1){
             if(MysqlQuery::Eliminar("cliente", "nombre_usuario='$nom_admin_delete' and clave='$clave_admin_delete'")){
+              MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Eliminar','".date("Y-m-d H:i:s") ."','cliente'");
+      
                 echo '<script type="text/javascript"> window.location="eliminar.php"; </script>';
             }else{
                 echo '
@@ -221,11 +223,11 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                         <form role="form" action="" method="post">
                         <div class="form-group">
                           <label><i class="fa fa-male"></i>&nbsp;Nombre completo</label>
-                          <input type="text" class="form-control" name="nom_admin_reg" placeholder="Nombre completo" required="" pattern="[a-zA-Z ]{1,40}" title="Nombre Apellido" maxlength="40">
+                          <input type="text" class="form-control" name="nom_admin_reg" placeholder="Nombre completo" required=""   title="Nombre Apellido" maxlength="60">
                         </div>
                         <div class="form-group has-success has-feedback">
                           <label class="control-label"><i class="fa fa-user"></i>&nbsp;Nombre de administrador</label>
-                          <input type="text" id="input_user" class="form-control" name="admin_reg" placeholder="Nombre de usuario" required="" pattern="[a-zA-Z0-9]{1,15}" title="Ejemplo7 maximo 15 caracteres" maxlength="15">
+                          <input type="text" id="input_user" class="form-control" name="admin_reg" placeholder="Nombre de usuario" required=""  title="Máximo 25 caracteres" maxlength="25">
                           <div id="com_form"></div>
                         </div>
                         <div class="form-group">
@@ -336,11 +338,11 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                          <form role="form" action="" method="POST">
                          <div class="form-group">
                            <label><i class="fa fa-male"></i>&nbsp;Nombre completo</label>
-                           <input type="text" class="form-control" value="<?php echo $reg1['nombre_completo']; ?>" name="nombre" placeholder="Nombre completo" required="" pattern="[a-zA-Z ]{1,40}" title="Nombre Apellido" maxlength="40">
+                           <input type="text" class="form-control" value="<?php echo $reg1['nombre_completo']; ?>" name="nombre" placeholder="Nombre completo" required=""  maxlength="65">
                          </div>
                          <div class="form-group">
                            <label><i class="fa fa-user"></i>&nbsp;Nombre de Usuario</label>
-                           <input type="text" class="form-control" value="<?php echo $reg1['nombre_usuario']; ?>" name="nombre_usuario" placeholder="Nombre anterior de administrador" required="" pattern="[a-zA-Z0-9]{1,15}" title="Ejemplo7 maximo 15 caracteres" maxlength="15">
+                           <input type="text" class="form-control" value="<?php echo $reg1['nombre_usuario']; ?>" name="nombre_usuario" placeholder="Nombre anterior de administrador" required=""   maxlength="25">
                          </div>
                      
                          <div class="form-group">

@@ -2,7 +2,7 @@
   session_start(); 
   include './lib/class_mysql.php';
   include './lib/config.php';
-  header('Content-Type: text/html; charset=UTF-8');
+  header('Content-Type: text/html; charset=UTF8');
   session_unset();
   session_destroy();
 ?>

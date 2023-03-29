@@ -22,6 +22,8 @@
                 if(isset($_POST['id_del'])){
                     $id = MysqlQuery::RequestPost('id_del');
                     if(MysqlQuery::Eliminar("ticket", "id='$id'")){
+                        MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$idAtiende,'Eliminar','".date("Y-m-d H:i:s") ."','ticket'");
+      
                         echo '
                             <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>

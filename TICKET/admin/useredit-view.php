@@ -17,7 +17,8 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
                         El usuario fue actualizado con exito
                     </p>
                 </div>
-            ';}
+            ';
+          }
 			 
 		}else{
 			echo '

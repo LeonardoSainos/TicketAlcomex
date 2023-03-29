@@ -3,7 +3,7 @@ require "./fpdf/fpdf.php";
 include './class_mysql.php';
 include './config.php';
 //require '../inc/timezone.php';
-header('Content-Type: text/html; charset=UTF-8');  
+header('Content-Type: text/html; charset=UTF8');  
 
 $id = MysqlQuery::RequestGet('id_del');
 $sql = Mysql::consulta("SELECT t.id_atiende, t.fecha,t.serie, e.Nombre as estado_ticket, c.nombre_completo, c.nombre_usuario,c.email_cliente, d.nombre as departamento, t.asunto, t.solucion, t.mensaje,t.fecha_actualizacion as actualizacion FROM ticket t LEFT JOIN cliente c ON t.idUsuario= c.id_cliente INNER JOIN estatus e ON e.idEstatus = t.idStatus INNER JOIN departamento d ON d.idDepartamento= t.idDepartamento WHERE t.serie = '$id';");

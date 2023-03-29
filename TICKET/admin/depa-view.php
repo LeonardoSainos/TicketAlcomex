@@ -19,7 +19,7 @@
                                 $eliminar = MysqlQuery::ProcedimientoAlmacenado("Depa", "$id");
                                 $idM = $_SESSION['id'];                            
                                 MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$idM,'Eliminar','".date("Y-m-d H:i:s") ."','departamento'");
-        
+                                
                         echo '
                             <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>

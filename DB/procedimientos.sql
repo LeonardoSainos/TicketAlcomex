@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-03-2023 a las 02:05:00
+-- Tiempo de generación: 28-03-2023 a las 21:06:23
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -41,45 +41,6 @@ SET AUTOCOMMIT=1;
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `EliminarUsuario` (IN `id` INT(11), IN `fechaInicio` VARCHAR(20), IN `fechaFin` VARCHAR(20), IN `pen` INT(11), IN `cre` INT(11), IN `res` INT(11), IN `pro` INT(11))   BEGIN 
-Declare admin int DEFAULT 0;
-Declare tecnico int DEFAULT 0;
-Declare aleatorio int DEFAULT 0;
-Declare aleatorio2 int DEFAULT 0;
-DECLARE rol int DEFAULT 0;
-DECLARE departamento varchar(50);
-DECLARE nombreCompleto varchar(60);
-START TRANSACTION;
-
-
-SET admin=(SELECT id_cliente FROM cliente where id_cliente <> id and id_rol=5267 order by fecha_creacion DESC LIMIT 0,1);
-UPDATE departamento SET idJefe=admin WHERE idJefe=id;
-SET tecnico =(SELECT COUNT(*) FROM ticket WHERE id_atiende = admin AND fecha BETWEEN  CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin,' 23:59:59'));              
- 
-set rol =(SELECT id_rol FROM cliente WHERE id_cliente = id);
-set departamento= (SELECT departamento.nombre FROM cliente INNER JOIN departamento ON departamento.idDepartamento = cliente.id_departamento  WHERE cliente.id_cliente= id);
-set nombreCompleto = (SELECT nombre_completo FROM cliente WHERE id_cliente = id); 
-
-IF tecnico <=20 THEN 
-    UPDATE ticket SET id_atiende = tecnico WHERE id_atiende = id  AND fecha BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');
-	SET aleatorio =(SELECT id_cliente FROM cliente WHERE id_rol= 4046 ORDER BY email_cliente LIMIT 0,1);
-    UPDATE ticket SET id_atiende = aleatorio WHERE id_atiende = id AND  fecha NOT BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');
-    DELETE FROM ticket WHERE idUsuario = id;
-      INSERT INTO user_delete (idUsuario,nombre_completo,id_rol,id_departamento,pendiente,creados,resuelto,proceso) VALUES (id,nombreCompleto,rol,departamento,pen,cre,res,pro);
-    DELETE FROM cliente WHERE id_cliente = id;
-COMMIT;           
-ELSEIF tecnico >=20 THEN 
-      set aleatorio =(SELECT id_cliente FROM cliente WHERE id_rol= 4046 ORDER BY email_cliente LIMIT 0,1);
-       UPDATE ticket SET id_atiende = aleatorio WHERE id_atiende = id AND  fecha NOT BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');
-       SET aleatorio2 = (SELECT id_cliente FROM cliente WHERE id_rol= 4046 AND id_cliente<> aleatorio ORDER BY email_cliente LIMIT 0,1);
-       UPDATE ticket SET id_atiende = aleatorio2 WHERE id_atiende = id AND  fecha BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');                         		   INSERT INTO user_delete (idUsuario,nombre_completo,id_rol,id_departamento,pendiente,creados,resuelto,proceso) VALUES (id,nombreCompleto,rol,departamento,pen,cre,res,pro);
-       DELETE FROM ticket WHERE idUsuario = id;
-       DELETE FROM cliente WHERE id_cliente = id;
-COMMIT;
-END IF;
-ROLLBACK;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `NuevoUsuario` (IN `usuario` INT, IN `acciones` VARCHAR(12), IN `fechad` VARCHAR(20), IN `tablad` VARCHAR(15))   BEGIN
 Declare usuarioD int;
 Declare temporal int;
@@ -112,11 +73,11 @@ DELIMITER ;
 
 CREATE TABLE `administrador` (
   `id_admin` int(11) NOT NULL,
-  `nombre_completo` varchar(100) NOT NULL,
-  `nombre_admin` varchar(60) NOT NULL,
-  `clave` mediumtext NOT NULL,
-  `email_admin` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `nombre_completo` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `nombre_admin` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `clave` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `email_admin` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `administrador`
@@ -133,25 +94,25 @@ INSERT INTO `administrador` (`id_admin`, `nombre_completo`, `nombre_admin`, `cla
 
 CREATE TABLE `cliente` (
   `id_cliente` int(11) NOT NULL,
-  `nombre_completo` varchar(100) NOT NULL,
-  `nombre_usuario` varchar(100) NOT NULL,
-  `email_cliente` varchar(100) NOT NULL,
-  `clave` text NOT NULL,
+  `nombre_completo` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `nombre_usuario` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `email_cliente` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `clave` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `id_departamento` int(11) DEFAULT NULL,
   `id_rol` int(11) DEFAULT NULL,
-  `telefono_celular` varchar(10) DEFAULT NULL,
+  `telefono_celular` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `Fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
   `idEstatus` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `cliente`
 --
 
 INSERT INTO `cliente` (`id_cliente`, `nombre_completo`, `nombre_usuario`, `email_cliente`, `clave`, `id_departamento`, `id_rol`, `telefono_celular`, `Fecha_creacion`, `idEstatus`) VALUES
-(1, 'Leonardo Saínos Pérez', 'LeonardoSainos', 'leonardosainos@gmail.com', '5e8667a439c68f5145dd2fcbecf02209', 2505, 4046, '2228412398', '2023-02-21 15:43:55', 19231),
+(1, 'Leonardo Sainos P?rez', 'LeonardoSainos', 'leonardosainos@gmail.com', '5e8667a439c68f5145dd2fcbecf02209', 2505, 4046, '2228412398', '2023-02-21 15:43:55', 19231),
 (3, 'Alondra Sanchez Torivio', 'Alo250518', 'alondrasanchez@gmail.com', '25d55ad283aa400af464c76d713c07ad', 2505, 5267, '2228660690', '2023-01-30 19:39:32', 31448),
-(5, 'Andrés Sebastián Sánchez Cortez', 'Oaxaco', 'andressebas@gmail.com', '0094bcd09edc457cf5efd7d93ad995f3', 2505, 5267, '5535291605', '2023-02-22 20:37:38', 31448),
+(5, 'Andres Sebastian Sanchez Cortez', 'Oaxaco', 'andressebas@gmail.com', '0094bcd09edc457cf5efd7d93ad995f3', 2505, 5267, '5535291605', '2023-02-22 20:37:38', 31448),
 (7, 'Luis Enrique Granillo Gamino', 'Gamino', 'kikegamino@gmail.com', '25d55ad283aa400af464c76d713c07ad', 2505, 5267, '2222335566', '2023-01-18 23:25:39', 31448),
 (8, 'Roman Sanchez', 'Roman08', 'roman@gmail.com', 'e2a8423214be5cd507325221dea72022', 2505, 9947, '2225469883', '2023-02-11 18:04:26', 31448),
 (12, 'Luis Enrique Granillo Gamino', 'TecnicoKike', 'LuisGranillo@gmail.com', 'ed2b1f468c5f915f3f1cf75d7068baae', 2505, 4046, '2225277033', '2023-02-21 16:44:32', 31448),
@@ -162,7 +123,8 @@ INSERT INTO `cliente` (`id_cliente`, `nombre_completo`, `nombre_usuario`, `email
 (31, 'Gibran Antonio Garcia Xicohtencatl', 'Gibran', 'sistemas@alcomex.mx', '342ef382d282dceaac9bfc51ebd7bae6', 2505, 4046, '2223245928', '2023-03-23 16:45:16', 31448),
 (35, 'Gabriela Prueba Sainos', 'Gaby Perez', 'gabyperedfdfz@gmail.com', '', 3, 4046, ' 222222222', '2023-03-27 19:37:54', 19231),
 (38, 'Jenny Ortega Garcia', 'Jenny', 'jennyortega@gmail.com', '25d55ad283aa400af464c76d713c07ad', 2505, 9947, '5566778844', '2023-03-27 20:01:07', 31448),
-(40, 'Uriel Isai Hernández Hernández ', 'UriCss', 'uricss@gmail.com', '25d55ad283aa400af464c76d713c07ad', 2505, 5267, '2491739802', '2023-03-28 20:12:27', 31448);
+(40, 'Uriel Isa Hern?ndez Hern?ndez ', 'UriCss', 'uricss@gmail.com', 'e807f1fcf82d132f9bb018ca6738a19f', 2505, 9947, '2491739802', '2023-03-28 17:29:59', 31448),
+(41, 'Jesus Enriqué Méndez Ornelas', 'Bucky', 'jesusornelas@gmail.com', 'asa11224dfdas', 2505, 4046, '2244558899', '2023-03-28 18:19:12', 31448);
 
 --
 -- Disparadores `cliente`
@@ -188,13 +150,13 @@ DELIMITER ;
 
 CREATE TABLE `departamento` (
   `idDepartamento` int(11) NOT NULL,
-  `nombre` varchar(30) DEFAULT NULL,
-  `correo` varchar(55) DEFAULT NULL,
-  `descripcion` varchar(300) DEFAULT NULL,
+  `nombre` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `correo` varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `descripcion` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `idEstatus` int(10) DEFAULT NULL,
   `idJefe` int(10) DEFAULT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `departamento`
@@ -203,16 +165,16 @@ CREATE TABLE `departamento` (
 INSERT INTO `departamento` (`idDepartamento`, `nombre`, `correo`, `descripcion`, `idEstatus`, `idJefe`, `fecha`) VALUES
 (3, 'Prueba', 'Prueba@gmail.com', 'esto es una prueba', 31448, 22, '2023-03-09 18:16:27'),
 (7, 'Talleres', 'deportes@utpuebla.edu.mx', 'Talleres deportivos y culturales ', 31448, 1, '2023-03-09 18:16:27'),
-(9, 'Titulacion', 'titulacionalcomex@utpuebla.mx', 'Area encargada del proceso de titulacion', 31448, 40, '2023-03-09 18:16:27'),
+(9, 'Titulacion', 'titulacionalcomex@utpuebla.mx', 'Area encargada del proceso de titulacion', 31448, 22, '2023-03-09 18:16:27'),
 (2505, 'Sin departamento', '', '', 31448, 5, '2023-03-09 18:16:27'),
-(2506, 'Cuentas por cobrar', 'cuentasporcobrar@alcomex.mx', 'Departamento del área de finanzas', 31448, 3, '2023-03-09 18:16:27'),
+(2506, 'Cuentas por cobnrar', 'cuentasporcobrar@alcomex.mx', 'Departamento del ?rea de finanzas', 31448, 3, '2023-03-09 18:16:27'),
 (2507, 'Prueba1', 'correo@gmail.com', 'Esto es una prueba de CRUD', 31448, 1, '2023-03-09 20:00:17'),
 (2510, 'Prueba1', 'correo032@gmail.com', 'Esto es una prueba de CRUD', 31448, 1, '2023-03-09 22:38:28'),
 (2519, 'Prueba10', 'icorreo9@gmail.com', 'Esto es una prueba de CRUD', 31448, 1, '2023-03-09 22:38:28'),
-(2522, 'Taller B2', 'tallerb2@alcomex.mx', 'Esta área se encarga de dar mantenimiento a los equipos de carga ', 31448, 3, '2023-03-13 18:55:57'),
-(2523, 'Sistemas', 'sistemas@alcomex.mx', 'Soporte técnico  ', 31448, 1, '2023-03-14 19:27:21'),
+(2522, 'Taller B2', 'tallerb2@alcomex.mx', 'Esta ?rea se encarga de dar mantenimiento a los equipos de carga ', 31448, 3, '2023-03-13 18:55:57'),
+(2523, 'Sistemas', 'sistemas@alcomex.mx', 'Soporte t?cnico', 31448, 1, '2023-03-14 19:27:21'),
 (2524, 'Recursos Humanos', 'alcomex2022@gmail.com', 'Recursos humanos alcomex', 31448, 29, '2023-03-14 19:29:28'),
-(2525, 'Triggers', 'triggers@gmail.com', 'Prueba de desencadenadores', 31448, 40, '2023-03-27 20:14:20');
+(2525, 'Triggers', 'triggers@gmail.com', 'Prueba de desencadenadores', 31448, 35, '2023-03-27 20:14:20');
 
 --
 -- Disparadores `departamento`
@@ -237,9 +199,9 @@ DELIMITER ;
 --
 
 CREATE TABLE `enviocorreo` (
-  `correo` varchar(200) DEFAULT NULL,
-  `contraseña` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `correo` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `contraseña` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -249,8 +211,8 @@ CREATE TABLE `enviocorreo` (
 
 CREATE TABLE `estatus` (
   `idEstatus` int(11) NOT NULL,
-  `Nombre` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `Nombre` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `estatus`
@@ -275,10 +237,10 @@ CREATE TABLE `registro_alteraciones` (
   `id_registro` int(11) NOT NULL,
   `usuario` int(11) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
-  `accion` varchar(255) NOT NULL,
+  `accion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `idAlterado` int(11) DEFAULT NULL,
-  `tabla` varchar(40) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `tabla` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `registro_alteraciones`
@@ -306,90 +268,75 @@ INSERT INTO `registro_alteraciones` (`id_registro`, `usuario`, `fecha`, `accion`
 (310, 1, '2023-03-27 21:03:17', 'Actualizar', 36, 'cliente'),
 (315, 0, '2023-03-27 21:05:11', 'Eliminar', 36, 'cliente'),
 (316, 1, '2023-03-27 21:07:40', 'Insertar', 39, 'cliente'),
-(369, 1, '2023-03-28 20:08:32', 'Actualizar', 2506, 'departamento'),
-(370, 0, '2023-03-28 20:10:42', '', 5, 'cliente'),
-(371, 40, '2023-03-28 20:12:27', 'Insertar', 40, 'cliente'),
-(372, 0, '2023-03-28 20:21:18', '', 2506, 'departamento'),
-(373, 1, '2023-03-28 20:21:44', 'Actualizar', 2523, 'departamento'),
-(374, 0, '2023-03-28 20:23:32', '', 2523, 'departamento'),
-(375, 1, '2023-03-28 20:23:46', 'Actualizar', 2523, 'departamento'),
-(376, 1, '2023-03-28 20:38:53', 'Actualizar', 2522, 'departamento'),
-(377, 1, '2023-03-28 20:39:01', 'Actualizar', 2522, 'departamento'),
-(378, 1, '2023-03-28 20:39:08', 'Actualizar', 2522, 'departamento'),
-(379, 1, '2023-03-28 20:41:23', 'Actualizar', 2522, 'departamento'),
-(380, 1, '2023-03-28 20:42:24', 'Actualizar', 2522, 'departamento'),
-(381, 1, '2023-03-28 20:43:44', 'Actualizar', 2523, 'departamento'),
-(382, 1, '2023-03-28 21:29:14', 'Actualizar', 2523, 'departamento'),
-(383, 1, '2023-03-28 21:29:19', 'Actualizar', 2523, 'departamento'),
-(384, 1, '2023-03-28 21:29:24', 'Actualizar', 2523, 'departamento'),
-(385, 1, '2023-03-28 21:32:42', 'Actualizar', 2523, 'departamento'),
-(386, 1, '2023-03-28 21:46:38', 'Actualizar', 2506, 'departamento'),
-(387, 1, '2023-03-28 21:46:49', 'Actualizar', 2506, 'departamento'),
-(388, 1, '2023-03-28 21:47:22', 'Actualizar', 2506, 'departamento'),
-(389, 1, '2023-03-28 21:59:42', 'Actualizar', 2506, 'departamento'),
-(390, 1, '2023-03-28 22:07:56', 'Actualizar', 2506, 'departamento'),
-(391, 1, '2023-03-28 22:12:46', 'Actualizar', 2506, 'departamento'),
-(392, 1, '2023-03-28 22:12:57', 'Actualizar', 2506, 'departamento'),
-(393, 1, '2023-03-28 22:13:48', 'Actualizar', 2506, 'departamento'),
-(394, 1, '2023-03-28 22:14:11', 'Actualizar', 1, 'cliente'),
-(395, 1, '2023-03-28 22:14:32', 'Actualizar', 1, 'cliente'),
-(396, 1, '2023-03-28 22:17:04', 'Actualizar', 2506, 'departamento'),
-(397, 1, '2023-03-28 22:17:14', 'Actualizar', 2506, 'departamento'),
-(398, 1, '2023-03-28 22:17:36', 'Actualizar', 1, 'cliente'),
-(399, 1, '2023-03-28 22:18:02', 'Actualizar', 1, 'cliente'),
-(400, 0, '2023-03-28 22:19:01', '', 1, 'cliente'),
-(401, 1, '2023-03-28 22:31:48', 'Actualizar', 2506, 'departamento'),
-(402, 1, '2023-03-28 22:32:12', 'Actualizar', 2506, 'departamento'),
-(403, 1, '2023-03-28 22:33:25', 'Actualizar', 2506, 'departamento'),
-(404, 1, '2023-03-28 22:35:36', 'Actualizar', 2506, 'departamento'),
-(405, 1, '2023-03-28 22:37:29', 'Actualizar', 2506, 'departamento'),
-(406, 1, '2023-03-28 22:37:48', 'Actualizar', 2506, 'departamento'),
-(407, 1, '2023-03-28 22:40:11', 'Actualizar', 1, 'cliente'),
-(408, 1, '2023-03-28 22:40:42', 'Actualizar', 2523, 'departamento'),
-(409, 1, '2023-03-28 22:40:53', 'Actualizar', 2522, 'departamento'),
-(410, 40, '2023-03-28 22:41:48', 'Actualizar', 40, 'cliente'),
-(411, 40, '2023-03-28 22:44:01', 'Insertar', 69, 'ticket'),
-(412, 40, '2023-03-28 22:46:57', 'Insertar', 70, 'ticket'),
-(413, 40, '2023-03-28 22:47:02', 'Insertar', 71, 'ticket'),
-(414, 40, '2023-03-28 22:47:06', 'Insertar', 72, 'ticket'),
-(415, 40, '2023-03-28 22:47:09', 'Insertar', 73, 'ticket'),
-(416, 40, '2023-03-28 22:47:12', 'Insertar', 74, 'ticket'),
-(417, 40, '2023-03-28 22:47:15', 'Insertar', 75, 'ticket'),
-(418, 40, '2023-03-28 22:47:18', 'Insertar', 76, 'ticket'),
-(419, 40, '2023-03-28 22:47:21', 'Insertar', 77, 'ticket'),
-(420, 40, '2023-03-28 22:47:23', 'Insertar', 78, 'ticket'),
-(421, 40, '2023-03-28 22:47:27', 'Insertar', 79, 'ticket'),
-(422, 40, '2023-03-28 22:47:31', 'Insertar', 80, 'ticket'),
-(423, 40, '2023-03-28 22:47:34', 'Insertar', 81, 'ticket'),
-(424, 40, '2023-03-28 22:47:37', 'Insertar', 82, 'ticket'),
-(425, 40, '2023-03-28 22:47:41', 'Insertar', 83, 'ticket'),
-(426, 40, '2023-03-28 22:47:44', 'Insertar', 84, 'ticket'),
-(427, 40, '2023-03-28 22:47:47', 'Insertar', 85, 'ticket'),
-(428, 40, '2023-03-28 22:47:50', 'Insertar', 86, 'ticket'),
-(429, 40, '2023-03-28 22:47:54', 'Insertar', 87, 'ticket'),
-(430, 40, '2023-03-28 22:47:58', 'Insertar', 88, 'ticket'),
-(431, 40, '2023-03-28 22:48:02', 'Insertar', 89, 'ticket'),
-(432, 40, '2023-03-28 22:48:06', 'Insertar', 90, 'ticket'),
-(433, 40, '2023-03-28 22:48:10', 'Insertar', 91, 'ticket'),
-(434, 40, '2023-03-28 22:48:13', 'Insertar', 92, 'ticket'),
-(435, 40, '2023-03-28 22:48:16', 'Insertar', 93, 'ticket'),
-(436, 40, '2023-03-28 22:48:21', 'Insertar', 94, 'ticket'),
-(437, 40, '2023-03-28 22:48:58', 'Insertar', 95, 'ticket'),
-(438, 40, '2023-03-28 22:49:03', 'Insertar', 96, 'ticket'),
-(439, 40, '2023-03-28 22:49:06', 'Insertar', 97, 'ticket'),
-(440, 40, '2023-03-28 22:49:10', 'Insertar', 98, 'ticket'),
-(441, 40, '2023-03-28 22:49:13', 'Insertar', 99, 'ticket'),
-(442, 40, '2023-03-28 22:49:17', 'Insertar', 100, 'ticket'),
-(443, 40, '2023-03-28 22:49:21', 'Insertar', 101, 'ticket'),
-(444, 1, '2023-03-28 22:49:58', 'Actualizar', 2525, 'departamento'),
-(445, 1, '2023-03-28 22:50:30', 'Actualizar', 40, 'cliente'),
-(446, 40, '2023-03-28 22:52:06', 'Actualizar', 35, 'ticket'),
-(447, 0, '2023-03-28 23:00:30', '', 78, 'ticket'),
-(448, 1, '2023-03-28 23:12:11', 'Actualizar', 1, 'cliente'),
-(449, 0, '2023-03-28 23:16:06', '', 1, 'cliente'),
-(451, 1, '2023-03-28 23:41:51', 'Actualizar', 9, 'departamento'),
-(453, 1, '2023-03-28 23:53:56', 'Insertar', 41, 'cliente'),
-(454, 0, '2023-03-29 00:03:11', 'Eliminar', 41, 'cliente');
+(317, 0, '2023-03-27 21:07:45', 'Eliminar', 39, 'cliente'),
+(318, 0, '2023-03-27 23:45:00', '', 28, 'ticket'),
+(319, 0, '2023-03-27 23:45:00', '', 30, 'ticket'),
+(320, 0, '2023-03-27 23:45:00', '', 31, 'ticket'),
+(321, 0, '2023-03-27 23:45:00', '', 32, 'ticket'),
+(322, 0, '2023-03-27 23:45:00', '', 33, 'ticket'),
+(323, 0, '2023-03-27 23:45:00', '', 34, 'ticket'),
+(324, 0, '2023-03-27 23:45:00', '', 35, 'ticket'),
+(325, 0, '2023-03-27 23:45:00', '', 39, 'ticket'),
+(326, 0, '2023-03-27 23:45:00', '', 40, 'ticket'),
+(327, 0, '2023-03-27 23:45:00', '', 41, 'ticket'),
+(328, 0, '2023-03-27 23:45:00', '', 42, 'ticket'),
+(329, 0, '2023-03-27 23:45:00', '', 43, 'ticket'),
+(330, 0, '2023-03-27 23:45:00', '', 45, 'ticket'),
+(331, 0, '2023-03-27 23:45:00', '', 46, 'ticket'),
+(332, 0, '2023-03-27 23:45:00', '', 47, 'ticket'),
+(333, 0, '2023-03-27 23:45:00', '', 48, 'ticket'),
+(334, 0, '2023-03-27 23:45:00', '', 49, 'ticket'),
+(335, 0, '2023-03-27 23:45:00', '', 50, 'ticket'),
+(336, 0, '2023-03-27 23:45:00', '', 51, 'ticket'),
+(337, 0, '2023-03-27 23:45:00', '', 52, 'ticket'),
+(338, 0, '2023-03-27 23:45:00', '', 55, 'ticket'),
+(339, 0, '2023-03-27 23:45:00', '', 56, 'ticket'),
+(340, 0, '2023-03-27 23:45:00', '', 57, 'ticket'),
+(341, 0, '2023-03-27 23:45:00', '', 58, 'ticket'),
+(342, 0, '2023-03-27 23:45:00', '', 63, 'ticket'),
+(343, 0, '2023-03-27 23:45:48', '', 28, 'ticket'),
+(344, 0, '2023-03-27 23:45:48', '', 30, 'ticket'),
+(345, 0, '2023-03-27 23:45:48', '', 31, 'ticket'),
+(346, 0, '2023-03-27 23:45:48', '', 32, 'ticket'),
+(347, 0, '2023-03-27 23:45:48', '', 33, 'ticket'),
+(348, 0, '2023-03-27 23:45:48', '', 34, 'ticket'),
+(349, 0, '2023-03-27 23:45:48', '', 35, 'ticket'),
+(350, 0, '2023-03-27 23:45:48', '', 39, 'ticket'),
+(351, 0, '2023-03-27 23:45:48', '', 40, 'ticket'),
+(352, 0, '2023-03-27 23:45:48', '', 41, 'ticket'),
+(353, 0, '2023-03-27 23:45:48', '', 42, 'ticket'),
+(354, 0, '2023-03-27 23:45:48', '', 43, 'ticket'),
+(355, 0, '2023-03-27 23:45:48', '', 45, 'ticket'),
+(356, 0, '2023-03-27 23:45:48', '', 46, 'ticket'),
+(357, 0, '2023-03-27 23:45:48', '', 47, 'ticket'),
+(358, 0, '2023-03-27 23:45:48', '', 48, 'ticket'),
+(359, 0, '2023-03-27 23:45:48', '', 49, 'ticket'),
+(360, 0, '2023-03-27 23:45:48', '', 50, 'ticket'),
+(361, 0, '2023-03-27 23:45:48', '', 51, 'ticket'),
+(362, 0, '2023-03-27 23:45:48', '', 52, 'ticket'),
+(363, 0, '2023-03-27 23:45:48', '', 55, 'ticket'),
+(364, 0, '2023-03-27 23:45:48', '', 56, 'ticket'),
+(365, 0, '2023-03-27 23:45:48', '', 57, 'ticket'),
+(366, 0, '2023-03-27 23:45:48', '', 58, 'ticket'),
+(367, 0, '2023-03-27 23:45:48', '', 63, 'ticket'),
+(368, 40, '2023-03-28 17:29:59', 'Insertar', 40, 'cliente'),
+(369, 40, '2023-03-28 17:37:30', 'Actualizar', 40, 'cliente'),
+(370, 0, '2023-03-28 17:39:14', '', 40, 'cliente'),
+(371, 40, '2023-03-28 17:39:34', 'Actualizar', 40, 'cliente'),
+(372, 40, '2023-03-28 17:43:16', 'Actualizar', 40, 'cliente'),
+(373, 40, '2023-03-28 17:43:43', 'Actualizar', 40, 'cliente'),
+(374, 40, '2023-03-28 17:44:09', 'Actualizar', 40, 'cliente'),
+(375, 40, '2023-03-28 17:44:20', 'Actualizar', 40, 'cliente'),
+(376, 40, '2023-03-28 17:44:34', 'Actualizar', 40, 'cliente'),
+(377, 40, '2023-03-28 17:50:59', 'Actualizar', 40, 'cliente'),
+(378, 40, '2023-03-28 17:51:12', 'Actualizar', 40, 'cliente'),
+(379, 1, '2023-03-28 18:00:26', 'Actualizar', 1, 'cliente'),
+(380, 29, '2023-03-28 18:05:58', 'Actualizar', 68, 'ticket'),
+(381, 0, '2023-03-28 18:19:12', '', 41, 'cliente'),
+(382, 0, '2023-03-28 18:44:56', '', 40, 'cliente'),
+(383, 0, '2023-03-28 18:52:41', '', 40, 'cliente'),
+(384, 40, '2023-03-28 18:53:05', 'Actualizar', 40, 'cliente'),
+(385, 40, '2023-03-28 18:53:28', 'Actualizar', 40, 'cliente');
 
 -- --------------------------------------------------------
 
@@ -399,8 +346,8 @@ INSERT INTO `registro_alteraciones` (`id_registro`, `usuario`, `fecha`, `accion`
 
 CREATE TABLE `rol` (
   `idRol` int(11) NOT NULL,
-  `Nombre` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `Nombre` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `rol`
@@ -420,16 +367,16 @@ INSERT INTO `rol` (`idRol`, `Nombre`) VALUES
 CREATE TABLE `ticket` (
   `id` int(11) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
-  `serie` varchar(100) NOT NULL,
-  `asunto` varchar(70) NOT NULL,
-  `mensaje` varchar(250) NOT NULL,
-  `solucion` varchar(300) NOT NULL,
+  `serie` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `asunto` varchar(70) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `mensaje` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `solucion` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `idDepartamento` int(11) NOT NULL,
   `idStatus` int(11) NOT NULL,
   `id_atiende` int(11) NOT NULL,
   `fecha_actualizacion` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `ticket`
@@ -442,7 +389,7 @@ INSERT INTO `ticket` (`id`, `fecha`, `serie`, `asunto`, `mensaje`, `solucion`, `
 (32, '2023-03-08 22:31:19', 'TK19N15', 'asas', 'asas', '', 1, 3, 94574, 8, '2023-03-08 04:16:10'),
 (33, '2023-03-08 22:31:19', 'TK40N16', 'asa', 'saasa', '', 1, 3, 94574, 8, '2023-03-08 04:16:12'),
 (34, '2023-03-08 22:31:19', 'TK85N17', 'asas', 'asas', '', 1, 3, 94574, 8, '2023-03-08 04:16:15'),
-(35, '2023-03-08 22:31:19', 'TK14N18', 'asasa', 'asasa', 'aun en proceso\r\n', 1, 3, 94575, 40, '2023-03-28 22:52:06'),
+(35, '2023-03-08 22:31:19', 'TK14N18', 'asasa', 'asasa', '', 1, 3, 94574, 8, '2023-03-08 04:16:17'),
 (39, '2023-03-08 22:31:19', 'TK95N22', 'asasa', 'asasas', '', 1, 3, 94574, 8, '2023-03-08 04:16:29'),
 (40, '2023-03-08 22:31:19', 'TK44N23', 'asasa', 'asasa', '', 1, 3, 94574, 8, '2023-03-08 04:16:32'),
 (41, '2023-03-08 22:31:19', 'TK05N24', 'asasa', 'asas', '', 1, 3, 94574, 8, '2023-03-08 04:16:35'),
@@ -465,40 +412,7 @@ INSERT INTO `ticket` (`id`, `fecha`, `serie`, `asunto`, `mensaje`, `solucion`, `
 (63, '2023-03-08 22:31:19', 'TK38N46', 'aa', 'ASAS', '', 1, 3, 94574, 8, '2023-03-08 04:34:48'),
 (65, '2023-03-15 05:34:35', 'TK13N37', 'Tóner', 'Toner para impresora DCP-LC5650DN', 'Pendiente', 29, 2523, 94575, 35, '2023-03-27 20:06:51'),
 (67, '2023-03-27 20:08:23', 'TK70N29', 'Prueba', 'Procedimientos almacenados', '', 1, 3, 94574, 3, NULL),
-(68, '2023-03-27 20:13:35', 'TK49N30', 'Prueba de base de da', 'Prueba Triggers', '', 1, 3, 94574, 29, NULL),
-(69, '2023-03-28 22:44:01', 'TK69N31', 'Fotos infantiles', 'Mañana iré a dejar mis fotitos', '', 40, 3, 94574, 3, NULL),
-(70, '2023-03-28 22:46:57', 'TK09N32', 'Tarea Jenny', 'ada', '', 40, 3, 94574, 5, NULL),
-(71, '2023-03-28 22:47:02', 'TK51N33', '1', '1', '', 40, 3, 94574, 3, NULL),
-(72, '2023-03-28 22:47:06', 'TK32N34', '2', '2', '', 40, 3, 94574, 3, NULL),
-(73, '2023-03-28 22:47:09', 'TK75N35', '3', '3', '', 40, 3, 94574, 3, NULL),
-(74, '2023-03-28 22:47:12', 'TK89N36', '4', '4', '', 40, 3, 94574, 3, NULL),
-(75, '2023-03-28 22:47:15', 'TK14N37', '5', '5', '', 40, 3, 94574, 3, NULL),
-(76, '2023-03-28 22:47:18', 'TK60N38', '6', '6', '', 40, 3, 94574, 3, NULL),
-(77, '2023-03-28 22:47:21', 'TK84N39', '7', '7', '', 40, 3, 94574, 3, NULL),
-(78, '2023-03-28 22:47:23', 'TK04N40', '8', '8', '', 40, 3, 94574, 1, NULL),
-(79, '2023-03-28 22:47:27', 'TK64N41', '9', '9', '', 40, 3, 94574, 3, NULL),
-(80, '2023-03-28 22:47:31', 'TK13N42', '10', '10', '', 40, 3, 94574, 3, NULL),
-(81, '2023-03-28 22:47:34', 'TK54N43', '11', '11', '', 40, 3, 94574, 3, NULL),
-(82, '2023-03-28 22:47:37', 'TK60N44', '12', '12', '', 40, 3, 94574, 3, NULL),
-(83, '2023-03-28 22:47:41', 'TK22N45', '13', '13', '', 40, 3, 94574, 3, NULL),
-(84, '2023-03-28 22:47:44', 'TK30N46', '14', '14', '', 40, 3, 94574, 3, NULL),
-(85, '2023-03-28 22:47:47', 'TK20N47', '15', '15', '', 40, 3, 94574, 3, NULL),
-(86, '2023-03-28 22:47:50', 'TK79N48', '16', '16', '', 40, 3, 94574, 3, NULL),
-(87, '2023-03-28 22:47:54', 'TK93N49', '17', '17', '', 40, 3, 94574, 3, NULL),
-(88, '2023-03-28 22:47:58', 'TK58N50', '18', '18', '', 40, 3, 94574, 3, NULL),
-(89, '2023-03-28 22:48:02', 'TK74N51', '19', '19', '', 40, 3, 94574, 3, NULL),
-(90, '2023-03-28 22:48:06', 'TK07N52', '20', '20', '', 40, 3, 94574, 3, NULL),
-(91, '2023-03-28 22:48:10', 'TK55N53', '21', '21', '', 40, 3, 94574, 5, NULL),
-(92, '2023-03-28 22:48:13', 'TK26N54', '22', '22', '', 40, 3, 94574, 5, NULL),
-(93, '2023-03-28 22:48:16', 'TK50N55', '23', '23', '', 40, 3, 94574, 5, NULL),
-(94, '2023-03-28 22:48:21', 'TK08N56', '24', '24', '', 40, 3, 94574, 5, NULL),
-(95, '2023-03-28 22:48:58', 'TK01N57', '25', '25', '', 40, 3, 94574, 5, NULL),
-(96, '2023-03-28 22:49:03', 'TK04N58', '26', '26', '', 40, 3, 94574, 5, NULL),
-(97, '2023-03-28 22:49:06', 'TK72N59', '27', '27', '', 40, 3, 94574, 5, NULL),
-(98, '2023-03-28 22:49:10', 'TK53N60', '28', '28', '', 40, 3, 94574, 5, NULL),
-(99, '2023-03-28 22:49:13', 'TK81N61', '29', '29', '', 40, 3, 94574, 5, NULL),
-(100, '2023-03-28 22:49:17', 'TK83N62', '30', '30', '', 40, 3, 94574, 5, NULL),
-(101, '2023-03-28 22:49:21', 'TK68N63', '31', '31', '', 40, 3, 94574, 5, NULL);
+(68, '2023-03-27 20:13:35', 'TK49N30', 'Prueba de base de da', 'Prueba Triggers', 'Listo ya qued?', 1, 3, 94574, 29, '2023-03-28 18:05:58');
 
 --
 -- Disparadores `ticket`
@@ -526,22 +440,21 @@ CREATE TABLE `user_delete` (
   `folio_id` int(11) NOT NULL,
   `fecha` datetime DEFAULT current_timestamp(),
   `idUsuario` int(11) NOT NULL,
-  `nombre_completo` varchar(100) DEFAULT NULL,
+  `nombre_completo` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `id_rol` int(11) DEFAULT NULL,
-  `id_departamento` varchar(60) DEFAULT NULL,
+  `id_departamento` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `pendiente` int(11) DEFAULT NULL,
   `creados` int(11) DEFAULT NULL,
   `resuelto` int(11) DEFAULT NULL,
   `proceso` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `user_delete`
 --
 
 INSERT INTO `user_delete` (`folio_id`, `fecha`, `idUsuario`, `nombre_completo`, `id_rol`, `id_departamento`, `pendiente`, `creados`, `resuelto`, `proceso`) VALUES
-(1, '2023-03-27 14:40:38', 5, 'Andrés Sebastián Sánchez Cortez', 4046, 'Sin departamento', 5, 0, 1, 2),
-(4, '2023-03-28 18:03:11', 41, 'Javier  Antonio Carrillo', 9947, 'Prueba', 0, 0, 0, 0);
+(1, '2023-03-27 14:40:38', 5, 'Andrés Sebastián Sánchez Cortez', 4046, 'SIN DEPARTAMENTO', 5, 0, 1, 2);
 
 --
 -- Índices para tablas volcadas
@@ -641,7 +554,7 @@ ALTER TABLE `estatus`
 -- AUTO_INCREMENT de la tabla `registro_alteraciones`
 --
 ALTER TABLE `registro_alteraciones`
-  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=455;
+  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=386;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -653,13 +566,13 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `ticket`
 --
 ALTER TABLE `ticket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT de la tabla `user_delete`
 --
 ALTER TABLE `user_delete`
-  MODIFY `folio_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `folio_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas

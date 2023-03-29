@@ -3,11 +3,23 @@
                 $iid= $_SESSION['id'];
         /*Eliminar */
             if(isset($_POST['id_dele'])){
-                $id_user=MysqlQuery::RequestPost('id_dele');
-         
-                    $eliminar= "email_cliente='$id_user'";
+                        $id_user=MysqlQuery::RequestPost('id_dele');
+                        $iproc= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" .$id_user . "'");
+                         $iproc2 = mysqli_fetch_array($iproc, MYSQLI_ASSOC);
+                         $idBorrar = $iproc2['id_cliente'];   
+                          // $eliminar= "email_cliente='$id_user'";                               
+                            $cr = Mysql:: consulta(" SELECT * FROM ticket WHERE idUsuario = $idBorrar");
+                            $creados = mysqli_num_rows($cr);
+                            $re= Mysql:: consulta(" SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94576");
+                            $resueltos= mysqli_num_rows($re); 
+                            $pen= Mysql:: consulta  ("SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94574 ");
+                            $pendientes = mysqli_num_rows($pen);
+                            $pro = Mysql:: consulta ("SELECT * FROM  ticket WHERE id_Atiende = $idBorrar AND idStatus = 94575");
+                            $proceso = mysqli_num_rows($pro);
       
-                if(MysqlQuery::Eliminar("cliente", $eliminar)){
+                if(MysqlQuery::ProcedimientoAlmacenado("EliminarUsuario","$idBorrar,'". date("Y-m-d")  ."','" . date("Y-m-d") . "',$pendientes, $creados, $resueltos, $proceso")){
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'CRUD','".date("Y-m-d H:i:s") ."','cliente, departamento,ticket'");
+      
                 echo '
                         <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
