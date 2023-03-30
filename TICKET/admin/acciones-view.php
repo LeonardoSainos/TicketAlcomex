@@ -57,10 +57,23 @@ if(@$_POST['Desbloquear'])
     {
         if(@$_POST['Usuarios']!=null)
         {
-            foreach ($_POST['Usuarios'] as  $IdDepa)
+            foreach ($_POST['Usuarios'] as  $idBorrar)
             {        
-                $llamar=MysqlQuery:: ProcedimientoAlmacenado("DeleteUsers","$IdDepa");
-                MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'Eliminar','".date("Y-m-d H:i:s") ."','cliente'");
+                  // $eliminar= "email_cliente='$id_user'";                               
+                  $cr = Mysql:: consulta(" SELECT * FROM ticket WHERE idUsuario = $idBorrar");
+                  $creados = mysqli_num_rows($cr);
+                  $re= Mysql:: consulta(" SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94576");
+                  $resueltos= mysqli_num_rows($re); 
+                  $pen= Mysql:: consulta  ("SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94574 ");
+                  $pendientes = mysqli_num_rows($pen);
+                  $pro = Mysql:: consulta ("SELECT * FROM  ticket WHERE id_Atiende = $idBorrar AND idStatus = 94575");
+                  $proceso = mysqli_num_rows($pro);
+
+                  if($llamar=MysqlQuery::ProcedimientoAlmacenado("EliminarUsuario","$idBorrar,'". date("Y-m-d")  ."','" . date("Y-m-d") . "',$pendientes, $creados, $resueltos, $proceso")){
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','cliente'");
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','ticket'");
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','departamento'");
+                  }      
             }
 
             if($llamar)

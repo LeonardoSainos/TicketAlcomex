@@ -46,7 +46,7 @@
                 <img src="./img/card_identy.png" alt="Image" class="img-responsive animated flipInY">
             </div>
             <div class="col-sm-10">
-              <p class="lead text-info">Bienvenido administrador, en esta página se muestran todos los usuarios y administradores registrados en soporte técnico Alcomex, usted podra eliminarlos si lo desea.</p>
+              <p class="lead text-info">Bienvenido asistente, en esta página se muestran todos los usuarios y administradores registrados en soporte técnico Alcomex, usted podra eliminarlos si lo desea.</p>
             </div>
           </div>
         </div>

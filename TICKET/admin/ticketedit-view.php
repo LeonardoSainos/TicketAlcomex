@@ -8,14 +8,14 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
     $Atiende_edit = MysqlQuery :: RequestPost('id_atiende');
     $fecha = MysqlQuery :: RequestPost('fecha_ticket');
 
-
+    $iid= $_SESSION['id'];
 		$cabecera="From: alcomex<correodepruebasutp@gmail.com>";
 		$mensaje_mail="Estimado usuario la solución a su problema es la siguiente : ".$solucion_edit;
 		$mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
 //  echo "<script> alert('" . $estado_edit . "' ); </script>";
 		if(MysqlQuery::Actualizar("ticket", "fecha='$fecha',id_atiende='$Atiende_edit', idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion='" . date("Y-m-d H:i:s"). "'","id=$id_edit")){
                             
-      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$Atiende_edit,'Actualizar','".date("Y-m-d H:i:s") ."','ticket'"))
+      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Actualizar','".date("Y-m-d H:i:s") ."','ticket'"))
  
       
       echo '

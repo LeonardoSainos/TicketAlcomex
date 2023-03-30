@@ -97,6 +97,14 @@
                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>                                                                                                  
                                    </ul>
                             </div>
+                            <div style="display:flex; float:right;">
+                                                        <form  method="GET" action="BuscarUser.php" >
+                                                            <input  style="width: 80%; float:left;"placeholder="Buscar Departamentos" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
+                                            
+                                                            <button style="float:right;"placeholder="Buscar"class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                            <?php echo "<input type='hidden' name='id' value='' >";?>
+                                                        </form>
+                                           </div>
                                        
                 <div class="row">
                     <div class="col-md-12">

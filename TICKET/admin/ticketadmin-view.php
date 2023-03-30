@@ -67,21 +67,30 @@
             ?>
 
             <div class="container">
-            <div class='btn-group'> <br><br> 
-                                                <button class='btn dropdown-toggle btn-warning' data-toggle='dropdown' value='Más'>
-                                                    Más
-                                                <span class='caret'></span>
-                                                </button>
-                                                <ul class='dropdown-menu'>
-                                              <!-- dropdown menu links -->
-                                             <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
-                                                    
-                                                    
-                                                          
-                                                </ul>
-                                                <br><br>
-                                          </div>
+                <br><br>
+                 <div class='btn-group'>   
+                     <button class='btn dropdown-toggle btn-warning' data-toggle='dropdown' value='Más'>
+                         Más
+                             <span class='caret'></span>
+                             </button>
+                              <ul class='dropdown-menu'>
+                               <!-- dropdown menu links -->
+                             <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>                                                                                                                               
+                              </ul>
+                                    
+                  </div>
+                  <div style="display:flex; float:right;">
+                     <form  method="GET" action="BuscarUser.php" >
+                           <input  style="width: 80%; float:left;"placeholder="Buscar tickets" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
+                          
+                              <button style="float:right;"placeholder="Buscar"class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                             <?php echo "<input type='hidden' name='id' value='' >";?>
+                     </form>
+                </div>
+                <br><br>
+                                          
                 <div class="row">
+                    
                     <div class="col-md-12">
                         <ul class="nav nav-pills nav-justified">
                             <li><a href="./admin.php?view=ticketadmin&ticket=all"><i class="fa fa-list"></i>&nbsp;&nbsp;Todos los tickets&nbsp;&nbsp;<span class="badge"><?php echo $num_total_all; ?></span></a></li>
@@ -92,6 +101,7 @@
                     
                         </ul>
                     </div>
+                    
                 </div>
                 <br>
                 <div class="row">

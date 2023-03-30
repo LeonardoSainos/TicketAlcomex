@@ -68,6 +68,15 @@
             ?>
 
             <div class="container">
+            <div style="display:flex; float:right;">
+                                                        <form  method="GET" action="BuscarUser.php" >
+                                                            <input  style="width: 80%; float:left;"placeholder="Buscar algún ticket" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
+                                            
+                                                            <button style="float:right;"placeholder="Buscar"class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                            <?php echo "<input type='hidden' name='id' value='' >";?>
+                                                        </form>
+                                           </div>
+                                           <br><br><br>
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="nav nav-pills nav-justified">
@@ -77,6 +86,8 @@
                             <li><a href="./tecni.php?view=ticketTecni&ticket=resolved"><i class="fa fa-thumbs-o-up"></i>&nbsp;&nbsp;Tickets resueltos&nbsp;&nbsp;<span class="badge"><?php echo $num_total_res; ?></span></a></li>
                         </ul>
                     </div>
+
+                    
                 </div>
                 <br>
                 <div class="row">

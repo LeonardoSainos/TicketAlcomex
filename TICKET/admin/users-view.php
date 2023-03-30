@@ -1,6 +1,6 @@
 <?php if($_SESSION['nombre']!="" && $_SESSION['rol']==4046){ ?>    
         <?php 
-                $iid= $_SESSION['id'];
+                $user= $_SESSION['id'];
         /*Eliminar */
             if(isset($_POST['id_dele'])){
                         $id_user=MysqlQuery::RequestPost('id_dele');
@@ -18,14 +18,17 @@
                             $proceso = mysqli_num_rows($pro);
       
                 if(MysqlQuery::ProcedimientoAlmacenado("EliminarUsuario","$idBorrar,'". date("Y-m-d")  ."','" . date("Y-m-d") . "',$pendientes, $creados, $resueltos, $proceso")){
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'CRUD','".date("Y-m-d H:i:s") ."','cliente, departamento,ticket'");
-      
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','cliente'");
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','ticket'");
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','departamento'");
+                  
+                  
                 echo '
                         <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                             <h4 class="text-center">USUARIO ELIMINADO</h4>
                             <p class="text-center">
-                                El usuario fue eliminado del sistema con éxito
+                                El usuario fue eliminado del sistema con éxito  
 
                             
                             </p>
@@ -59,7 +62,7 @@
                 if(mysqli_num_rows($Verificar)<=0){
                     if(MysqlQuery::Guardar("cliente", "nombre_completo, nombre_usuario, email_cliente,id_departamento,id_rol,idEstatus,telefono_celular", "'$Ncompleto', '$Gusuario', '$Gcorreo',$Departamento, $Rol,$Estatus,' $Telefono'"))
                     {   
-                        MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Insertar','".date("Y-m-d H:i:s") ."','cliente'");
+                        MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'Insertar','".date("Y-m-d H:i:s") ."','cliente'");
 
                      
                         echo '
@@ -135,8 +138,16 @@
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
                                                         <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" name="Resetear" value=" Resetear contraseña" /> </a></li>  
                                             
-                                                    </ul>
+                                                 </ul>
                                           </div>  
+                                          <div style="display:flex; float:right;">
+                                                        <form  method="GET" action="BuscarUser.php" >
+                                                            <input  style="width: 80%; float:left;"placeholder="Buscar usuarios" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
+                                            
+                                                            <button style="float:right;"placeholder="Buscar"class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                            <?php echo "<input type='hidden' name='id' value='' >";?>
+                                                        </form>
+                                           </div>
                                                 <br><br>
                 <div class="row">
                     <div class="col-md-12 text-center">

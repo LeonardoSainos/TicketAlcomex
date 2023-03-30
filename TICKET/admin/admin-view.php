@@ -3,13 +3,25 @@
             $iid= $_SESSION['id'];
           //ELIMINAR USUARIO
             if(isset($_POST['id_dele'])){
-                $id_admin=MysqlQuery::RequestPost('id_dele');
-
-                $eliminar= "email_cliente='$id_admin'";
-              
-                if(MysqlQuery::Eliminar("cliente", "$eliminar")){
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Eliminar','".date("Y-m-d H:i:s") ."','cliente'");
+                $id_user=MysqlQuery::RequestPost('id_dele');
+                        $iproc= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" .$id_user . "'");
+                         $iproc2 = mysqli_fetch_array($iproc, MYSQLI_ASSOC);
+                         $idBorrar = $iproc2['id_cliente'];   
+                          // $eliminar= "email_cliente='$id_user'";                               
+                            $cr = Mysql:: consulta(" SELECT * FROM ticket WHERE idUsuario = $idBorrar");
+                            $creados = mysqli_num_rows($cr);
+                            $re= Mysql:: consulta(" SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94576");
+                            $resueltos= mysqli_num_rows($re); 
+                            $pen= Mysql:: consulta  ("SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94574 ");
+                            $pendientes = mysqli_num_rows($pen);
+                            $pro = Mysql:: consulta ("SELECT * FROM  ticket WHERE id_Atiende = $idBorrar AND idStatus = 94575");
+                            $proceso = mysqli_num_rows($pro);
       
+                if(MysqlQuery::ProcedimientoAlmacenado("EliminarUsuario","$idBorrar,'". date("Y-m-d")  ."','" . date("Y-m-d") . "',$pendientes, $creados, $resueltos, $proceso")){
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','cliente'");
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','ticket'");
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','departamento'");
+                  
                     echo '
                         <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -115,17 +127,35 @@
                                                     Más
                                                 <span class='caret'></span>
                                                 </button>
-                                                <ul class='dropdown-menu'>
+
+                                                
+                                                   <ul class='dropdown-menu'>
                                                 <!-- dropdown menu links -->
                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
-                                                        <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input  form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" value=" Resetear contraseña" name="Resetear"  /> </a></li>  
-                                                </ul>
+                                                     <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input  form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" value=" Resetear contraseña" name="Resetear"  /> </a></li>  
+                                                    
+                                               
+                                                    </ul>                                                    
+                                                
+                                               
                                           </div>
+                                          <div style="display:flex; float:right;">
+                                                        <form  method="GET" action="BuscarUser.php" >
+                                                            <input  style="width: 80%; float:left;"placeholder="Buscar administradores" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
+                                            
+                                                            <button style="float:right;"placeholder="Buscar"class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                            <?php echo "<input type='hidden' name='id' value='' >";?>
+                                                        </form>
+                                           </div>
+
+                                         
                                           <br><br>
                 <div class="row">
+
+                
                     <div class="col-md-12 text-center">
                         <ul class="nav nav-pills nav-justified">
                             <li><a href="./admin.php?view=users"><i class="fa fa-users"></i>&nbsp;&nbsp;Usuarios&nbsp;&nbsp;<span class="badge"><?php echo $num_total_user; ?></span></a></li>
