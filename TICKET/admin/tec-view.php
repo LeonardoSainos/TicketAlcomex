@@ -107,6 +107,7 @@
 
 
         ?>
+        <div id="contenido">
         <div class="container">
        
           <div class="row">
@@ -137,13 +138,9 @@
                                                 </ul>
                                           </div>
                                           <div style="display:flex; float:right;">
-                                                        <form  method="GET" action="BuscarUser.php" >
-                                                            <input  style="width: 80%; float:left;"placeholder="Buscar técnicos" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
-                                            
-                                                            <button style="float:right;"  class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                                            <?php echo "<input type='hidden' name='id' value='' >";?>
-                                                        </form>
-                                           </div>
+                                                   <input id="busqueda" style="width: 80%; float:left;" placeholder="Buscar técnicos" id="search" name="busqueda" class="form-control mr-sm-2 alin" type="text">
+                                                   <a id="mt" href="javascript:void()" style="float:right;" placeholder="Buscar" class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>
+                                           </div>   
                                           <br><br>
                 <div class="row">
                     <div class="col-md-12 text-center">
@@ -277,6 +274,7 @@
                     </div>
                 </div>
             </div>
+        </div>
 <?php
 }else{
 ?>
@@ -459,7 +457,6 @@
                             </div>
 
 <!--Modal para eliminar usuarios -->
-
 <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
        <div class="modal-dialog" role="document">
            <div class="modal-content">
@@ -487,7 +484,18 @@
        return $(this).text(); 
         });
        $("#borrar_id").val(datos[4]);                                           
-        });
+        });        
+</script>
 
-        
-</script> 
+<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
+
+<script>
+$("#mt").click(BuscarUsuario);
+    function BuscarUsuario(){
+         var URL = "./admin.php?view=searchUsers&tec=" + $("#busqueda").val();                    
+        $.get(URL,function (datos,estado){
+            $("#contenido").html(datos);
+        }
+        );
+    }
+</script>

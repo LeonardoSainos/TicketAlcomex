@@ -107,8 +107,8 @@
 
 
         ?>
+        <div  id="contenido">
         <div class="container" >
-       
           <div class="row">
             <div class="col-sm-2">
                 <img src="./img/card_identy.png" alt="Image" class="img-responsive animated flipInY">
@@ -128,29 +128,21 @@
                                                 <span class='caret'></span>
                                                 </button>                                                
                                                    <ul class='dropdown-menu'>
-                                                <!-- dropdown menu links -->
                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
-                                                     <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input  form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" value=" Resetear contraseña" name="Resetear"  /> </a></li>  
-                                                    
-                                               
-                                                    </ul>                                                    
-                                                
-                                               
+                                                     <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input  form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" value=" Resetear contraseña" name="Resetear"/> </a></li>  
+                                                    </ul>                                                         
                                           </div>
                                           <div style="display:flex; float:right;">
-                                                   <input id="busqueda" style="width: 80%; float:left;"placeholder="Buscar administradores" id="search" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
-                                                   <a id="mt" href="javascript:void()" style="float:right;"placeholder="Buscar"class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>
-                                                       
-                                           </div>
-
-                                         
+                                                   <input id="busqueda" style="width: 80%; float:left;" placeholder="Buscar administradores" id="search" name="busqueda" class="form-control mr-sm-2 alin" type="text">
+                                                   <a id="mt" href="javascript:void()" style="float:right;" placeholder="Buscar" class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>
+                                           </div>            
+                                           
+                                           
                                           <br><br>
                 <div class="row">
-
-                
                     <div class="col-md-12 text-center">
                         <ul class="nav nav-pills nav-justified">
                             <li><a href="./admin.php?view=users"><i class="fa fa-users"></i>&nbsp;&nbsp;Usuarios&nbsp;&nbsp;<span class="badge"><?php echo $num_total_user; ?></span></a></li>
@@ -162,24 +154,20 @@
                 <br>
                 <div class="row">
                     <div class="col-md-12">
-                        <div  id="contenido" class="table-responsive">
+                        <div  class="table-responsive">
                             <?php 
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
-
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
                                 $regpagina = 15;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
-
-                                $seladmin=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS  cliente.id_cliente,cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=4046  ORDER by cliente.nombre_completo LIMIT $inicio, $regpagina");
-
+                                $seladmin=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS  cliente.id_cliente,cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  WHERE cliente.id_rol=4046  ORDER by cliente.nombre_completo LIMIT $inicio, $regpagina");
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
-                                $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
-                        
+                                $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);                        
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
                                 if(mysqli_num_rows($seladmin)>0):
                             ?>
-                              <form id="acciones" method="POST" action="../TICKET/admin/acciones-view.php">
+                            <form id="acciones" method="POST" action="../TICKET/admin/acciones-view.php">
                             <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre'] ;?>"/>
                             <input type="hidden" name="rol"value="<?php echo $_SESSION['rol'];?>"/>
                             <input type="hidden" name="id" value="<?php echo $_SESSION['id'];?>"/>
@@ -214,10 +202,7 @@
                                         <td class="text-center">
                                                   <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
                                                   <a href="admin.php?view=useredit&id=<?php echo $row['id_cliente']; ?>" class="btn btn-sm btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                      
-                                                  <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class=" dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                    
-                                       
-                                                  
+                                                  <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class=" dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                                                                       
                                         </td>
                                     </tr>
                                     <?php
@@ -282,6 +267,7 @@
                     </div>
                 </div>
             </div>
+        </div>
 <?php
 }else{
 ?>
@@ -289,7 +275,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <img src="./img/Stop.png" alt="Image" class="img-responsive animated slideInDown"/><br>
-                    <img src="./img/SadTux.png" alt="Image" class="img-responsive"/>
+                    <img src="./img/Transp_ALCOMEX.png" alt="Image" class="img-responsive"/>
                     
                 </div>
                 <div class="col-sm-7 animated flip">
@@ -492,28 +478,17 @@
        return $(this).text(); 
         });
        $("#borrar_id").val(datos[4]);                                           
-        });
-
-        
+        });        
 </script> 
-
-<!-- http://localhost/Ticket-master/TICKET/admin.php?view=admin -->
 <script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
-<script src="http://localhost:8888/9/appweblam1/public/js/jquery-3.5.1.min.js"></script>
+ 
 <script>
-
 $("#mt").click(BuscarUsuario);
-
     function BuscarUsuario(){
-       // var URL="http://localhost:8888/9/Grafica/getimg.php?ancho="+$("#txtancho").val()+"&alto="+$("#txtalto").val();
-        var URL = "http://localhost/Ticket-master/TICKET/admin.php?view-searchUsers&busqueda=" + $("#busqueda").val();      
-       alert(URL);
+         var URL = "./admin.php?view=searchUsers&admin=" + $("#busqueda").val();                    
         $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }
-
         );
     }
-
-
 </script>

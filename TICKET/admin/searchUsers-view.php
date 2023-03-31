@@ -1,8 +1,24 @@
 <?php if($_SESSION['nombre']!="" && $_SESSION['rol']==4046){ ?>    
         <?php
-            $busqueda= MysqlQuery::RequestGet('busqueda');
             $iid= $_SESSION['id'];
-          //ELIMINAR USUARIO
+                 
+            if (isset($_GET['admin'])) {
+                $busqueda = MysqlQuery::RequestGet('admin');
+                $where ='admin';
+                $rol=4046;  
+            }else if(isset($_GET['tec'])){
+                $busqueda = MysqlQuery::RequestGet('tec');
+                $rol=5267;  
+                $where='tec';
+            }else if(isset($_GET['users'])){
+                $busqueda = MysqlQuery::RequestGet('users');
+                $where = 'users';
+                $rol=9947;  
+
+            }
+          
+        
+            //ELIMINAR USUARIO
             if(isset($_POST['id_dele'])){
                 $id_user=MysqlQuery::RequestPost('id_dele');
                         $iproc= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" .$id_user . "'");
@@ -108,7 +124,8 @@
 
 
         ?>
-        <div class="container">
+        <div  id="contenido">
+        <div class="container" >
        
           <div class="row">
             <div class="col-sm-2">
@@ -116,14 +133,13 @@
             </div>
             <div class="col-sm-10">
               <p class="lead text-info">Bienvenido administrador, en esta página se muestran todos los <strong>Usuarios </strong> registrados en soporte técnico Alcomex, usted podra eliminarlos si lo desea.</p>
-                
-   
             </div>
           </div>
         </div>
         
         <br><br>
-        <div  class="container">
+        
+        <div   class="container">
                                       <div class='btn-group'>
                                                 <button class='btn dropdown-toggle btn-warning' data-toggle='dropdown' value='Más'>
                                                     Más
@@ -143,7 +159,8 @@
                                                
                                           </div>
                                           <div style="display:flex; float:right;">
-                                                   <input  style="width: 80%; float:left;"placeholder="Buscar administradores" id="search" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
+                                                   <input id="busqueda" style="width: 80%; float:left;" placeholder="Buscar administradores" id="search" name="busqueda" value="<?php echo $busqueda; ?>" class="form-control mr-sm-2 alin" type="text">
+                                                   <input id="where" type="hidden" name="where" value="<?php echo $where;?>">
                                                    <a id="mt" href="javascript:void()" style="float:right;"placeholder="Buscar"class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>
                                                        
                                            </div>
@@ -151,8 +168,6 @@
                                          
                                           <br><br>
                 <div class="row">
-
-                
                     <div class="col-md-12 text-center">
                         <ul class="nav nav-pills nav-justified">
                             <li><a href="./admin.php?view=users"><i class="fa fa-users"></i>&nbsp;&nbsp;Usuarios&nbsp;&nbsp;<span class="badge"><?php echo $num_total_user; ?></span></a></li>
@@ -164,7 +179,7 @@
                 <br>
                 <div class="row">
                     <div class="col-md-12">
-                        <div id="contenido" class="table-responsive">
+                        <div  class="table-responsive">
                             <?php 
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
@@ -172,10 +187,11 @@
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
                                 $regpagina = 15;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
-                              $seladmin= mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS c.id_cliente,c.nombre_completo, c.nombre_usuario, c.email_cliente, d.nombre as Depa, r.Nombre, c.telefono_celular as celular, c.Fecha_creacion, e.Nombre as Esta FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento INNER JOIN estatus e ON e.idEstatus = c.idEstatus INNER JOIN rol r ON c.id_rol = r.idRol WHERE (c.id_cliente LIKE '%$busqueda%' OR c.nombre_usuario LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.Fecha_creacion LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR r.Nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' ) AND id_rol = 4046 LIMIT $inicio,$regpagina");
+                               
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
-                        
+                                $seladmin= mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS c.id_cliente,c.nombre_completo, c.nombre_usuario, c.email_cliente, d.nombre as Depa, r.Nombre, c.telefono_celular as celular, c.Fecha_creacion, e.Nombre as Esta FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento INNER JOIN estatus e ON e.idEstatus = c.idEstatus INNER JOIN rol r ON c.id_rol = r.idRol WHERE (c.id_cliente LIKE '%$busqueda%' OR c.nombre_usuario LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.Fecha_creacion LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR r.Nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' ) AND id_rol = $rol LIMIT $inicio,$regpagina");
+                                $encontrados = mysqli_num_rows($seladmin);
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
                                 if(mysqli_num_rows($seladmin)>0):
                             ?>
@@ -183,9 +199,9 @@
                             <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre'] ;?>"/>
                             <input type="hidden" name="rol"value="<?php echo $_SESSION['rol'];?>"/>
                             <input type="hidden" name="id" value="<?php echo $_SESSION['id'];?>"/>
-
-                            
-        <?php echo $iid . "hello ";?>
+                            <div class="col-sm-10">
+                                 <p class="lead text-info"><strong><?php echo $encontrados;?></strong> registros coinciden con tu busqueda</p>
+                            </div>
                             <table id="tabla" class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
@@ -285,6 +301,7 @@
                     </div>
                 </div>
             </div>
+        </div>
 <?php
 }else{
 ?>
@@ -500,16 +517,18 @@
         
 </script> 
 
- 
+<!-- http://localhost/Ticket-master/TICKET/admin.php?view=admin -->
 <script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
-<!--<script src="http://localhost:8888/9/appweblam1/public/js/jquery-3.5.1.min.js"></script>-->
+ 
 <script>
+
 $("#mt").click(BuscarUsuario);
 
     function BuscarUsuario(){
        // var URL="http://localhost:8888/9/Grafica/getimg.php?ancho="+$("#txtancho").val()+"&alto="+$("#txtalto").val();
-        var URL = "http://localhost/Ticket-master/TICKET/admin.php?view=searchUsers&" + $("#search").val();      
-       alert(URL);
+        var URL = "./admin.php?view=searchUsers&" + $("#where").val() + "=" + $("#busqueda").val();    
+                         
+    
         $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }

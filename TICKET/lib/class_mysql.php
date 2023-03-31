@@ -55,7 +55,6 @@ class MysqlQuery {
 
     public static function RequestGet($val) {
         $data = addslashes($_GET[$val]);
-
         $datos = MysqlQuery::limpiarCadena($data);
         return $datos;
     }
