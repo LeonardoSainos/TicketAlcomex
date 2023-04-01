@@ -2,6 +2,7 @@
     
     $user= $_SESSION['id'];?>
 
+        
         <div class="container">
           <div class="row">
             <div class="col-sm-2">
@@ -79,14 +80,12 @@
                               </ul>
                                     
                   </div>
+                  
+
                   <div style="display:flex; float:right;">
-                     <form  method="GET" action="BuscarUser.php" >
-                           <input  style="width: 80%; float:left;"placeholder="Buscar tickets" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
-                          
-                              <button style="float:right;"placeholder="Buscar"class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                             <?php echo "<input type='hidden' name='id' value='' >";?>
-                     </form>
-                </div>
+                       <input  style="width: 80%; float:left;" id="busqueda" placeholder="Buscar tickets" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
+                       <a id="mt" href="javascript:void()" style="float:right;" placeholder="Buscar" class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>       
+                 </div>
                 <br><br>
                                           
                 <div class="row">

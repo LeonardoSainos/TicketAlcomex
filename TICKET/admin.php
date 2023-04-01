@@ -11,7 +11,7 @@ if($_SESSION['rol']!=4046){
 }
 ?>
         <?php
-            $ViewDiferent=["searchUsers"];
+            $ViewDiferent=["searchUsers","searchDepa","searchTicket"];
             $WhiteList=["ticketadmin","ticketedit","users","admin","config","tec","depa","depaedit","useredit","acciones"];
             if(isset($_GET['view']) && in_array($_GET['view'], $WhiteList) && is_file("./admin/".$_GET['view']."-view.php")){
               ?>            

@@ -183,17 +183,16 @@
                             <?php 
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
-
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
                                 $regpagina = 15;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
-                               
+                                $seladmin= mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS c.id_cliente,c.nombre_completo, c.nombre_usuario, c.email_cliente, d.nombre as Depa, r.Nombre, c.telefono_celular as celular, c.Fecha_creacion, e.Nombre as Esta FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento INNER JOIN estatus e ON e.idEstatus = c.idEstatus INNER JOIN rol r ON c.id_rol = r.idRol WHERE (c.id_cliente LIKE '%$busqueda%' OR c.nombre_usuario LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.Fecha_creacion LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR r.Nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' ) AND id_rol = $rol LIMIT $inicio,$regpagina");
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
-                                $seladmin= mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS c.id_cliente,c.nombre_completo, c.nombre_usuario, c.email_cliente, d.nombre as Depa, r.Nombre, c.telefono_celular as celular, c.Fecha_creacion, e.Nombre as Esta FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento INNER JOIN estatus e ON e.idEstatus = c.idEstatus INNER JOIN rol r ON c.id_rol = r.idRol WHERE (c.id_cliente LIKE '%$busqueda%' OR c.nombre_usuario LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.Fecha_creacion LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR r.Nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' ) AND id_rol = $rol LIMIT $inicio,$regpagina");
                                 $encontrados = mysqli_num_rows($seladmin);
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
                                 if(mysqli_num_rows($seladmin)>0):
+
                             ?>
                               <form id="acciones" method="POST" action="../TICKET/admin/acciones-view.php">
                             <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre'] ;?>"/>

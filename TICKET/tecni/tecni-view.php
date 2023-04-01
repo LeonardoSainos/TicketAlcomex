@@ -5,7 +5,7 @@
             if(isset($_POST['id_del'])){
                 $id_admin=MysqlQuery::RequestPost('id_del');
                 if(MysqlQuery::Eliminar("cliente", "id_cliente='$id_admin'")){
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Eliminar','".date("Y-m-d H:i:s") ."','cliente'");
+                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Eliminar','".date("Y-m-d H:i:s") ."','cliente'");
       
                     echo '
                         <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
@@ -199,3 +199,31 @@
 <?php
 }
 ?>
+
+
+
+<script>
+        $('.dropbtn').on('click',function () {
+        $tr=$(this).closest("#tabla tbody tr");
+       var datos=$tr.children("#tabla tbody td").map(function() {
+       return $(this).text(); 
+        });
+       $("#borrar_id").val(datos[4]);                                           
+        });
+</script> 
+
+
+
+
+<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
+ 
+<script>
+$("#mt").click(BuscarUsuario);
+    function BuscarUsuario(){
+         var URL = "./admin.php?view=searchUsers&users=" + $("#busqueda").val();                    
+        $.get(URL,function (datos,estado){
+            $("#contenido").html(datos);
+        }
+        );
+    }
+</script>
