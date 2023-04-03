@@ -1,5 +1,6 @@
 <?php if( $_SESSION['nombre']!="" && $_SESSION['clave']!="" && $_SESSION['rol']==4046 ){ ?>
-        <div class="container">
+    <div id="contenido">    
+    <div class="container">
           <div class="row">
             <div class="col-sm-2">
               <img src="./img/depa.png"  stlyle="max-width: 100%;"alt="Image" class="img-responsive animated tada">
@@ -88,7 +89,7 @@
                 $num_total_all=mysqli_num_rows($num_depa_all);
             ?>
             
-
+        
             <div class="container"><br><br>
                             <div class='btn-group'>
                                  <button class='btn dropdown-toggle btn-warning' data-toggle='dropdown' value='Más'>Más<span class='caret'></span></button>
@@ -98,18 +99,14 @@
                                    </ul>
                             </div>
                             <div style="display:flex; float:right;">
-                                                        <form  method="GET" action="BuscarUser.php" >
-                                                            <input  style="width: 80%; float:left;"placeholder="Buscar Departamentos" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
-                                            
-                                                            <button style="float:right;"placeholder="Buscar"class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                                            <?php echo "<input type='hidden' name='id' value='' >";?>
-                                                        </form>
-                                           </div>
+                               <input  style="width: 80%; float:left;" value="" name="busqueda" id="busqueda" placeholder="Buscar departamentos" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
+                               <a id="mt" href="javascript:void()" style="float:right;" placeholder="Buscar" class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>       
+                           </div>
                                        
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="nav nav-pills nav-justified">
-                            <li><a href="#"><i class="fa fa-list"></i>&nbsp;&nbsp;Todos los departamentos&nbsp;&nbsp;<span class="badge"><?php echo $num_total_all; ?></span></a></li>
+                            <li><a  href="./admin.php?view=depa" ><i class="fa fa-list"></i>&nbsp;&nbsp;Todos los departamentos&nbsp;&nbsp;<span class="badge"><?php echo $num_total_all; ?></span></a></li>
                          </ul>
                     </div>
                 </div>
@@ -246,6 +243,7 @@
                     </div>
                 </div>
             </div><!--container principal-->
+          </div>
 <?php
 }else{
 ?>
@@ -266,9 +264,7 @@
 <?php
 }
 ?>
-
-
-                                                      
+                               
 
 <!-- Modal para insertar -->
 <div class="container">
@@ -420,3 +416,20 @@
         });
        
 </script> 
+
+
+
+<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
+ 
+<script>
+$("#mt").click(BuscarDepartamento);
+    function BuscarDepartamento(){
+        //admin.php?view=ticketadmin&ticket=all
+         var URL = "./admin.php?view=searchDepa&depa=" + $("#busqueda").val();   
+        alert(URL);             
+        $.get(URL,function (datos,estado){
+            $("#contenido").html(datos);
+        }
+        );
+    }
+</script>
