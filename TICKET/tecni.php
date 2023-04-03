@@ -59,8 +59,7 @@ if($_SESSION['rol']!=5267){
                 </html><?php include "./tecni/".$_GET['view']."-view.php";
             }
             else{
-?>
-                        
+?>  
                     <!DOCTYPE html>
                     <html>
                         <head>
@@ -80,14 +79,10 @@ if($_SESSION['rol']!=5267){
                                     <?php include "./inc/timezone.php"; ?>
                                     </strong>
                                 </p>
-
-                           
                                 </div>
-
-                                
                                 </div>
                                 <h1 class="text-center">Lo sentimos,la opción que ha seleccionado no se encuentra disponible</h1>
-                            
+
                             </div>
                             </div>
                           <br><br><br><br><br><br><br><br><br><br><br><br><br><br>   <br><br><br><br><br><br><br><br><br><br><br><br><br><br>

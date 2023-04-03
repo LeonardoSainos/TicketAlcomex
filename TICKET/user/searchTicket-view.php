@@ -75,7 +75,7 @@
 
             <div class="container">
             <div style="display:flex; float:right;">
-                       <input  style="width: 80%; float:left;" name="busqueda" required="" id="busqueda" placeholder="Buscar tickets" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
+                       <input  style="width: 80%; float:left;" name="busqueda" required="" id="busqueda" placeholder="Buscar tickets" name="busqueda"  value="<?php echo $busqueda; ?>" class="form-control mr-sm-2 alin" type="text">
                        <a id="mt" href="javascript:void()" style="float:right;" placeholder="Buscar" class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>       
                  </div>
                                            <br><br><br>
@@ -105,7 +105,7 @@
                                 if(isset($_GET['ticket'])){
                                     if($_GET['ticket']=="Client"){
                                         //SELECT SQL_CALC_FOUND_ROWS * FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  WHERE () AND t.idUsuario= $idAtiende  ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
+                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  WHERE (t.id LIKE '%$busqueda%' OR t.fecha LIKE '%$busqueda%' OR t.serie LIKE '%$busqueda%' OR t.asunto LIKE '%$busqueda%' OR t.mensaje LIKE '%$busqueda%' OR t.solucion LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR t.fecha_actualizacion LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%') AND t.idUsuario= $idAtiende  ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
                                         echo $estatus;
                                     }elseif($_GET['ticket']=="pending"){
@@ -138,9 +138,13 @@
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
                         
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
-
+                                $encontrados = mysqli_num_rows($selticket);
+                           
                                 if(mysqli_num_rows($selticket)>0):
                             ?>
+                              <div class="col-sm-10">
+                                 <p class="lead text-info"><strong><?php echo $encontrados;?></strong> registros coinciden con tu busqueda</p>
+                            </div>
                             <table class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
