@@ -12,7 +12,7 @@ include './lib/config.php';
         <link rel="icon" href="favicon.png">
         <?php include "./inc/links.php"; ?>        
     </head>
-    <body style="background-image:'/img/Transpo_ALCOMEX.png';" >   
+    <body style="background-image:'/img/Transp_ALCOMEX.png';" >   
         <?php include "./inc/navbar.php"; ?>
         <div class="container">
           <div class="row">
@@ -37,7 +37,7 @@ include './lib/config.php';
                 $content=$_GET['view'];
 
                
-                $WhiteList=["index","productos","soporte","ticket","ticketcon","registro","configuracion"];
+                $WhiteList=["index","productos","soporte","ticket","ticketcon","registro","configuracion","ticketClient","searchTicket"];
                 if(in_array($content, $WhiteList) && is_file("./user/".$content."-view.php")){
                     include "./user/".$content."-view.php";
                 }else{
@@ -46,8 +46,9 @@ include './lib/config.php';
                     <div class="row">
 
                         <div class="col-sm-4">
-                            <img src="./img/Stop.png" alt="Image" class="img-responsive"/><br>
-                            <img src="./img/SadTux.png" alt="Image" class="img-responsive"/>
+                        <img src="./img/Stop.png" alt="Image" class="img-responsive"/><br>
+                 
+                                  <img src="./img/Transp_ALCOMEX.png" alt="Image" class="img-responsive"/>
                         </div>
                       
                         <div class="col-sm-7 text-center">

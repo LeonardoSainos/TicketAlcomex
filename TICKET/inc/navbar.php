@@ -26,12 +26,15 @@
                     <ul class="dropdown-menu">
                         <!-- usuarios -->
                         <?php if($_SESSION['rol']==9947): ?>
-                        <li>
+                        <!--<li>
                             <a  href="#!"><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp;Mensajes</a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="./index.php?view=configuracion"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Configuración</a>
                         </li> 
+                        <li >
+                            <a href="./index.php?view=ticketClient"><span class="glyphicon glyphicon-envelope"></span> &nbsp; Tus Tickets</a>
+                        </li>
                         <?php endif; ?>
                         
                          <!-- tecnico -->
@@ -39,10 +42,7 @@
                         <li >
                             <a href="tecni.php?view=ticketTecni"><span class="glyphicon glyphicon-envelope"></span> &nbsp; Tus Tickets</a>
                         </li>
-                        <li>
-                            <a href="#!"><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp;Mensajes</a>
-                        </li>
-                        <li>
+                          <li>
                             <a href="tecni.php?view=users"><span class="glyphicon glyphicon-user"></span> &nbsp;Usuarios</a>
                         </li>
                         <li>
