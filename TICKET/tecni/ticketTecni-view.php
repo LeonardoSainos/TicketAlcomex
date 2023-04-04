@@ -172,10 +172,6 @@
                                             <a href="./lib/pdf.php?id_del=<?php echo $row['serie']; ?>" class="btn btn-sm btn-success" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
 
                                             <a href="tecni.php?view=ticketedit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-
-                                            <form  id="formulario" action="" method="POST" style="display: inline-block;">
-                                            <button data-toggle='modal' data-target='#pregunta' type="button" class="btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                                                           
-                                           </form>
                                         </td>
                                     </tr>
                                     <?php
@@ -291,16 +287,12 @@
                                                             </div>
                                                         </div>    
                                                  </div>
-
-
-
-<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
 <script>
 $("#mt").click(BuscarTicket);
     function BuscarTicket(){
         //admin.php?view=ticketadmin&ticket=all
          var URL = "./tecni.php?view=searchTicket&ticket=" + $("#estatus").val() + "&busqueda=" + $("#busqueda").val();   
-        alert(URL);             
+        
         $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }

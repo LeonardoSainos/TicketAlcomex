@@ -296,7 +296,6 @@ $("#mt").click(BuscarTicket);
     function BuscarTicket(){
         //admin.php?view=ticketadmin&ticket=all
          var URL = "./index.php?view=searchTicket&ticket=" + $("#estatus").val() + "&busqueda=" + $("#busqueda").val();   
-        alert(URL);             
         $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }

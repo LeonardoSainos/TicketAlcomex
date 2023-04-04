@@ -8,7 +8,7 @@
     }
 
     ?>
-          
+   
         <div class="container">
           <div class="row">
             <div class="col-sm-2">
@@ -69,7 +69,7 @@
 
 
             ?>
-            <div id="contenido">
+ <div id="contenido">           
             <div class="container">
                 <br><br>
                  <div class='btn-group'>   
@@ -269,9 +269,12 @@
                     </div>
                 </div>
             </div><!--container principal-->
-        </div>
+    </div>
+
 <?php
-}else{
+}
+
+else{
 ?>
         <div class="container">
             <div class="row">
@@ -319,6 +322,9 @@
                                        </div>
 
 
+                                       
+
+                
 <script>
         $('.dropbtn').on('click',function () {
         $tr=$(this).closest("#tabla tbody tr");
@@ -331,15 +337,13 @@
         
 </script> 
 
-<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
  
 <script>
 $("#mt").click(BuscarTicket);
     function BuscarTicket(){
         //admin.php?view=ticketadmin&ticket=all
          var URL = "./admin.php?view=searchTicket&ticket=" + $("#estatus").val() + "&busqueda=" + $("#busqueda").val();   
-        alert(URL);             
-        $.get(URL,function (datos,estado){
+          $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }
         );

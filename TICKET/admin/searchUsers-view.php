@@ -517,7 +517,7 @@
 </script> 
 
 <!-- http://localhost/Ticket-master/TICKET/admin.php?view=admin -->
-<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
+
  
 <script>
 
@@ -526,8 +526,7 @@ $("#mt").click(BuscarUsuario);
     function BuscarUsuario(){
        // var URL="http://localhost:8888/9/Grafica/getimg.php?ancho="+$("#txtancho").val()+"&alto="+$("#txtalto").val();
         var URL = "./admin.php?view=searchUsers&" + $("#where").val() + "=" + $("#busqueda").val();    
-          alert(URL);               
-        $.get(URL,function (datos,estado){
+              $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }
 

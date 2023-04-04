@@ -320,8 +320,7 @@
                                                </div>
                                            </div>    
                                        </div>
-
-
+ 
 <script>
         $('.dropbtn').on('click',function () {
         $tr=$(this).closest("#tabla tbody tr");
@@ -336,13 +335,12 @@
 
 
 
-<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
+
 <script>
 $("#mt").click(BuscarTicket);
     function BuscarTicket(){
         //admin.php?view=ticketadmin&ticket=all
          var URL = "./admin.php?view=searchTicket&ticket=" + $("#estatus").val() + "&busqueda=" + $("#busqueda").val();   
-        alert(URL);             
         $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }

@@ -4,7 +4,7 @@ include('../lib/config.php');
 date_default_timezone_set('America/Mexico_City');
 setlocale(LC_TIME, 'spanish');
 
-if($_POST['nombre']!="" && $_POST['rol']==4046 && $_POST['id']){ 
+if($_POST['nombre']!="" && $_POST['rol']==5267 && $_POST['id']){ 
     
     $user= $_POST['id'];
     //BLOQUEAR
@@ -51,51 +51,7 @@ if(@$_POST['Desbloquear'])
             </script>
             <?php
         }
-    }
-  //ELIMINAR USUARIO 
-    if(@$_POST['Eliminar'])
-    {
-        if(@$_POST['Usuarios']!=null)
-        {
-            foreach ($_POST['Usuarios'] as  $idBorrar)
-            {        
-                  // $eliminar= "email_cliente='$id_user'";                               
-                  $cr = Mysql:: consulta(" SELECT * FROM ticket WHERE idUsuario = $idBorrar");
-                  $creados = mysqli_num_rows($cr);
-                  $re= Mysql:: consulta(" SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94576");
-                  $resueltos= mysqli_num_rows($re); 
-                  $pen= Mysql:: consulta  ("SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94574 ");
-                  $pendientes = mysqli_num_rows($pen);
-                  $pro = Mysql:: consulta ("SELECT * FROM  ticket WHERE id_Atiende = $idBorrar AND idStatus = 94575");
-                  $proceso = mysqli_num_rows($pro);
-
-                  if($llamar=MysqlQuery::ProcedimientoAlmacenado("EliminarUsuario","$idBorrar,'". date("Y-m-d")  ."','" . date("Y-m-d") . "',$pendientes, $creados, $resueltos, $proceso")){
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','cliente'");
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','ticket'");
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','departamento'");
-                  }      
-            }
-
-            if($llamar)
-            {
-            echo "<script>alert('Usuarios eliminados');
-            window.history.go(-1);
-            </script>";
-            }
-            else  
-            {
-                echo "<script>alert('Algo falló, revisa tu conexión a Internet');</script>";
-            }
-        }
-        else  if(@$_POST['Usuarios']==null) {
-            ?>
-            <script>
-             alert("No haz seleccionado ningún usuario");
-             window.history.go(-1);
-            </script>
-            <?php
-        } 
-    }   
+    } 
 
     //RESETEAR CONTRASEÑA 
     if(@$_POST['Resetear'])

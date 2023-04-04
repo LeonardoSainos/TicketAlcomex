@@ -1,54 +1,8 @@
 <?php if($_SESSION['nombre']!="" && $_SESSION['rol']==5267){ ?>    
         <?php 
                 $user= $_SESSION['id'];
-        /*Eliminar */
-            if(isset($_POST['id_dele'])){
-                        $id_user=MysqlQuery::RequestPost('id_dele');
-                        $iproc= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" .$id_user . "'");
-                         $iproc2 = mysqli_fetch_array($iproc, MYSQLI_ASSOC);
-                         $idBorrar = $iproc2['id_cliente'];   
-                          // $eliminar= "email_cliente='$id_user'";                               
-                            $cr = Mysql:: consulta(" SELECT * FROM ticket WHERE idUsuario = $idBorrar");
-                            $creados = mysqli_num_rows($cr);
-                            $re= Mysql:: consulta(" SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94576");
-                            $resueltos= mysqli_num_rows($re); 
-                            $pen= Mysql:: consulta  ("SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94574 ");
-                            $pendientes = mysqli_num_rows($pen);
-                            $pro = Mysql:: consulta ("SELECT * FROM  ticket WHERE id_Atiende = $idBorrar AND idStatus = 94575");
-                            $proceso = mysqli_num_rows($pro);
-      
-                if(MysqlQuery::ProcedimientoAlmacenado("EliminarUsuario","$idBorrar,'". date("Y-m-d")  ."','" . date("Y-m-d") . "',$pendientes, $creados, $resueltos, $proceso")){
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','cliente'");
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','ticket'");
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','departamento'");
-                  
-                  
-                echo '
-                        <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            <h4 class="text-center">USUARIO ELIMINADO</h4>
-                            <p class="text-center">
-                                El usuario fue eliminado del sistema con éxito  
-
-                            
-                            </p>
-                        </div>
-                    ';  
-                }else{
-                    echo '
-                        <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            <h4 class="text-center">OCURRIÓ UN ERROR</h4>
-                            <p class="text-center">
-                                No hemos podido eliminar el usuario
-                            </p>
-                        </div>
-                    ';
-                }
-            }
-
-            // Guardar nuevo usuario
-            else if(isset($_POST['Gnombre']) && isset($_POST['Gapellidos']) && isset($_POST['Gcorreo'] )){
+                //Guardar nuevo usuario
+                if(isset($_POST['Gnombre']) && isset($_POST['Gapellidos']) && isset($_POST['Gcorreo'] )){
                 $N = MysqlQuery :: RequestPost('Gnombre');
                 $A = MysqlQuery :: RequestPost('Gapellidos');
                 $Ncompleto = $N . " " . $A;
@@ -116,7 +70,7 @@
                 <img src="./img/card_identy.png" alt="Image" class="img-responsive animated flipInY">
             </div>
             <div class="col-sm-10">
-              <p class="lead text-info">Bienvenido técnico, en esta página se muestran todos los <strong>Usuarios </strong> registrados en soporte técnico Alcomex, usted podra eliminarlos si lo desea.</p>
+              <p class="lead text-info">Bienvenido técnico, en esta página se muestran todos los <strong>Usuarios </strong> registrados en soporte técnico Alcomex.</p>
             </div>
           </div>
         </div>
@@ -133,7 +87,6 @@
                                                 <!-- dropdown menu links -->
                                                         
                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
                                                         <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" name="Resetear" value=" Resetear contraseña" /> </a></li>  
@@ -170,7 +123,7 @@
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
                                 if(mysqli_num_rows($selusers)>0):
                             ?>
-                            <form id="acciones" method="POST" action="../TICKET/admin/acciones-view.php">
+                            <form id="acciones" method="POST" action="../TICKET/tecni/acciones-view.php">
                             <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre'] ;?>"/>
                             <input type="hidden" name="rol"value="<?php echo $_SESSION['rol'];?>"/>
                             <input type="hidden" name="id" value="<?php echo $_SESSION['id'];?>"/>
@@ -186,8 +139,7 @@
                                         <th class="text-center">Departamento</th>
                                         <th class="text-center">Estatus</th>
                                         <th class="text-center">Teléfono </th>
-                                        <th class="text-center">Opciones</th>
-                                    </tr>
+                                               </tr>
                                 </thead>
                                 <tbody>
                                     <?php
@@ -203,13 +155,7 @@
                                         <td class="text-center"><?php echo $row['Depa']; ?> </td>
                                         <td class="text-center"><?php echo $row['Esta'];?> </td>
                                         <td class="text-center"><?php echo $row['celular'];?> </td>
-                                      
-                                        <td class="text-center">
-                                                  <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
-                                                  <a href="tecni.php?view=useredit&id=<?php echo $row['id_cliente']; ?>" class="btn btn-sm btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                      
-                                                  <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class=" dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                    
-                                        </td>
+                                     
                                     </tr>
                                       <?php
                                         $ct++;
@@ -387,34 +333,13 @@
                                                       </div>
                                                    </div>
                                                 <br><br>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Rol:</label>
-                                                      <div class='col-sm-10'>
-                                                        <div class="input-group">
-                                                <?php $E=Mysql::consulta("SELECT * FROM rol ");
-                                                echo "
-                                                   <select REQUIRED  class='formu form-control'name='Grol'>";
-                                                if ($E) {
-                                                    while ($EST=mysqli_fetch_array($E,MYSQLI_ASSOC)) {
-                                                        echo"  <option value=" .$EST['idRol']. ">" .$EST['Nombre']. "</option>";
-                                                    }
-                                                }
-                                                 echo "</select>"
-                                                ?>
-                                                          <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-                           
-                                                        </div>
-                                                      </div>
-                                                </div>
-                                                <br>
-                                                <br>
-
+                                                <input type="hidden" name="Grol" value="9947"/>
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Departamento: </label>
                                                       <div class='col-sm-10'>
                                                         <div class="input-group">
                                         
-                                                <?php $E=Mysql::consulta("SELECT nombre,idDepartamento From departamento");
+                                                <?php $E=Mysql::consulta("SELECT d.idDepartamento , d.nombre from departamento d  INNER JOIN cliente c ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $user ");
                                                 echo "
                                                     
                                                 <select REQUIRED  class='formu form-control'name='Gdepartamento'>";
@@ -459,31 +384,6 @@
                                      <!--FIN DEL MODAL -->
                             </div>
 
-<!-- Formulario para elliminar user-->
-<div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                         <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                            <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
-                                                                <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar al usuario (Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
-                                                            
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                
-                                                            </div>
-                                                            <div style="align-items:center; justify-content:center;"class="modal-footer">
-                                                                <center>
-                                                                <form id="formulario" action="" method="POST" style="display: inline-block;">                                             
-                                        
-                                                                   <input  type="hidden" name="id_dele"  id="borrar_id" >       
-                                                                    <button   name="ide" type="submit"  class="btn btn-success">SI</button>
-                                                                   <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
-                                                                </form>                        
-                                                                </center>
-                                                            </div>
-                                                            </div>
-                                                        </div>    
-                                                    </div>
-
 
 <script>
         $('.dropbtn').on('click',function () {
@@ -497,9 +397,6 @@
 
 
 
-
-<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
- 
 
 <script>
 $("#mt").click(BuscarUsuario);

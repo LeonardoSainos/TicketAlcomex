@@ -13,6 +13,5 @@ echo %nombre%;
 cd C:\xampp\mysql\bin
 
 mysqldump -u root %1 --tables %2 > C:\xampp\htdocs\TL11EST.github.io\DB\backup\%2\%nombre%
-
 pause > nul
 

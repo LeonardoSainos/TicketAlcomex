@@ -191,8 +191,7 @@
                                             <a href="./lib/pdf.php?id_del=<?php echo $row['serie']; ?>" class="btn btn-sm btn-success" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
                                             <a href="tecni.php?view=ticketedit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                 <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
-                                                <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class="dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                                                        
-                                        </td>
+                                                          </td>
                                     </tr>
                                     <?php
                                         $ct++;
@@ -288,35 +287,6 @@
 <?php
 }
 ?>
-
-
-                                                      
-<!-- MODAL PARA ELIMINAR -->
-<div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                               <div class="modal-content">
-                                               <div style="text-align:center; background: #fb5d14; color:white;" class="modal-header">
-                                                   <h3 class="modal-title" id="exampleModalLabel">¿Estás seguro de que deseas elminar este ticket(Todo lo que este relacionado a él se eliminara de forma permanente)?</h3>
-                                               
-                                               </div>
-                                               <div class="modal-body">
-                                                   
-                                               </div>
-                                               <div style="align-items:center; justify-content:center;"class="modal-footer">
-                                                   <center>
-                                                   <form id="formularios" action="" method="POST" style="display: inline-block;">                                             
-                           
-                                                      <input  type="hidden" name="id_dele"  id="borrar_id" >       
-                                                       <button     type="submit"  class="btn btn-success">SI</button>
-                                                      <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
-                                                   </form>                        
-                                                   </center>
-                                               </div>
-                                               </div>
-                                           </div>    
-                                       </div>
-
-
 <script>
         $('.dropbtn').on('click',function () {
         $tr=$(this).closest("#tabla tbody tr");
@@ -329,14 +299,14 @@
         
 </script> 
 
-<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
+
  
 <script>
 $("#mt").click(BuscarTicket);
     function BuscarTicket(){
         //admin.php?view=ticketadmin&ticket=all
          var URL = "./tecni.php?view=searchTicket&ticket=" + $("#estatus").val() + "&busqueda=" + $("#busqueda").val();   
-        alert(URL);             
+        
         $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }

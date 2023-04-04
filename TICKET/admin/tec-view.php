@@ -487,7 +487,7 @@
         });        
 </script>
 
-<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
+
 
 <script>
 $("#mt").click(BuscarUsuario);

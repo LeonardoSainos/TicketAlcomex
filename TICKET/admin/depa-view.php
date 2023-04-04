@@ -419,15 +419,14 @@
 
 
 
-<script src= "/TICKET/js/jquery-2.1.0.min.js"></script>
+
  
 <script>
 $("#mt").click(BuscarDepartamento);
     function BuscarDepartamento(){
         //admin.php?view=ticketadmin&ticket=all
          var URL = "./admin.php?view=searchDepa&depa=" + $("#busqueda").val();   
-        alert(URL);             
-        $.get(URL,function (datos,estado){
+          $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }
         );

@@ -18,8 +18,9 @@ if($_SESSION['rol']!=4046){
                     <!DOCTYPE html>
                     <html>
                         <head>
+                        <?php include "./inc/links.php"; ?>  
                             <title>Administracion</title>
-                            <?php include "./inc/links.php"; ?>        
+                          
                         </head>
                         <body>   
                             <?php include "./inc/navbar.php"; ?>
@@ -48,8 +49,7 @@ if($_SESSION['rol']!=4046){
                 <html>
                     <head>
                         <title>Administracion</title>
-                        <?php include "./inc/links.php"; ?>        
-                    </head>
+                       </head>
                     <body>   
                         <?php include "./inc/navbar.php"; ?>
                         <div class="container">

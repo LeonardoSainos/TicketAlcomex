@@ -48,7 +48,7 @@ if($_SESSION['rol']!=5267){
                 <html>
                     <head>
                         <title>Administracion</title>
-                        <?php include "./inc/links.php"; ?>        
+                    
                     </head>
                     <body>   
                         <?php include "./inc/navbar.php"; ?>

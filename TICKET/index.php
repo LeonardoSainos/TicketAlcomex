@@ -51,8 +51,7 @@ if(isset($_GET['view']) && in_array($_GET['view'],$WhiteList) && is_file("./user
                 <html>
                     <head>
                         <title>Alcomex soporte técnico</title>
-                        <?php include "./inc/links.php"; ?>        
-                    </head>
+                          </head>
                     <body>   
                         <?php include "./inc/navbar.php"; ?>
                         <div class="container">
