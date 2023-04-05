@@ -112,13 +112,14 @@
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                                $regpagina = 2;
+                                $regpagina = 50;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
                                 if(isset($_GET['ticket'])){
                                     if($where=="all"){
                                           $consulta = "SELECT SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie, t.asunto,t.mensaje, t.solucion, c.nombre_completo AS nombre_usuario, c.email_cliente, c.telefono_celular , d.nombre AS departamento, e.Nombre AS estado_ticket,t.fecha_actualizacion FROM ticket t INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento INNER JOIN estatus e ON t.idStatus=e.idEstatus INNER JOIN cliente c ON t.idUsuario = c.id_cliente WHERE (t.id LIKE '%$busqueda%' OR t.fecha LIKE '%$busqueda%' OR t.serie LIKE '%$busqueda%' OR t.asunto LIKE '%$busqueda%' OR t.mensaje LIKE '%$busqueda%' OR t.solucion LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR t.fecha_actualizacion LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%')  ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                           $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
                                           echo $estatus;
+                                        
                                    }
                                    else if($where=="pending"){
                                         $consulta = "SELECT SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie, t.asunto,t.mensaje, t.solucion, c.nombre_completo AS nombre_usuario, c.email_cliente, c.telefono_celular , d.nombre AS departamento, e.Nombre AS estado_ticket,t.fecha_actualizacion FROM ticket t INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento INNER JOIN estatus e ON t.idStatus=e.idEstatus INNER JOIN cliente c ON t.idUsuario = c.id_cliente WHERE (t.id LIKE '%$busqueda%' OR t.fecha LIKE '%$busqueda%' OR t.serie LIKE '%$busqueda%' OR t.asunto LIKE '%$busqueda%' OR t.mensaje LIKE '%$busqueda%' OR t.solucion LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR t.fecha_actualizacion LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%')  AND t.idStatus = 94574 ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
@@ -148,7 +149,7 @@
                                 $selticket=mysqli_query($mysqli,$consulta);
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
-                                $encontrados = mysqli_num_rows($selticket);
+                                  $encontrados = mysqli_num_rows($selticket);
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
                                 if(mysqli_num_rows($selticket)>0):
 
@@ -232,7 +233,8 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=searchTicket&ticket=<?php echo $where; ?>&busqueda=<?php echo $busqueda; ?>&pagina=<?php echo $pagina-1; ?>" aria-label="Previous">
+                                           <?php echo '<a onclick="NextPage(' . $pag = $pagina-1 .');"  id="page' . $pagina . ' "href="javascript:void()" aria-label="Previous">';?>
+                                        
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
@@ -260,8 +262,8 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=searchTicket&ticket=<?php echo $where; ?>&busqueda=<?php echo $busqueda ;?>&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
-                                            <span aria-hidden="true">&raquo;</span>
+                                    <?php echo '<a onclick="NextPage(' . $pag = $pagina+1 .');"  id="page' . $pagina . ' "href="javascript:void()" aria-label="Previous">';?>
+                                           <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -351,9 +353,7 @@ $("#mt").click(BuscarTicket);
         );
     }
 
-
- 
-
+    
 function NextPage(pageId){
     var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
     var URL2 = "./admin.php?view=searchTicket&ticket=" + $("#estatus").val() + "&busqueda=" + $("#busqueda").val() + "&pagina=" + $(newPageId).val();   
@@ -361,8 +361,6 @@ function NextPage(pageId){
     $.get(URL2, function(datos, estado) {
         $("#contenido").html(datos);
     });
-}
-
- 
+} 
 </script>
 
