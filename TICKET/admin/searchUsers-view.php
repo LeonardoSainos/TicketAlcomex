@@ -184,7 +184,7 @@
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                                $regpagina = 15;
+                                $regpagina = 2;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
                                 $seladmin= mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS c.id_cliente,c.nombre_completo, c.nombre_usuario, c.email_cliente, d.nombre as Depa, r.Nombre, c.telefono_celular as celular, c.Fecha_creacion, e.Nombre as Esta FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento INNER JOIN estatus e ON e.idEstatus = c.idEstatus INNER JOIN rol r ON c.id_rol = r.idRol WHERE (c.id_cliente LIKE '%$busqueda%' OR c.nombre_usuario LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.Fecha_creacion LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR r.Nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' ) AND id_rol = $rol LIMIT $inicio,$regpagina");
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
@@ -263,8 +263,8 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=admin&pagina=<?php echo $pagina-1; ?>" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
+                                    <?php echo '<a onclick="NextPage(' . $pag = $pagina-1 .');"  id="page' . $pagina . ' "href="javascript:void()" aria-label="Previous">';?>
+                                                <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -273,9 +273,11 @@
                                 <?php
                                     for($i=1; $i <= $numeropaginas; $i++ ){
                                         if($pagina == $i){
-                                            echo '<li class="active"><a href="./admin.php?view=admin&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li class="active"><a   onclick="NextPage(' .$i .');" type="button" id="page' . $i . ' "href="javascript:void()">'.$i.'</a></li>';
+                                                echo '<input   type="hidden"  id="pagina' . $i .'" value="' . $i . '" />' ;
                                         }else{
-                                            echo '<li><a href="./admin.php?view=admin&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li><a  onclick="NextPage(' .$i .');" type="button" id="page' . $i . '" href="javascript:void()">'.$i.'</a></li>';
+                                            echo '<input type="hidden" id="pagina' . $i . '" value="' . $i . '" />' ;
                                         }
                                     }
                                 ?>
@@ -289,7 +291,7 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=admin&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
+                                    <?php echo '<a onclick="NextPage(' . $pag = $pagina+1 .');"  id="page' . $pagina . ' "href="javascript:void()" aria-label="Previous">';?>
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
@@ -533,5 +535,13 @@ $("#mt").click(BuscarUsuario);
         );
     }
 
+    function NextPage(pageId){
+    var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
+    var URL2 = "./admin.php?view=searchUsers&" + $("#where").val() + "=" + $("#busqueda").val() + "&pagina=" + $(newPageId).val();   
+    alert(URL2);
+    $.get(URL2, function(datos, estado) {
+        $("#contenido").html(datos);
+    });
+} 
 
 </script>

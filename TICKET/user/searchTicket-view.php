@@ -100,7 +100,7 @@
                                 mysqli_set_charset($mysqli, "utf8");
 
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                                $regpagina = 50;
+                                $regpagina = 15;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
                                 if(isset($_GET['ticket'])){
                                     if($_GET['ticket']=="Client"){
@@ -214,8 +214,8 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./index.php?view=ticketClient&ticket=<?php echo $ticketselected; ?>&pagina=<?php echo $pagina-1; ?>" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
+                                    <?php echo '<a onclick="NextPage(' . $pag = $pagina-1 .');"  id="page' . $pagina . ' "href="javascript:void()" aria-label="Previous">';?>
+                                                <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -224,9 +224,11 @@
                                 <?php
                                     for($i=1; $i <= $numeropaginas; $i++ ){
                                         if($pagina == $i){
-                                            echo '<li class="active"><a href="./index.php?view=tickeClient&ticket='.$ticketselected.'&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li class="active"><a   onclick="NextPage(' .$i .');" type="button" id="page' . $i . ' "href="javascript:void()">'.$i.'</a></li>';
+                                                echo '<input   type="hidden"  id="pagina' . $i .'" value="' . $i . '" />' ;
                                         }else{
-                                            echo '<li><a href="./index.php?view=ticketClient&ticket='.$ticketselected.'&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li><a  onclick="NextPage(' .$i .');" type="button" id="page' . $i . '" href="javascript:void()">'.$i.'</a></li>';
+                                            echo '<input type="hidden" id="pagina' . $i . '" value="' . $i . '" />' ;
                                         }
                                     }
                                 ?>
@@ -240,8 +242,8 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./index.php?view=ticketClient&ticket=<?php echo $ticketselected; ?>&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
-                                            <span aria-hidden="true">&raquo;</span>
+                                    <?php echo '<a onclick="NextPage(' . $pag = $pagina+1 .');"  id="page' . $pagina . ' "href="javascript:void()" aria-label="Previous">';?>
+                                        <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -311,4 +313,15 @@ $("#mt").click(BuscarTicket);
         }
         );
     }
+
+
+ 
+function NextPage(pageId){
+    var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
+    var URL2 = "./index.php?view=searchTicket&ticket=" + $("#estatus").val() + "&busqueda=" + $("#busqueda").val() + "&pagina=" + $(newPageId).val();   
+    
+    $.get(URL2, function(datos, estado) {
+        $("#contenido").html(datos);
+    });
+}   
 </script>

@@ -11,7 +11,7 @@
               <img src="./img/msj.png" alt="Image" class="img-responsive animated tada">
             </div>
             <div class="col-sm-10">
-              <p class="lead text-info">Bienvenido técnico, aqui se muestran todos los Tickets de Alcomex los cuales podra eliminar, modificar e imprimir.</p>
+              <p class="lead text-info">Bienvenido técnico, aqui se muestran todos los Tickets de Alcomex los cuales puedes modificar e imprimir.</p>
             </div>
           </div>
         </div>

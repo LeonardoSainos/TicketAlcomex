@@ -357,7 +357,7 @@ $("#mt").click(BuscarTicket);
 function NextPage(pageId){
     var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
     var URL2 = "./admin.php?view=searchTicket&ticket=" + $("#estatus").val() + "&busqueda=" + $("#busqueda").val() + "&pagina=" + $(newPageId).val();   
-    alert(URL2);
+    
     $.get(URL2, function(datos, estado) {
         $("#contenido").html(datos);
     });

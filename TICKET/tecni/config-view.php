@@ -244,7 +244,7 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                           <label><i class="fa fa-user"></i>&nbsp;Departamento</label>
                           <select class="form-control" name="Departamento">
                                   <?php 
-                                    $sql = Mysql::consulta("SELECT * FROM departamento");
+                                    $sql = Mysql::consulta("SELECT d.idDepartamento , d.nombre from departamento d  INNER JOIN cliente c ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $iid ");
                                     while( $d=mysqli_fetch_array($sql, MYSQLI_ASSOC)){
                                     echo "
                                         <option value='" . $d['idDepartamento'] . "'>";  echo  $d['nombre'];?>  
