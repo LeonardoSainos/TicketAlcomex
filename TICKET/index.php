@@ -2,7 +2,7 @@
 session_start();
 include './lib/class_mysql.php';
 include './lib/config.php';   
-$ViewDiferent=["searchTicket"];
+$ViewDiferent=["searchTicket","filterTicket"];
 $WhiteList=["index","productos","soporte","ticket","ticketcon","registro","configuracion","ticketClient",""];
 
 if(isset($_GET['view'])){

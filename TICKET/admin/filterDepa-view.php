@@ -11,8 +11,39 @@
           </div>
         </div>
             <?php
-              $orderby=["d.nombre","d.fecha","c.nombre_completo","d.correo"];
+                  $orderby=["d.nombre","d.fecha","c.nombre_completo","d.correo"];
               $ordenamuestra= $orderby[0];
+
+                    if(isset($_GET['filtro'])){
+                  $filtro= MysqlQuery::RequestGet('filtro');
+
+                  switch($filtro)
+                  {
+                    case 'Nombre':
+                        $ordenamuestra= $orderby[0];
+                    break;
+
+                    case 'Fecha':
+                        $ordenamuestra= $orderby[1];
+                    break;
+                    
+                    case 'Líder':
+                        $ordenamuestra= $orderby[2];
+                    break;
+
+
+                    case 'Correo':
+                        $ordenamuestra= $orderby[3];
+                    break;
+                         
+                    default:
+                    $ordenamuestra = $orderby[0];
+                  }
+                }
+                 
+
+              
+
                $iid= $_SESSION['id'];
             // ELIMINAR DEPARTAMENTOS
                 if(isset($_POST['id_dele'])){
@@ -113,7 +144,7 @@
                                         <div class='btn-group' style="display:flex; float:left">
                                             <button class='btn dropdown-toggle btn-success' data-toggle='dropdown' value='Más'><span class='fa fa-reorder'></span></button>
                                             <ul class='dropdown-menu'>
-                                            <li ><a  id="nombree" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Nombre</a></li>  
+                                             <li ><a  id="nombree" href='javascript:void();' class='btn btn-link ' type="submit" style='text-decoration:none;'>Nombre</a></li>  
                                              <li ><a id="fechaa" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Fecha</a></li>  
                                              <li ><a  id="liderr" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Líder</a></li>  
                                              <li ><a id="correoo" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Correo</a></li>  
@@ -138,7 +169,7 @@
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                                $regpagina = 50;
+                                $regpagina = 2;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
                                     $consulta= "SELECT SQL_CALC_FOUND_ROWS d.fecha,d.idDepartamento,d.nombre,d.correo,d.descripcion, e.Nombre, c.nombre_completo, c.email_cliente FROM departamento d INNER JOIN estatus e ON d.idEstatus = e.idEstatus INNER JOIN cliente c ON d.idJefe = c.id_cliente   ORDER BY " . $ordenamuestra ." ASC LIMIT $inicio, $regpagina";
                                 $seldepa=mysqli_query($mysqli,$consulta);
@@ -173,9 +204,8 @@
                                     <tr>
                                        <td class="text-center"> <input type="checkbox" form="acciones" name="Depas[]" value="<?php  echo $row['idDepartamento'];?>" /></td>    
                                         <td class="text-center"><?php echo $ct; ?></td>
-                                        <td class="text-center"><?php echo $row['fecha']; ?></td>
                                         <td class="text-center"><?php echo $row['nombre']; ?></td>
-                                        
+                                        <td class="text-center"><?php echo $row['fecha']; ?></td>
                                         <td class="text-center"><?php echo $row['correo']; ?></td>
                                         <td class="text-center"><?php echo $row['descripcion']; ?></td>
                                         <td class="text-center"><?php echo $row['Nombre']; ?></td>          
@@ -228,9 +258,9 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=depa&depa=<?php echo $ticketselected; ?>&pagina=<?php echo $pagina-1; ?>" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
+                                    <?php echo '<a onclick="NextPage(' . $pag = $pagina-1 .');"  id="page' . $pagina . ' "href="javascript:void()" aria-label="Previous">';?>
+                                               <span aria-hidden="true">&laquo;</span>
+                                           </a>
                                     </li>
                                 <?php endif; ?>
                                 
@@ -238,9 +268,11 @@
                                 <?php
                                     for($i=1; $i <= $numeropaginas; $i++ ){
                                         if($pagina == $i){
-                                            echo '<li class="active"><a href="./admin.php?view=depa&depa='.$ticketselected.'&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li class="active"><a   onclick="NextPage(' .$i .');" type="button" id="page' . $i . ' "href="javascript:void()">'.$i.'</a></li>';
+                                                echo '<input   type="hidden"  id="pagina' . $i .'" value="' . $i . '" />' ;
                                         }else{
-                                            echo '<li><a href="./admin.php?view=depa&depa='.$ticketselected.'&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li><a  onclick="NextPage(' .$i .');" type="button" id="page' . $i . '" href="javascript:void()">'.$i.'</a></li>';
+                                            echo '<input type="hidden" id="pagina' . $i . '" value="' . $i . '" />' ;
                                         }
                                     }
                                 ?>
@@ -254,8 +286,8 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=depa&depa=<?php echo $ticketselected; ?>&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
-                                            <span aria-hidden="true">&raquo;</span>
+                                    <?php echo '<a onclick="NextPage(' . $pag = $pagina+1 .');"  id="page' . $pagina . ' "href="javascript:void()" aria-label="Previous">';?>
+                                       <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -431,6 +463,7 @@
 <input type="hidden" id="fecha" value="Fecha"/> 
 <input type="hidden" id="lider" value="Líder"/>
 <input type="hidden" id="correo" value="Correo"/>  
+<input type="hidden" id="filtro" value="<?php echo $filtro;?>"/>  
  </div>
 
 <script>
@@ -499,6 +532,16 @@
                 }
                 );
             }
-
            
+
+
+
+    function NextPage(pageId){
+    var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
+    var URL2 = "./admin.php?view=filterDepa&filtro=" + $("#filtro").val() + "&pagina=" + $(newPageId).val();   
+    alert(URL2);
+    $.get(URL2, function(datos, estado) {
+        $("#contenido").html(datos);
+    });
+} 
 </script>

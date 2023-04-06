@@ -3,7 +3,10 @@
     if (isset($_GET['depa'])!=""){
         $busqueda = MysqlQuery::RequestGet('depa');     
     }
-    
+    $orderby=["d.nombre","d.fecha","c.nombre_completo","d.correo"];
+    $ordenamuestra= $orderby[0];
+
+          
     
     ?>
   <div id="contenido">
@@ -103,6 +106,11 @@
                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>                                                                                                  
                                    </ul>
                             </div>
+
+
+                           
+
+                            
                             <div style="display:flex; float:right;">
                                    <input  style="width: 80%; float:left;" value="<?php echo $busqueda; ?>" name="busqueda" id="busqueda" placeholder="Buscar tickets" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
                                    <a id="mt" href="javascript:void()" style="float:right;" placeholder="Buscar" class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>       
@@ -143,6 +151,7 @@
                                     <tr>
                                         <th class="text-center"></th>
                                         <th class="text-center">#</th>
+                                        <th class="text-center">Creado</th>
                                         <th class="text-center">Nombre</th>
                                         <th class="text-center">Correo</th>
                                         <th class="text-center">Descripción</th>
@@ -160,6 +169,7 @@
                                     <tr>
                                        <td class="text-center"> <input type="checkbox" form="acciones" name="Depas[]" value="<?php  echo $row['idDepartamento'];?>" /></td>    
                                         <td class="text-center"><?php echo $ct; ?></td>
+                                        <td class="text-center"><?php echo $row['fecha']; ?></td>
                                         <td class="text-center"><?php echo $row['nombre']; ?></td>
                                         <td class="text-center"><?php echo $row['correo']; ?></td>
                                         <td class="text-center"><?php echo $row['descripcion']; ?></td>
@@ -413,6 +423,13 @@
                                        </div>
 
 
+                                       <div style="display:none">
+<input type="hidden" id="nombre" value="Nombre"/> 
+<input type="hidden" id="fecha" value="Fecha"/> 
+<input type="hidden" id="lider" value="Líder"/>
+<input type="hidden" id="correo" value="Correo"/>  
+ </div>
+
 
 <script>
         $('.dropbtn').on('click',function () {
@@ -420,7 +437,7 @@
        var datos=$tr.children("#tabla tbody tr td").map(function() {
        return $(this).text(); 
         });
-       $("#borrar_id").val(datos[8]);                                           
+       $("#borrar_id").val(datos[9]);                                           
         });
        
 </script> 

@@ -3,7 +3,36 @@
     $user= $_SESSION['id'];
     $orderby=["t.fecha","t.serie","e.Nombre","t.fecha_actualizacion","c.nombre_completo"];
     $ordenamuestra= $orderby[0];
-    
+    if(isset($_GET['filtro'])){
+        $filtro= MysqlQuery::RequestGet('filtro');
+
+        switch($filtro)
+        {
+          case 'Fecha':
+              $ordenamuestra= $orderby[0];
+          break;
+
+          case 'Serie':
+              $ordenamuestra= $orderby[1];
+          break;
+          
+          case 'Estatus':
+              $ordenamuestra= $orderby[2];
+          break;
+
+
+          case 'Actualizado':
+              $ordenamuestra= $orderby[3];
+          break;
+               
+          case 'Creadores':
+            $ordenamuestra= $orderby[4];
+        break;
+             
+          default:
+          $ordenamuestra = $orderby[0];
+        }
+      }
     
     ?>
 
@@ -101,7 +130,7 @@
                                             <button class='btn dropdown-toggle btn-success' data-toggle='dropdown' value='Más'><span class='fa fa-reorder'></span></button>
                                             <ul class='dropdown-menu'>
                                          
-                                            <li ><a  id="fechaa" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Fecha</a></li>  
+                                            <li><a  id="fechaa" href='javascript:void();' class='btn btn-link ' type="submit" style='text-decoration:none;'>Fecha</a></li>  
                                              <li ><a id="seriee" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Serie</a></li>  
                                              <li ><a  id="estatuss" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Estatus</a></li>  
                                              <li ><a id="actualizadoo" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Actualizado</a></li>   
@@ -259,8 +288,8 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=ticketadmin&ticket=<?php echo $ticketselected; ?>&pagina=<?php echo $pagina-1; ?>" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
+                                    <?php echo '<a onclick="NextPage(' . $pag = $pagina-1 .');"  id="page' . $pagina . ' "href="javascript:void()" aria-label="Previous">';?>
+                                         <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -269,9 +298,11 @@
                                 <?php
                                     for($i=1; $i <= $numeropaginas; $i++ ){
                                         if($pagina == $i){
-                                            echo '<li class="active"><a href="./admin.php?view=ticketadmin&ticket='.$ticketselected.'&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li class="active"><a   onclick="NextPage(' .$i .');" type="button" id="page' . $i . ' "href="javascript:void()">'.$i.'</a></li>';
+                                                echo '<input   type="hidden"  id="pagina' . $i .'" value="' . $i . '" />' ;
                                         }else{
-                                            echo '<li><a href="./admin.php?view=ticketadmin&ticket='.$ticketselected.'&pagina='.$i.'">'.$i.'</a></li>';
+                                            echo '<li><a  onclick="NextPage(' .$i .');" type="button" id="page' . $i . '" href="javascript:void()">'.$i.'</a></li>';
+                                            echo '<input type="hidden" id="pagina' . $i . '" value="' . $i . '" />' ;
                                         }
                                     }
                                 ?>
@@ -285,8 +316,8 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=ticketadmin&ticket=<?php echo $ticketselected; ?>&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
-                                            <span aria-hidden="true">&raquo;</span>
+                                    <?php echo '<a onclick="NextPage(' . $pag = $pagina+1 .');"  id="page' . $pagina . ' "href="javascript:void()" aria-label="Previous">';?>
+                                         <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -319,17 +350,6 @@
 ?>
 
 
-
-<div style="display:none">
-<input type="hidden" id="fecha" value="Fecha"/> 
-<input type="hidden" id="serie" value="Serie"/> 
-<input type="hidden" id="eestatus" value="Estatus"/>
-<input type="hidden" id="actualizado" value="Actualizado"/>  
-<input type="hidden" id="creador" value="Creadores"/>
-</div>
-
-
-
                                                       
 <!-- MODAL PARA ELIMINAR -->
 <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -357,10 +377,17 @@
                                        </div>
  
 
+<div style="display:none">
+<input type="hidden" id="fecha" value="Fecha"/> 
+<input type="hidden" id="serie" value="Serie"/> 
+<input type="hidden" id="eestatus" value="Estatus"/>
+<input type="hidden" id="actualizado" value="Actualizado"/>  
+<input type="hidden" id="creador" value="Creadores"/>
+</div>
+
 
 
  
-
 
 <script>
         $('.dropbtn').on('click',function () {
@@ -372,6 +399,12 @@
         });
 
         
+</script> 
+
+
+
+
+<script>
 $("#mt").click(BuscarTicket);
     function BuscarTicket(){
         //admin.php?view=ticketadmin&ticket=all
@@ -435,6 +468,17 @@ $("#fechaa").click(FiltroTicketf);
                 }
                 );
             }
+
+
+            
+    function NextPage(pageId){
+    var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
+    var URL2 = "./admin.php?view=filterTicket&filtro=" + $("#filtro").val() + "&pagina=" + $(newPageId).val();   
+    alert(URL2);
+    $.get(URL2, function(datos, estado) {
+        $("#contenido").html(datos);
+    });
+    }
 
 
 </script>
