@@ -1,6 +1,9 @@
 <?php if( isset($_SESSION['nombre'])!="" && isset($_SESSION['clave'])!="" && isset($_SESSION['rol'])==9947 ){ 
     
     $idAtiende = $_SESSION['id'];
+    $orderby=["t.fecha","t.serie","e.Nombre","t.fecha_actualizacion","c.nombre_completo"];
+    $ordenamuestra= $orderby[0];
+   
    
     
     ?>
@@ -52,19 +55,19 @@
           
                 /* Todos los tickets*/
          
-                $num_ticket_all=Mysql::consulta("SELECT t.id_atiende, t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario, d.nombre as departamento, c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento where t.idUsuario = '$idAtiende' ORDER BY t.fecha DESC ");
+                $num_ticket_all=Mysql::consulta("SELECT t.id_atiende, t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario, d.nombre as departamento, c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento where t.idUsuario = '$idAtiende' ORDER BY $ordenamuestra DESC ");
                 $num_total_all=mysqli_num_rows($num_ticket_all);
 
                 /* Tickets pendientes*/
-                $num_ticket_pend=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , d.nombre as departamento , c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94574 OR (e.Nombre='PENDIENTE' OR e.Nombre='pendiente')) AND t.idUsuario = '$idAtiende' ORDER BY t.fecha DESC");
+                $num_ticket_pend=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , d.nombre as departamento , c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94574 OR (e.Nombre='PENDIENTE' OR e.Nombre='pendiente')) AND t.idUsuario = '$idAtiende' ORDER BY $ordenamuestra DESC");
                 $num_total_pend=mysqli_num_rows($num_ticket_pend);
 
                 /* Tickets en proceso*/
-                $num_ticket_proceso=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario, d.nombre as departamento , c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94575 OR (e.Nombre='EN PROCESO' OR e.Nombre='En proceso')) AND t.idUsuario = '$idAtiende' ORDER BY t.fecha DESC");
+                $num_ticket_proceso=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario, d.nombre as departamento , c.email_cliente, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94575 OR (e.Nombre='EN PROCESO' OR e.Nombre='En proceso')) AND t.idUsuario = '$idAtiende' ORDER BY $ordenamuestra DESC");
                 $num_total_proceso=mysqli_num_rows($num_ticket_proceso);
 
                 /* Tickets resueltos*/
-                $num_ticket_res=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94576 OR (e.Nombre='Resuelto' OR e.Nombre='RESUELTO')) AND t.idUsuario = '$idAtiende' ORDER BY t.fecha DESC");
+                $num_ticket_res=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94576 OR (e.Nombre='Resuelto' OR e.Nombre='RESUELTO')) AND t.idUsuario = '$idAtiende' ORDER BY $ordenamuestra DESC");
                 $num_total_res=mysqli_num_rows($num_ticket_res);
             ?>
 
@@ -72,6 +75,18 @@
             <div style="display:flex; float:right;">
                        <input  style="width: 80%; float:left;" name="busqueda" required="" id="busqueda" placeholder="Buscar tickets" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
                        <a id="mt" href="javascript:void()" style="float:right;" placeholder="Buscar" class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>       
+                       <div class='btn-group' style="display:flex; float:left">
+                                            <button class='btn dropdown-toggle btn-success' data-toggle='dropdown' value='Más'><span class='fa fa-reorder'></span></button>
+                                            <ul class='dropdown-menu'>
+                                         
+                                            <li ><a  id="fechaa" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Fecha</a></li>  
+                                             <li ><a id="seriee" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Serie</a></li>  
+                                             <li ><a  id="estatuss" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Estatus</a></li>  
+                                             <li ><a id="actualizadoo" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Actualizado</a></li>   
+                                             <li ><a id="creadorr" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Creadores</a></li>  
+                                            
+                                            </ul>
+                                         </div>
                  </div>
                                            <br><br><br>
                 <div class="row">
@@ -100,28 +115,28 @@
                                 if(isset($_GET['ticket'])){
                                     if($_GET['ticket']=="tecni"){
                                         //SELECT SQL_CALC_FOUND_ROWS * FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
+                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  ORDER BY $ordenamuestra DESC   LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
                                         echo $estatus;
                                     }elseif($_GET['ticket']=="pending"){
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94574 AND t.idUsuario = '$idAtiende'   ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
+                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94574 AND t.idUsuario = '$idAtiende' ORDER BY $ordenamuestra DESC   LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="pending" id="estatus"/>';
                                         echo $estatus;
                                     }elseif($_GET['ticket']=="process"){
-                                    $consulta = "SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94575 AND t.idUsuario = '$idAtiende'    ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
+                                    $consulta = "SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94575 AND t.idUsuario = '$idAtiende' ORDER BY $ordenamuestra DESC   LIMIT $inicio, $regpagina";
                                     $estatus ='<input type="hidden" name="estatus" value="process" id="estatus"/>';
                                     echo $estatus;
                                     }elseif($_GET['ticket']=="resolved"){
-                                    $consulta = "SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94576  AND t.idUsuario = '$idAtiende'  ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
+                                    $consulta = "SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94576  AND t.idUsuario = '$idAtiende' ORDER BY $ordenamuestra DESC   LIMIT $inicio, $regpagina";
                                     $estatus ='<input type="hidden" name="estatus" value="resolved" id="estatus"/>';
                                     echo $estatus;
                                     }else if ($_GET['ticket']=="all"){
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE t.idUsuario = '$idAtiende' ORDER BY t.fecha DESC LIMIT $inicio, $regpagina";
+                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE t.idUsuario = '$idAtiende' ORDER BY $ordenamuestra DESC LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
                                         echo $estatus;
                                     }
                                 }else{
-                                    $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario,c.email_cliente, d.nombre as departamento , e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE t.idUsuario = '$idAtiende' ORDER BY t.fecha DESC LIMIT $inicio, $regpagina";
+                                    $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario,c.email_cliente, d.nombre as departamento , e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.id_atiende INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE t.idUsuario = '$idAtiende' ORDER BY $ordenamuestra DESC LIMIT $inicio, $regpagina";
                                     $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
                                     echo $estatus;
                                 }
@@ -264,6 +279,16 @@
 }
 ?>
 
+
+
+<div style="display:none">
+<input type="hidden" id="fecha" value="Fecha"/> 
+<input type="hidden" id="serie" value="Serie"/> 
+<input type="hidden" id="eestatus" value="Estatus"/>
+<input type="hidden" id="actualizado" value="Actualizado"/>  
+<input type="hidden" id="creador" value="Creadores"/>
+</div>
+
 <!-- MODAL PARA ELIMINAR TICKET -->
 
 <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -301,4 +326,62 @@ $("#mt").click(BuscarTicket);
         }
         );
     }
+
+
+    
+$("#fechaa").click(FiltroTicketf);
+            function FiltroTicketf(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./index.php?view=filterTicket&filtro=" + $("#fecha").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+
+            $("#seriee").click(FiltroTickets);
+            function  FiltroTickets(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./index.php?view=filterTicket&filtro=" + $("#serie").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+
+            $("#estatuss").click(FiltroTickete);
+            function  FiltroTickete(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./index.php?view=filterTicket&filtro=" + $("#eestatus").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+
+            $("#actualizadoo").click(FiltroTicketa);
+            function FiltroTicketa(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./index.php?view=filterTicket&filtro=" + $("#actualizado").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+            $("#creadorr").click( FiltroTicketr);
+            function FiltroTicketr(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./index.php?view=filterTicket&filtro=" + $("#creador").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+
+
 </script>

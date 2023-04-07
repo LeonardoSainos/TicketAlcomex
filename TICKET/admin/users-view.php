@@ -1,6 +1,8 @@
 <?php if($_SESSION['nombre']!="" && $_SESSION['rol']==4046){ ?>    
         <?php 
                 $user= $_SESSION['id'];
+                $orderby=["cliente.nombre_completo","cliente.email_cliente","cliente.Fecha_creacion","estatus.Nombre"];
+                $ordenamuestra= $orderby[0];
         /*Eliminar */
             if(isset($_POST['id_dele'])){
                         $id_user=MysqlQuery::RequestPost('id_dele');
@@ -143,6 +145,16 @@
                                           <div style="display:flex; float:right;">
                                                    <input id="busqueda" style="width: 80%; float:left;" placeholder="Buscar usuarios" id="search" name="busqueda" class="form-control mr-sm-2 alin" type="text">
                                                    <a id="mt" href="javascript:void()" style="float:right;" placeholder="Buscar" class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>
+                                                   <div class='btn-group' style="display:flex; float:left">
+                                                   <button class='btn dropdown-toggle btn-success' data-toggle='dropdown' value='Más'><span class='fa fa-reorder'></span></button>
+                                                 
+                                                        <ul class='dropdown-menu'>
+                                                            <li ><a  id="nombree" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Nombre</a></li>  
+                                                            <li ><a id="correoo" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Correo</a></li>  
+                                                            <li ><a  id="fechaa" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Fecha</a></li>  
+                                                            <li ><a id="estatuss" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Estatus</a></li>  
+                                                        </ul>
+                                                    </div>   
                                            </div>   
                                                 <br><br>
                 <div class="row">
@@ -167,7 +179,7 @@
                                 $regpagina = 15;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
 
-                                $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS cliente.id_cliente, cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=9947  ORDER by cliente.nombre_completo LIMIT $inicio, $regpagina");
+                                $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS cliente.id_cliente, cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta, cliente.Fecha_creacion   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=9947  ORDER by  $ordenamuestra LIMIT $inicio, $regpagina");
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);                        
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
@@ -183,6 +195,7 @@
                                     <tr>
                                     <th class="text-center"></th>
                                         <th class="text-center">#</th>
+                                        <th class="text-center">Creado</th>
                                         <th class="text-center">Nombre completo</th>
                                         <th class="text-center">Nombre de usuario</th>
                                         <th class="text-center">Email</th>
@@ -200,6 +213,7 @@
                                     <tr>
                                         <td class="text-center"> <input type="checkbox" name="Usuarios[]" value="<?php  echo $row['id_cliente'];?>" /></td>
                                         <td class="text-center"><?php echo $ct; ?></td>
+                                        <td class="text-center"><?php echo $row['Fecha_creacion']; ?></td>
                                         <td class="text-center"><?php echo $row['nombre_completo']; ?></td>
                                         <td class="text-center"><?php echo $row['nombre_usuario']; ?></td>
                                         <td class="text-center"><?php echo $row['email_cliente']; ?></td>
@@ -302,6 +316,12 @@
 }
 ?>
 
+<div style="display:none">
+<input type="hidden" id="nombre" value="Nombre"/> 
+<input type="hidden" id="fecha" value="Fecha"/> 
+<input type="hidden" id="correo" value="Correo"/>
+<input type="hidden" id="estatusss" value="Estatus"/>  
+ </div>
 
 <!-- Formulario para guardar user -->
 <div class="container">
@@ -487,8 +507,6 @@
                                                             </div>
                                                         </div>    
                                                     </div>
-
-
 <script>
         $('.dropbtn').on('click',function () {
         $tr=$(this).closest("#tabla tbody tr");
@@ -497,13 +515,7 @@
         });
        $("#borrar_id").val(datos[4]);                                           
         });
-</script> 
 
-
-
- 
- 
-<script>
 $("#mt").click(BuscarUsuario);
     function BuscarUsuario(){
          var URL = "./admin.php?view=searchUsers&users=" + $("#busqueda").val();                    
@@ -512,4 +524,54 @@ $("#mt").click(BuscarUsuario);
         }
         );
     }
+
+
+    $("#nombree").click(FiltroUsers);
+            function FiltroUsers(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./admin.php?view=filterUsers&users=" + $("#nombre").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+
+            $("#fechaa").click(FiltroFecha);
+            function FiltroFecha(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./admin.php?view=filterUsers&users=" + $("#fecha").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+
+           
+
+            $("#correoo").click(FiltroCorreo);
+            function FiltroCorreo(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./admin.php?view=filterUsers&users=" + $("#correo").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }  
+
+
+            $("#estatuss").click(FiltroEstatus);
+            function FiltroEstatus(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./admin.php?view=filterUsers&users=" + $("#estatusss").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+
+
 </script>

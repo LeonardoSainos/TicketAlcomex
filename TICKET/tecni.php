@@ -11,7 +11,7 @@ if($_SESSION['rol']!=5267){
 }
 ?>
         <?php
-            $ViewDiferent=["searchUsers","searchDepa","searchTicket","filterDepa","filterTicket","filterUser"];
+            $ViewDiferent=["searchUsers","searchDepa","searchTicket","filterDepa","filterTicket","filterUsers"];
             $WhiteList=["ticketTecni","ticketedit","users","tecni","config","tec","useredit"];
             if(isset($_GET['view']) && in_array($_GET['view'], $WhiteList) && is_file("./tecni/".$_GET['view']."-view.php")){
               ?>            

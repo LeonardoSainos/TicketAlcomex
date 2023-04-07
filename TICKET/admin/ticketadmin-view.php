@@ -97,7 +97,7 @@
                        <input  style="width: 80%; float:left;" name="busqueda" id="busqueda" placeholder="Buscar tickets" name="busqueda" value="" class="form-control mr-sm-2 alin" type="text">
                        <a id="mt" href="javascript:void()" style="float:right;" placeholder="Buscar" class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>     
                        
-                       <div class='btn-group' style="display:flex; float:left">
+                                     <div class='btn-group' style="display:flex; float:left">
                                             <button class='btn dropdown-toggle btn-success' data-toggle='dropdown' value='Más'><span class='fa fa-reorder'></span></button>
                                             <ul class='dropdown-menu'>
                                          

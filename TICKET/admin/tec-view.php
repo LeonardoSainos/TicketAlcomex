@@ -1,6 +1,11 @@
 <?php if($_SESSION['nombre']!="" && $_SESSION['rol']==4046){ ?>    
         <?php
             $iid= $_SESSION['id'];
+            $orderby=["cliente.nombre_completo","cliente.email_cliente","cliente.Fecha_creacion","estatus.Nombre"];
+            $ordenamuestra= $orderby[0];
+        
+
+
           //ELIMINAR USUARIO
             if(isset($_POST['id_dele'])){
                 $id_user=MysqlQuery::RequestPost('id_dele');
@@ -130,17 +135,28 @@
                                                 </button>
                                                 <ul class='dropdown-menu'>
                                                 <!-- dropdown menu links -->
-                                                        <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
-                                                        <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input  form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" value=" Resetear contraseña" name="Resetear"  /> </a></li>  
+                                                        <li ><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
+                                                        <li ><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
+                                                        <li ><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
+                                                        <li ><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
+                                                        <li ><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input  form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" value=" Resetear contraseña" name="Resetear"  /> </a></li>  
                                                 </ul>
                                           </div>
                                           <div style="display:flex; float:right;">
                                                    <input id="busqueda" style="width: 80%; float:left;" placeholder="Buscar técnicos" id="search" name="busqueda" class="form-control mr-sm-2 alin" type="text">
                                                    <a id="mt" href="javascript:void()" style="float:right;" placeholder="Buscar" class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>
-                                           </div>   
+                                                  
+                                                   <div class='btn-group' style="display:flex; float:left">
+                                                   <button class='btn dropdown-toggle btn-success' data-toggle='dropdown' value='Más'><span class='fa fa-reorder'></span></button>
+                                                 
+                                                        <ul class='dropdown-menu'>
+                                                            <li ><a  id="nombree" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Nombre</a></li>  
+                                                            <li ><a id="correoo" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Correo</a></li>  
+                                                            <li ><a  id="fechaa" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Fecha</a></li>  
+                                                            <li ><a id="estatuss" href='javascript:void()' class='btn btn-link ' type="submit" style='text-decoration:none;'>Estatus</a></li>  
+                                                        </ul>
+                                                    </div>   
+                                        </div>
                                           <br><br>
                 <div class="row">
                     <div class="col-md-12 text-center">
@@ -163,7 +179,7 @@
                                 $regpagina = 15;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
 
-                                $seladmin=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS  cliente.id_cliente,cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=5267  ORDER by cliente.nombre_completo LIMIT $inicio, $regpagina");
+                                $seladmin=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS  cliente.id_cliente,cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta, cliente.Fecha_creacion  FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=5267  ORDER BY $ordenamuestra LIMIT $inicio, $regpagina");
 
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
@@ -180,6 +196,7 @@
                                     <tr>
                                         <th class="text-center"></th>
                                         <th class="text-center">#</th>
+                                        <th class="text-center">Creado</th>
                                         <th class="text-center">Nombre completo</th>
                                         <th class="text-center">Nombre de usuario</th>
                                         <th class="text-center">Email</th>
@@ -197,6 +214,7 @@
                                     <tr>
                                         <td class="text-center"><input type="checkbox" name="Usuarios[]" value="<?php echo $row['id_cliente']; ?>"></td>
                                         <td class="text-center"><?php echo $ct; ?></td>
+                                        <td class="text-center"><?php echo $row['Fecha_creacion']; ?></td>
                                         <td class="text-center"><?php echo $row['nombre_completo']; ?></td>
                                         <td class="text-center"><?php echo $row['nombre_usuario']; ?></td>
                                         <td class="text-center"><?php echo $row['email_cliente']; ?></td>
@@ -217,7 +235,7 @@
                                         endwhile; 
                                     ?>
                                     <tr>
-                                        <td class="text-center"  colspan="9"> Seleccionar :<input onclick="MarcarCheckBox(this);"  type="checkbox" /> Todos | Ninguno </td>
+                                        <td class="text-center"  colspan="10"> Seleccionar :<input onclick="MarcarCheckBox(this);"  type="checkbox" /> Todos | Ninguno </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -295,6 +313,13 @@
 <?php
 }
 ?>
+
+<div style="display:none">
+<input type="hidden" id="nombre" value="Nombre"/> 
+<input type="hidden" id="fecha" value="Fecha"/> 
+<input type="hidden" id="correo" value="Correo"/>
+<input type="hidden" id="estatusss" value="Estatus"/>  
+ </div>
 
 <!-- Modal para agregar usuario -->
 <div class="container">
@@ -498,4 +523,55 @@ $("#mt").click(BuscarUsuario);
         }
         );
     }
+
+
+    $("#nombree").click(FiltroUsers);
+            function FiltroUsers(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./admin.php?view=filterUsers&tec=" + $("#nombre").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+
+            $("#fechaa").click(FiltroFecha);
+            function FiltroFecha(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./admin.php?view=filterUsers&tec=" + $("#fecha").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+
+           
+
+            $("#correoo").click(FiltroCorreo);
+            function FiltroCorreo(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./admin.php?view=filterUsers&tec=" + $("#correo").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }  
+
+
+            $("#estatuss").click(FiltroEstatus);
+            function FiltroEstatus(){
+                //admin.php?view=ticketadmin&ticket=all
+                var URL = "./admin.php?view=filterUsers&tec=" + $("#estatusss").val();   
+                alert(URL);
+                $.get(URL,function (datos,estado){
+                    $("#contenido").html(datos);
+                }
+                );
+            }
+
+
+
 </script>

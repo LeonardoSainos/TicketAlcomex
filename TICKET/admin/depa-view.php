@@ -498,7 +498,5 @@
                     $("#contenido").html(datos);
                 }
                 );
-            }
-
-           
+            }  
 </script>
