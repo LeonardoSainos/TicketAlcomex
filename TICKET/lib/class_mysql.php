@@ -37,7 +37,7 @@ class MysqlQuery {
         $valor = str_ireplace("DELETE", "", $valor);
         $valor = str_ireplace("DROP", "", $valor);
         $valor = str_ireplace("DUMP", "", $valor);
-        $valor = str_ireplace(" OR ", "", $valor);
+        $valor = str_ireplace("OR", "", $valor);
         $valor = str_ireplace("%", "", $valor);
         $valor = str_ireplace("LIKE", "", $valor);
         $valor = str_ireplace("--", "", $valor);
@@ -64,6 +64,14 @@ class MysqlQuery {
        
         $datos = MysqlQuery::limpiarCadena($data);
         return $datos;
+    }
+
+
+    public static function RequestFile($val){
+        $data = addslashes($_FILES[$val]);
+        $datos = MysqlQuery::limpiarCadena($data);
+        return $datos;        
+
     }
 
     public static function Guardar($tabla, $campos, $valores) {

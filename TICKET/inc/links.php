@@ -12,7 +12,7 @@
 <script src="./js/jquery-2.1.0.min.js"></script>
 <script src="./js/bootstrap.js"></script>
 <script src="./js/jquery-ui-1.10.4.custom.min.js"></script>
-
+<script  src="https://code.jquery.com/jquery-2.1.0.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auk4Pfzbm7uH60=" crossorigin="anonymous" ></script>
 
  
     <!-- METISMENU SCRIPTS -->

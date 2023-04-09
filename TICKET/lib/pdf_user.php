@@ -3,7 +3,9 @@ require "./fpdf/fpdf.php";
 include './class_mysql.php';
 include './config.php';
 //require '../inc/timezone.php';
-header('Content-Type: text/html; charset=utf8');  
+header('Content-Type: text/html; charset=UTF8');  
+require_once __DIR__. "/vendor/autoload.php";
+
 $id = MysqlQuery::RequestGet('id');
 $sql = Mysql::consulta("SELECT t.id_atiende, t.fecha,t.serie, e.Nombre as estado_ticket, c.nombre_completo, c.nombre_usuario,c.email_cliente, d.nombre as departamento, t.asunto, t.solucion, t.mensaje,t.fecha_actualizacion as actualizacion FROM ticket t LEFT JOIN cliente c ON t.idUsuario= c.id_cliente INNER JOIN estatus e ON e.idEstatus = t.idStatus INNER JOIN departamento d ON d.idDepartamento= t.idDepartamento WHERE t.serie = '$id';");
 $reg = mysqli_fetch_array($sql, MYSQLI_ASSOC);
@@ -14,78 +16,111 @@ $atiende = Mysql::consulta("SELECT c.id_cliente, c.nombre_usuario ,c.nombre_comp
 $reg1 = mysqli_fetch_array($atiende, MYSQLI_ASSOC);
 
 
-class PDF extends FPDF
-{
+$html = "";
+
+$html = $html . 
+" <div width='100%' height='100%'; style='padding:0; margin:0; border:0;'>
+
+<img style='float:right; padding:0;' src='../img/transp_ALCOMEX.png' width='30%' />
+<br>
+    <div>
+        <h2  style='text-align:center;'>Solicitud de soporte técnico </h2>
+        <br>
+        <h4>Información de Ticket # ".$reg['serie']."</h4>
+    </div>
+
+<table width='100%' class='table'>
+            <thead style=' border :1px solid #000; color : #fff;'>
+                <tr colspan='4'>
+                    <td><strong>Creado :</strong>" . $reg['fecha']. "</td>
+                    <td colspan='2' rowspan='2'><h3>Solicitud de servicio TI</h3></td>
+                    <td><strong>Actualizado:</strong>" . $reg['actualización']." </td>
+                </tr>
+                <tr colspan='3'>
+                    <td><strong>Creador:</strong>" . $reg['nombre_completo'] . " </td>
+                    <td><strong>Seguimiento:</strong>" . $reg1['nombre_completo'] . "</td>
+                </tr>
+                <tr colspan='4' rowspan='1'>
+                    <td > <strong>Departamento: </strong>".$reg['departamento']."</td>
+                    <td ><strong>Asunto :</strong>".$reg['asunto']."</td>
+                    <td ><strong>Fecha de cierre:</strong>". date("Y-m-d h:i:s")."</td>
+                    <td ><strong>Estatus:</strong> ". $reg['estado_ticket']. "</td>
+                </tr>
+
+                
+                <tr colspan='4'>
+                    <td  colspan='2' style='text-align: left;'   ><strong>Foto:</strong><br><br><img src='../user/". $reg['foto'] . "' width=100px height='auto' alt='foto ticket'/> </td>
+                    <td colspan='2' ><strong>Solución:</strong> " . $reg['solucion']." </td>
+                
+                    </tr>
+
+               
+                  
+
+
+            </thead>
+</table>
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br> 
+
+
+<p><strong>Firma de conformidad: ____________________  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          Elaboró: __________________________</strong></p>
+<p><strong>(Nombre y firma de usuario) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                (Nombre y firma de quien realiza el servicio)</strong></p>
+
+</div> 
+
+<style>
+.table{
+   /* border: 1px solid #000;*/
+   border-collapse: collapse;
+   text-align: center;
+   border:1;
+   margin: 0 auto;
+   /*width:500px;*/
 }
 
-$pdf=new PDF('P','mm','Letter');
-$pdf->SetMargins(15,10);
-$pdf->AliasNbPages();
-$pdf->AddPage();
-
-$pdf->SetTextColor(0,0,0); // color de texto
-$pdf->SetFillColor(243, 156, 18); // colo de relleno
-$pdf->SetDrawColor(0,0,0);
-$pdf->SetFont("Arial","b",14);
-
-
-//$pdf->Cell (0,5,utf8_decode('Alcomex'),0,1,'C');
-$pdf->MultiCell (0,5,utf8_decode('Solicitud de soporte técnico'),'','C',false);
-$pdf->Image('../img/transp_ALCOMEX.png',160,2.5,50);
-$pdf->Ln();
-$pdf->Ln();
-$pdf->Ln();
-
+hr{
+   color:black;    
+}
+.table thead{
+ border :1px solid #000;
+ background:blue;
+color : #fff;
+}
  
-$pdf->SetFont("Arial","b",10);
-$pdf->Cell (0,5,utf8_decode('Información de Ticket #'.utf8_decode($reg['serie'])),0,1,'L');
-$pdf->Ln();
-$pdf->SetFont("Arial","b",9);
-$pdf->Cell (50,16,'Creado:'.  $reg['fecha'],1,0,'C');
-$pdf->SetFont("Arial","b",11);
-$pdf->Cell (85,32,'SOLICITUD DE SERVICIO TI',1,0,'C');
-$pdf->SetFont("Arial","b",9);
-$pdf->Cell (50,16,'Actualizado:' .$reg['actualizacion'],1,1,'L');
-$pdf->Cell (50,16,'Creador:'.  utf8_decode( $reg['nombre_usuario']),1,0,'L');
-$pdf->Cell (85,16,'',0,0,'C');
-$pdf->Cell (50,16,'Seguimiento:' . utf8_decode($reg1['nombre_usuario']),1,1,'L');
-$pdf->Cell(50, 60, utf8_decode('Área: ' . $reg['departamento']),1,0,'L');
-$pdf->Cell(42.5, 60, 'Asunto: ' . utf8_decode($reg['asunto']) ,1,0, 'L');
-$pdf->Cell(42.5, 60, 'Fecha de fin: ' . date("Y-m-d") ,1,0, 'L');
-$pdf->Cell(50, 60, 'Estatus: ' . utf8_decode($reg['estado_ticket']),1,1,'L');
-$pdf->Ln(10);
-$pdf->Cell(50, 10, utf8_decode('Solución:'),0,1,'L');
+.table td{
+    border: 1px solid #000;  
+    padding: 20px;
+    font-size:12px;
+    font-family: Arial;
+    align-items:center;
+    justify-content:center;
+    
+}
+.table tr{
+    background: #fff;
+   
+}
+p {
 
-$pdf->Cell(185, 60, utf8_decode( $reg['solucion']),1,1,'L');
+font-size:12px;
 
-$pdf->Ln(30);
-
-/*$pdf->Cell (35,10,'Serie',1,0,'C',true);
-$pdf->Cell (0,10,utf8_decode($reg['serie']),1,1,'L');
-$pdf->Cell (35,10,'Estado',1,0,'C',true);
-$pdf->Cell (0,10,utf8_decode($reg['estado_ticket']),1,1,'L');
-$pdf->Cell (35,10,'Nombre',1,0,'C',true);
-$pdf->Cell (0,10,utf8_decode($reg['nombre_usuario']),1,1,'L');
-$pdf->Cell (35,10,'Email',1,0,'C',true);
-$pdf->Cell (0,10,utf8_decode($reg['email_cliente']),1,1,'L');
-$pdf->Cell (35,10,'Departamento',1,0,'C',true);
-$pdf->Cell (0,10,utf8_decode($reg['departamento']),1,1,'L');
-$pdf->Cell (35,10,'Asunto',1,0,'C',true);
-$pdf->Cell (0,10,utf8_decode($reg['asunto']),1,1,'L');
-$pdf->Cell (35,15,'Problema',1,0,'C',true);
-$pdf->Cell (0,15,utf8_decode($reg['mensaje']),1,1,'L');
-$pdf->Cell (35,15,'Solucion',1,0,'C',true);
-$pdf->Cell (0,15,utf8_decode($reg['solucion']),1,1,'L');
-*/
+} 
+ 
+  
+ 
+ 
+</style>
+";
 
 
-//$pdf->cell(0,5,"Alcomex " . date("Y")  ,0,0,'C');
 
-//Update Leonardo Sainos 20-01-2023
-$pdf->cell(0,5, "Firma de conformidad: ____________________",0,0,'L');
-$pdf->cell(-8,5, utf8_decode("Elaboró: __________________________"),0,0,'R');
-$pdf->Ln();
-$pdf->cell(0,5, utf8_decode("  (Nombre y firma de operador,usuario ó jefe de área) "),0,0,'L');
-$pdf->cell(0,5, utf8_decode("  (Nombre y firma de quien realiza el servicio) "),0,0,'R');
-$pdf->output();
-$pdf->close();
+
+
+$mpdf= new \Mpdf\Mpdf();
+$mpdf->WriteHTML($html);
+$mpdf->Output();
+
+
+?>

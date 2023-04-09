@@ -1,0 +1,16 @@
+1.- Arreglo de order by
+2.- btn desplegable de opciones de ordenamiento
+3.- Cambiar variable ordenamiento a consultas
+4.- Div de input hidden 
+5.-funciones opciones
+
+
+---------------------
+
+6.- Switch
+7.- Navegadores cambiar php a js
+8.- Agregar input hidden de filtro
+9.- Funcion nextPage
+10.- Usuarios variable where 
+
+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
