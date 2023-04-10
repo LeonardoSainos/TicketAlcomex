@@ -25,7 +25,7 @@ $t = Mysql::consulta("SELECT * FROM cliente WHERE (id_rol = 5267 AND  idEstatus<
          }
   }
   else{
-    echo "<option>Límite de tickets superados por técnicos</option>";
+    echo "<option>No hay técnicos dispobiles</option>";
   }
 }
 

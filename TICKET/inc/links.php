@@ -8,8 +8,8 @@
 <link rel="stylesheet" href="./css/font-awesome.min.css">
 <link rel="stylesheet" rel="stylesheet" href="./css/ui-lightness/jquery-ui-1.10.4.custom.min.css">      
 
+<!--<link rel="stylesheet" href="./sw/w3.css">-->
 
-<link rel="stylesheet" href="./sw/w3.css">
 <link rel="manifest" href="./sw/manifiesto.json">
 
 

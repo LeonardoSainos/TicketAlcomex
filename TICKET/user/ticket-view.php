@@ -153,7 +153,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                           <div class="col-sm-10">
                               <div class='input-group'>
                               <select id="departamento" class="form-control" name="departamento_ticket">
-                                <option value="<?php echo 2505;?>">Selecciona un departamento</option>
+                                <option>Selecciona un departamento</option>
                                       <?php 
                                         $sql = Mysql::consulta("SELECT * FROM departamento WHERE idDepartamento <> 2505");
                                         while( $reg1=mysqli_fetch_array($sql, MYSQLI_ASSOC)){

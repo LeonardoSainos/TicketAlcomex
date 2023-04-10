@@ -133,13 +133,11 @@ if(isset($_GET['view']) && in_array($_GET['view'],$WhiteList) && is_file("./user
                 navigator.serviceWorker.register('./sw/sw.js')
                 .then(
                     function(registration){
-                        alert('Reg. satisfactorio del sw');
-                        console.log('Reg. satisfactorio del sw en el ámbito: ', registration.scope);
+                            console.log('Reg. satisfactorio del sw en el ámbito: ', registration.scope);
                     }
                 ).catch(
                     function(err){
-                        alert('El SW no se registró');
-                        console.log('El SW no se registró', err);
+                           console.log('El SW no se registró', err);
                     }
                 );
             }
