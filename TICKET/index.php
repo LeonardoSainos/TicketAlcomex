@@ -39,7 +39,7 @@ if(isset($_GET['view']) && in_array($_GET['view'],$WhiteList) && is_file("./user
                                 </div>  
                               </div>
                           </body>
-                      </html> </html><?php include "./user/".$_GET['view']."-view.php";
+                      </html> <?php include "./user/".$_GET['view']."-view.php";
                        include './inc/footer.php'; ?>
         <?php
 
@@ -127,16 +127,29 @@ if(isset($_GET['view']) && in_array($_GET['view'],$WhiteList) && is_file("./user
           </div>
         </div>
         </body>
-                      </html> </html><?php 
+      </html> 
+          <script>
+            if('serviceWorker' in navigator){
+                navigator.serviceWorker.register('./sw/sw.js')
+                .then(
+                    function(registration){
+                        alert('Reg. satisfactorio del sw');
+                        console.log('Reg. satisfactorio del sw en el ámbito: ', registration.scope);
+                    }
+                ).catch(
+                    function(err){
+                        alert('El SW no se registró');
+                        console.log('El SW no se registró', err);
+                    }
+                );
+            }
+        </script>
+                      <?php 
                 include "./user/index-view.php";
                 include './inc/footer.php';
-                ?>
-
-                
+                ?>       
   <?php
- 
 }
-              
-         ?>
+?>
            
 

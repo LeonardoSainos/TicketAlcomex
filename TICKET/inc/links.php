@@ -8,11 +8,16 @@
 <link rel="stylesheet" href="./css/font-awesome.min.css">
 <link rel="stylesheet" rel="stylesheet" href="./css/ui-lightness/jquery-ui-1.10.4.custom.min.css">      
 
+
+<link rel="stylesheet" href="./sw/w3.css">
+<link rel="manifest" href="./sw/manifiesto.json">
+
+
 <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
 <script src="./js/jquery-2.1.0.min.js"></script>
 <script src="./js/bootstrap.js"></script>
 <script src="./js/jquery-ui-1.10.4.custom.min.js"></script>
-<script  src="https://code.jquery.com/jquery-2.1.0.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auk4Pfzbm7uH60=" crossorigin="anonymous" ></script>
+
 
  
     <!-- METISMENU SCRIPTS -->
