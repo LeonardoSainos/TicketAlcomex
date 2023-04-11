@@ -1,6 +1,19 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception; 
+require '/xampp/htdocs/TL11EST.github.io/vendor/autoload.php';
+
+
+
+$id = MysqlQuery::RequestGet('id');
+$sql = Mysql::consulta("SELECT t.foto,t.id_atiende as atender,t.id, t.fecha, t.serie, t.asunto, t.mensaje, t.solucion, c.nombre_completo , c.email_cliente, d.nombre as departamento, e.Nombre, e.idEstatus FROM ticket t INNER JOIN cliente c ON t.idUsuario = c.id_cliente INNER JOIN departamento d ON d.idDepartamento = t.idDepartamento INNER JOIN estatus e ON t.idStatus = e.idEstatus  WHERE t.id= $id");
+$reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
+
 
 if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST['estado_ticket'])){
+
+  
 		$id_edit=MysqlQuery::RequestPost('id_edit');
 		$estado_edit=  MysqlQuery::RequestPost('estado_ticket');
 		$solucion_edit=  MysqlQuery::RequestPost('solucion_ticket');
@@ -9,10 +22,6 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
     $fecha = MysqlQuery :: RequestPost('fecha_ticket');
 
     $iid= $_SESSION['id'];
-		$cabecera="From: alcomex<correodepruebasutp@gmail.com>";
-		$mensaje_mail="Estimado usuario la solución a su problema es la siguiente : ".$solucion_edit;
-		$mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
-//  echo "<script> alert('" . $estado_edit . "' ); </script>";
 		if(MysqlQuery::Actualizar("ticket", "fecha='$fecha',id_atiende='$Atiende_edit', idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion='" . date("Y-m-d H:i:s"). "'","id=$id_edit")){
                             
       if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Actualizar','".date("Y-m-d H:i:s") ."','ticket'"))
@@ -27,8 +36,78 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                     </p>
                 </div>
             ';
-			if($radio_email=="option2"){
-				mail($email_edit, $asunto_edit, $mensaje_mail, $cabecera);
+			if($radio_email=="option2"){          
+
+             
+                $Aserie = $reg['serie'];
+                $ANombre= $reg['nombre_completo'];
+                $AEstatus= $reg['Nombre'];
+                $Asolucion=$reg['solucion'];
+                $Acorreo = $reg['email_cliente'];
+
+                $segunda= Mysql :: consulta("SELECT c.nombre_completo, c.email_cliente, d.nombre as depa FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $Atiende_edit");
+                $segundaa= mysqli_fetch_array($segunda,MYSQLI_ASSOC);
+                $depa = $segundaa['depa'];
+                $NombreEmisor= $segundaa['nombre_completo'];
+                $CorreoEmisor = $segundaa['email_cliente'];
+
+            $mail = new PHPMailer(true);
+            try {
+                //Server settings
+                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                    //Enable verbose debug output
+                $mail->isSMTP();                                            //Send using SMTP
+                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                $mail->Username   = 'correodepruebasutp@gmail.com';                     //SMTP username
+                $mail->Password   = 'ikezrnpsjnzipfha';                               //SMTP password
+                $mail->SMTPSecure =  PHPMailer:: ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                //Recipients
+                $mail->setFrom('correodepruebasutp@gmail.com', 'Soporte técnico ' . $depa . ' Alcomex');
+                $mail->addAddress($Acorreo, $ANombre);     //Add a recipient
+                //Content
+                $mail->isHTML(true);       
+                $mail->CharSet = 'UTF-8';                           //Set email format to HTML
+                $mail->Subject = 'Actualización de ticket #' . $Aserie;
+                $mail->Body=  '<h2 style="text-align:center; color: #fb5d14;">
+                ¡Hola <strong> ' . $ANombre . '. ! </strong> </h2><br>
+                <p style="text-align:center;" ><b>Se ha actualizado el estatus de tu ticket:</b><br>
+            </p>
+            <p style="text-align:center;">
+                Actualizado: ' .  date("Y-m-d H:i:s").  ' <br>
+                Atiende :'. $NombreEmisor.' <br>
+                Correo : '. $CorreoEmisor .' <br> 
+                Estatus : <strong style="color:red;"> '.$AEstatus .' </strong><br>
+                Solución : <strong style="color:red;"> '.$Asolucion.  '</strong>
+
+            </p>
+               <br> '.
+                '
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <center>
+                <img style="align-items: center; justify-content: center;" width="250px" height="auto" src="https://scontent.fpbc1-1.fna.fbcdn.net/v/t39.30808-6/340835079_219065740720635_4950595825896346541_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=dbeb18&_nc_ohc=luxwI7hBcLoAX966O2M&_nc_ht=scontent.fpbc1-1.fna&oh=00_AfD9I8W2OeZ8hANUKlp9wcDfCd6mrA5fshIMCbP6tlaRmQ&oe=6438D9D3" />
+                </center>
+                <br>
+                <p style="text-align:center;">
+                Atentamente Soporte técnico Alcomex
+                <br>
+                <hr>
+                </p>
+                <p style="text-align:center;">
+                Esperamos haber atendido satisfactoriamente su problema.
+                </p>
+            </div>'  
+                  ;
+                $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                $mail->send();
+                echo "<script>
+             
+                window.history.go(-1);
+                </script>";
+            } catch (Exception $e) {
+                echo " <script> alert( {$mail->ErrorInfo}); </scripyt>";
+            }
+
 			}
 		}else{
 			echo '
@@ -44,9 +123,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
 	}     
 
 	     
-	$id = MysqlQuery::RequestGet('id');
-	$sql = Mysql::consulta("SELECT t.foto,t.id_atiende as atender,t.id, t.fecha, t.serie, t.asunto, t.mensaje, t.solucion, c.nombre_completo , c.email_cliente, d.nombre as departamento, e.Nombre, e.idEstatus FROM ticket t INNER JOIN cliente c ON t.idUsuario = c.id_cliente INNER JOIN departamento d ON d.idDepartamento = t.idDepartamento INNER JOIN estatus e ON t.idStatus = e.idEstatus  WHERE t.id= $id");
-	$reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
+
 
 ?>
 
@@ -238,7 +315,3 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                       </form>
             </div><!--col-md-12-->
           </div><!--container-->
-
-
-
-       

@@ -1,5 +1,12 @@
-<?php if(isset($_SESSION['nombre']) && ($_SESSION['rol']==9947 ||  $_SESSION['rol']==4046 || $_SESSION['rol']==5267 )){
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception; 
+require '/xampp/htdocs/TL11EST.github.io/vendor/autoload.php';
+
+if(isset($_SESSION['nombre']) && ($_SESSION['rol']==9947 ||  $_SESSION['rol']==4046 || $_SESSION['rol']==5267 )){
         $iid= $_SESSION['id'];
+        
 
 if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
 
@@ -16,9 +23,6 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
     $numero_filas_total=$numero_filas+1;
     $id_ticket="TK".$codigo."N".$numero_filas_total;
     /*Fin codigo numero de ticket*/
-
-
-
     // $fecha_ticket= MysqlQuery::RequestPost('fecha_ticket');
     $nombre_ticket= MysqlQuery::RequestPost('name_ticket');
     $email_ticket=MysqlQuery::RequestPost('email_ticket');
@@ -27,8 +31,6 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
     $mensaje_ticket=MysqlQuery::RequestPost('mensaje_ticket');
     $id = $_SESSION['id'];
     $tecnico = MysqlQuery::RequestPost('tecnico');
-
-
 
     $autoriza= false;
     $imagen_ticket="";
@@ -43,8 +45,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
         //$height= $dimensiones[1];
         $carpeta = "../TICKET/user/Fotos";
         if($tipo!= "image/jpg" && $tipo!="image/JPG" && $tipo!="image/jpeg" && $tipo!= "image/png" && $tipo!="image/gif") {
-            echo "<script>alert('El archivo que tratas de enviar no es una foto o imagen');
-            
+            echo "<script>alert('El archivo que tratas de enviar no es una foto o imagen');            
                   </script>";
             $autoriza= false;
         } elseif($size > 5 *1024*1024) {
@@ -60,22 +61,78 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
         }
     }
 
-
-
-
-    $cabecera="From: LinuxStore El Salvador<linuxstore@hifenix.com>";
-    $mensaje_mail="¡Gracias por reportarnos su problema! Buscaremos una solución para su producto lo más pronto posible. Su ID ticket es: ".$id_ticket;
-    $mensaje_mail=wordwrap($mensaje_mail, 70, "\r\n");
-
     if($autoriza==true) {
         if(MysqlQuery::Guardar("ticket", "foto,serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende", "'$imagen_ticket','$id_ticket','$asunto_ticket','$mensaje_ticket',$id,'$departamento_ticket',94574,$tecnico")) {
             MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente", "$iid,'Insertar','".date("Y-m-d H:i:s") ."','ticket'");
+           
+              $destino = Mysql::consulta("SELECT c.id_cliente,c.nombre_completo,c.email_cliente,d.nombre  FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $tecnico");
+              $destinoArray = mysqli_fetch_array($destino,MYSQLI_ASSOC);
+              $Correo= $destinoArray['email_cliente'];
+              $Nombre= $destinoArray['nombre_completo'];
+              $depa = $destinoArray['nombre'];
+              
 
-
-
-            /*----------  Enviar correo con los datos del ticket
-            mail($email_ticket, $asunto_ticket, $mensaje_mail, $cabecera)
-            ----------*/
+              $emisor = Mysql:: consulta("SELECT * FROM cliente WHERE  id_cliente = $id");
+              $emisorArray = mysqli_fetch_array($emisor, MYSQLI_ASSOC);
+              $CorreoEmisor= $emisorArray['email_cliente'];
+              $NombreEmisor= $emisorArray['nombre_completo'];
+              
+            $mail = new PHPMailer(true);
+            try {
+                //Server settings
+                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                    //Enable verbose debug output
+                $mail->isSMTP();                                            //Send using SMTP
+                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                $mail->Username   = 'correodepruebasutp@gmail.com';                     //SMTP username
+                $mail->Password   = 'ikezrnpsjnzipfha';                               //SMTP password
+                $mail->SMTPSecure =  PHPMailer:: ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                //Recipients
+                $mail->setFrom('correodepruebasutp@gmail.com', 'Soporte técnico ' . $depa . ' Alcomex');
+                $mail->addAddress($Correo, $Nombre);     //Add a recipient
+                //Content
+                $mail->isHTML(true);       
+                $mail->CharSet = 'UTF-8';                           //Set email format to HTML
+                $mail->Subject = 'Nuevo ticket #' . $id_ticket;
+                $mail->Body=  '<h2 style="text-align:center; color: #fb5d14;">
+                ¡Hola <strong> ' . $Nombre . ' ! </strong> </h2><br>
+                <p style="text-align:center;" ><b>Se te ha asignado un nuevo ticket, los datos del ticket son los siguientes:</b><br>
+            </p>
+            <p style="text-align:center;">
+                Creado: ' .  date("Y-m-d H:i:s").  ' <br>
+                Usuario :'. $NombreEmisor.' <br>
+                Correo : '. $CorreoEmisor .' <br> 
+                Asunto :'. $asunto_ticket. '<br>
+                Mensaje :'.$mensaje_ticket . '<br>
+            </p>
+               <br> '.
+                '
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <center>
+                <img style="align-items: center; justify-content: center;" width="250px" height="auto" src="https://scontent.fpbc1-1.fna.fbcdn.net/v/t39.30808-6/340835079_219065740720635_4950595825896346541_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=dbeb18&_nc_ohc=luxwI7hBcLoAX966O2M&_nc_ht=scontent.fpbc1-1.fna&oh=00_AfD9I8W2OeZ8hANUKlp9wcDfCd6mrA5fshIMCbP6tlaRmQ&oe=6438D9D3" />
+                </center>
+                <br>
+               
+                <p style="text-align:center;">
+                Atentamente Soporte técnico Alcomex
+                <br>
+                <hr>
+                </p>
+                <p style="text-align:center;">
+                Esperamos haber atendido satisfactoriamente su problema.
+                </p>
+            </div>'  
+                  ;
+                $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                $mail->send();
+                echo "<script>
+             
+                window.history.go(-1);
+                </script>";
+            } catch (Exception $e) {
+                echo " <script> alert( {$mail->ErrorInfo}); </scripyt>";
+            }
 
             echo '
                 <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
@@ -174,7 +231,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                           <label  class="col-sm-2 control-label">Asunto</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                <input type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="20" required="">
+                                <input type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="60" required="">
                                 <span class="input-group-addon"><i class="fa fa-paperclip"></i></span>
                               </div> 
                           </div>
@@ -184,8 +241,8 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                           <label  class="col-sm-2 control-label">Técnico</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                          <select id="tecnico" class="form-control" name="tecnico">
-                                          <option> No hay técnicos disponibles</option>
+                                          <select required id="tecnico" class="form-control" name="tecnico">
+                                         
                                           </select>
                                    <span class="input-group-addon"><i class="fa fa-laptop"></i></span>
                               </div> 
@@ -199,10 +256,11 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                         </div>
 
                         <div class="form-group">
-                          <label  class="col-sm-2 control-label">Foto(opcional)</label>
+                          <label  class="col-sm-2 control-label">Foto</label>
                           <div class="col-sm-10">
+ 
                               <div class='input-group'>
-                                <input type="file"  class="form-control" placeholder="Foto(opcional)" name="foto" />
+                                <input type="file"  required class="form-control form-control-sm" placeholder="Foto(opcional)" name="foto" />
                                 <span class="input-group-addon"><i class="fa fa-image"></i></span>
                               </div>
                           </div>

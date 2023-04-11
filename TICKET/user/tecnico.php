@@ -25,7 +25,7 @@ $t = Mysql::consulta("SELECT * FROM cliente WHERE (id_rol = 5267 AND  idEstatus<
          }
   }
   else{
-    echo "<option>No hay técnicos dispobiles</option>";
+    echo "<option value=''>No hay técnicos dispobiles</option>";
   }
 }
 

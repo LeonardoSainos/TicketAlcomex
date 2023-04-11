@@ -4,8 +4,8 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
     $estado = MysqlQuery::RequestPost('estado_cliente');
     $departamento = MysqlQuery:: RequestPost('departamento_cliente');
 	 $rol= MysqlQuery::RequestPost('rol_cliente');
-	 
-		if(MysqlQuery::Actualizar("cliente", "id_departamento = '$departamento', id_rol='$rol', idEstatus= '$estado'", "id_cliente='$id_edit'")){
+	 $correo = MysqlQuery::RequestPost('email_cliente');
+		if(MysqlQuery::Actualizar("cliente", "email_cliente='$correo',id_departamento = '$departamento', id_rol='$rol', idEstatus= '$estado'", "id_cliente='$id_edit'")){
       $id = $_SESSION['id'];                            
       if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','cliente'")){
  
