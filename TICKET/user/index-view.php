@@ -5,57 +5,54 @@
 
 <!--************************************Carousel******************************-->
 <div class="container hidden-xs">
-    <div class="col-xs-12">
-<div id="carousel-example-generic" class="carousel slide">
-
-  <ol class="carousel-indicators">
-    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="3"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="4"></li>
-  </ol>
-    <div class="carousel-inner">
-       <div class="item active">
-           <img style="max-width: 1920; min-width: 1920; max-height: 1000; min-height: 1000;" src="img/trailers/2T.jpg" alt="">
+  <div class="col-xs-12">
+    <div id="carousel-example-generic" class="carousel slide">
+      <ol class="carousel-indicators">
+        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="item active">
+          <img class="img-fluid d-block" src="img/trailers/2T.jpg" alt="">
           <div class="carousel-caption">
-             
           </div>
-       </div>
-       <div class="item">
-       <img style="max-width: 1920; min-width: 1920; max-height: 1000; min-height: 1000;"  src="img/Trailers/track1.jpg" alt="">
+        </div>
+        <div class="item">
+          <img class="img-fluid d-block" src="img/Trailers/track1.jpg" alt="">
           <div class="carousel-caption">
-             </div>
-       </div>
-       <div class="item">
-       <img style="max-width: 1920; min-width: 1920; max-height: 1000; min-height: 1000;"  src="img/Trailers/1T.jpg" alt="">
-          <div class="carousel-caption">
-         
           </div>
-       </div>
-       <div class="item ">
-       <img src="img/Trailers/camioneta.jpg" alt="">
+        </div>
+        <div class="item">
+          <img class="img-fluid d-block" src="img/Trailers/1T.jpg" alt="">
           <div class="carousel-caption">
-     
           </div>
         </div>
         <div class="item ">
-        <img src="img/Trailers/camioneta1.jpg" alt="">
+          <img class="img-fluid d-block" src="img/Trailers/3T.jpg" alt="">
           <div class="carousel-caption">
-              HP ProBook 440
           </div>
         </div>
-   </div>
-   <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-       <span class="icon-prev"></span>
-   </a>
-   <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-     <span class="icon-next"></span>
-   </a>
-</div>
+        <div class="item ">
+          <img class="img-fluid d-block" src="img/Trailers/camion.jpg" alt="">
+          <div class="carousel-caption">
+         
+          </div>
         </div>
-     <div class="col-sm-2">&nbsp;</div>
+      </div>
+      <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+        <span class="icon-prev"></span>
+      </a>
+      <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+        <span class="icon-next"></span>
+      </a>
+    </div>
+  </div>
+  <div class="col-sm-2">&nbsp;</div>
 </div>
+
 <!--************************************ Fin Carousel******************************-->
 
  <hr class="hidden-xs">
@@ -63,88 +60,75 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-        <h1 class="text-center text-info">Periodicio mural</h1>
+         <strong>  <h1 class="text-center" style="color:#fb5d14;">¡BIENVENIDO AL CENTRO DE SOPORTE !</h1></strong>
     </div>
   </div>
 </div>
 <br>
 <div class="container">
     <div class="row">
-        <div class="col-xs-12 col-md-6 thumbnail">
-            <h3 class="text-center">LinuxMint</h3>
-            <img  src="img/logoMint.png" class="img-responsive logos_GnuLinux" alt="Image">
-             <p>
-                 Linux Mint es una distribución del sistema operativo GNU/Linux, basado en la distribución 
-                 Ubuntu (que a su vez está basada en Debian). A partir del 7 de septiembre de 2010 también 
-                 está disponible una edición basada en Debian.<br>
-                 Linux Mint mantiene un inventario actualizado, un sistema operativo estable para el usuario medio, 
-                 con un fuerte énfasis en la usabilidad y facilidad de instalación. Es reconocido por ser fácil de usar, 
-                 especialmente para los usuarios sin experiencia previa en Linux.<br>
-                 Linux Mint se compone de muchos paquetes de software, los cuales se distribuyen la mayor parte bajo una 
-                 licencia de software libre. La principal licencia utilizada es la GNU General Public License (GNU GPL) que, 
-                 junto con la GNU Lesser General Public License (GNU LGPL), declara explícitamente que los usuarios tienen libertad 
-                 para ejecutar, copiar, distribuir, estudiar, cambiar, desarrollar y mejorar el software.
-             </p>
-             <p class="text-center">
-                <a href="#" class="btn btn-primary btn-sm" role="button">Leer más</a>
-             </p>
+        <div class="col-xs-12 col-md-12 thumbnail">
+            <h3 class="text-center">Sistema de Tickets Soporte Técnico Alcomex</h3>
+            <img  src="img/TransP_ALCOMEX.png"  class="img-fluid d-block" alt="Image">
+             <h4 style="text-align:center; padding:10px;">
+             El objetivo del sistema de Centro de Soporte es llevar un registro detallado de las problemáticas y solicitudes de los usuarios de <strong> Transporte y Logística Alcomex </strong>, como parte del soporte técnico que brindan cada una de las áreas que la integran, para ofrecer una respuesta y/o solución de ellos a la brevedad posible o en su defecto gestionar su solución con la persona responsable del tema en cuestión.
+            </h4>
+        </div>
+        <div class="col-xs-12 col-md-12 thumbnail">
+          <h3 class="text-center">¿Quiénes somos? </h3>
+            <img src="img/trailers/lupa.jpg" class="img-responsive " alt="Image">
+            <h4  style="text-align:center; padding:10px;">
+            Empresa Poblana, creada en 2016, ante la necesidad de satisfacer el flujo óptimo de mercancías en distintas zonas del país.
+            Con unidades tipo Trailers y remolques de 48 y 53 pies de capacidad e iniciando en rutas del Sureste, Sur Oeste, Occidente y Norte de
+            nuestra República Mexicana.<br>
+            Hemos generado nuestra propia plataforma de rastreo, la cual otorga ubicación fidedigna y
+            tiempo de respuesta acelerado.
+            Hoy en día, contamos con unidades tipo Trailers, Thorton, Rabones, Camioneta de 3.5 Toneladas y Camionetas tipo VAN </h4>
         </div>
         <div class="col-xs-12 col-md-6 thumbnail">
-          <h3 class="text-center">Fedora</h3>
-            <img src="img/logoFedora.png" class="img-responsive logos_GnuLinux" alt="Image">
-            <p>
-             Fedora es una distribución Linux para propósitos generales basada en RPM, que se caracteriza 
-             por ser un sistema estable, la cual es mantenida gracias a una comunidad internacional de ingenieros, 
-             diseñadores gráficos y usuarios que informan de fallos y prueban nuevas tecnologías. Cuenta con el respaldo 
-             y la promoción de Red Hat.<br>
-             El proyecto no busca sólo incluir software libre y de código abierto, sino ser el líder en ese ámbito tecnológico.
-             Algo que hay que destacar es que los desarrolladores de Fedora prefieren hacer cambios en las fuentes originales 
-             en lugar de aplicar los parches específicos en su distribución, de esta forma se asegura que las actualizaciones 
-             estén disponibles para todas las variantes de Linux. Max Spevack en una entrevista afirmó que: "Hablar de Fedora es hablar 
-             del rápido progreso del software libre y de código abierto." Durante sus primeras 6 versiones se llamó Fedora Core, debido
-             a que solo incluía los paquetes más importantes del sistema operativo.
-            </p>
-            <center><a href="#" class="btn btn-primary btn-sm" role="button">Leer más</a></center>
+            <h3 class="text-center">Misión</h3>
+            <img src="img/trailers/mapa.jpg" class="xp" alt="Image">
+            <h4  style="text-align:center; padding:10px;">
+            Ofrecer servicios de transporte de carga con mayor capacidad de respuesta y dominio en todo México, aprovechando la experiencia, conocimiento y estrategias
+            de negocios que nos amparan, cumpliendo con los servicios ofrecidos para la satisfacción de nuestros clientes implementando los estándares de Calidad,
+            Medio Ambiente y Seguridad en el trabajo.
+            </h4>
         </div>
         <div class="col-xs-12 col-md-6 thumbnail">
-            <h3 class="text-center">Ubuntu</h3>
-            <img src="img/logoUbuntu.png" class="img-responsive logos_GnuLinux" alt="Image">
-            <p>
-             Ubuntu es un sistema operativo basado en Linux y que se distribuye como software libre, 
-             el cual incluye su propio entorno de escritorio denominado Unity. Su nombre proviene de 
-             la ética homónima, en la que se habla de la existencia de uno mismo como cooperación de 
-             los demás.<br>
-             Está orientado al usuario novel y promedio, con un fuerte enfoque en la facilidad de uso 
-             y en mejorar la experiencia de usuario. Está compuesto de múltiple software normalmente distribuido 
-             bajo una licencia libre o de código abierto. Estadísticas web sugieren que la cuota de mercado de 
-             Ubuntu dentro de las distribuciones Linux es, aproximadamente, del 49%, y con una tendencia a aumentar 
-             como servidor web. Y un importante incremento activo de 20 millones de usuarios para fines del 2011.
-            </p>
-            <center><a href="#" class="btn btn-primary btn-sm" role="button">Leer más</a></center>
+            <h3 class="text-center">Visión</h3>
+            <img src="img/trailers/rentame.jpg" class="xp" alt="Image">
+             <h4  style="text-align:center; padding:10px;">
+                    Consolidarnos como una de las mejores empresas de Transporte y Logística en el país, expandiendo nuestros servicios en toda la República, satisfaciendo las expectativas de todo cliente y dando como resultado una
+                    rentabilidad para las organizaciones que contraten nuestro servicio y una estabilidad laboral a nuestros colaboradores.
+            </h4>
         </div>
-        <div class="col-xs-12 col-md-6 thumbnail">
-            <h3 class="text-center">Debian</h3>
-            <img src="img/logoDebian.png" class="img-responsive logos_GnuLinux" alt="Image">
-            <p>
-                Debian GNU/Linux es un sistema operativo libre, desarrollado por más de mil voluntarios 
-                alrededor del mundo, que colaboran a través de Internet.
-                La dedicación de Debian al software libre, su base de voluntarios, su naturaleza no comercial
-                y su modelo de desarrollo abierto la distingue de otras distribuciones del sistema operativo 
-                GNU. Todos estos aspectos y más se recogen en el llamado Contrato Social de Debian.
-            </p>
-            <p>
-                Nació en el año 1993, de la mano del proyecto Debian, con la idea de crear un sistema GNU usando
-                Linux como núcleo ya que el proyecto Debian, organización responsable de su mantenimiento en la 
-                actualidad, también desarrolla sistemas GNU basados en otros núcleos (Debian GNU/Hurd, Debian GNU/NetBSD y Debian GNU/kFreeBSD).
-            </p>
-            <center><a href="#" class="btn btn-primary btn-sm" role="button">Leer más</a></center>
+        <div class="col-xs-12 col-md-12 thumbnail text-center">
+           <strong> <h4> Ellos confian en nosotros</h4></strong>
+             <img src="img/Empresas4.jpg" class="img-responsive" alt="Image">
         </div>
+         
     </div>
 </div>
+
+<style>
+    .carousel-inner .item img {
+  width: 1200px;
+  height: 500px;
+}
+
+.xp{
+
+width: 600px;
+height: 250px;
+
+}
+
+</style>
+
 <script>
     $(document).ready(function(){
         $("#carousel-example-generic").carousel({
-            interval: 3000,
+            interval: 2500,
         });
     });
 </script>
