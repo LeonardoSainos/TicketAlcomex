@@ -9,7 +9,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre']) && isset($_POST['correo']
         $descripcion = MysqlQuery::RequestPost('descripcion');
 	   
 	 
-		if(MysqlQuery::Actualizar("departamento", "nombre = '$nombre', correo='$correo', descripcion= '$descripcion',idEstatus='$estado',idJefe='$lider'", "idDepartamento='$id_edit'")){
+		if(MysqlQuery::Actualizar("departamento", "nombre='$nombre', correo='$correo', descripcion= '$descripcion',idEstatus='$estado',idJefe='$lider'", "idDepartamento='$id_edit'")){
       $id = $_SESSION['id'];                            
       MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','departamento'");
  
