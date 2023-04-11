@@ -54,12 +54,12 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre']) && isset($_POST['correo']
           <div class="container">
             <div class="col-sm-12">
                 <form class="form-horizontal" role="form" action="" method="POST">
-                		<input type="hidden" name="id_edit" value="<?php echo $reg['idDepartamento']?>">
+                		<input type="hidden" name="id_edit" value="<?php echo $reg['idDepartamento'];?>">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Fecha:</label>
                             <div class='col-sm-10'>
                                 <div class="input-group">
-                                    <input class="form-control" readonly="" type="text" name="fecha_ticket" readonly="" value="<?php echo $reg['fecha']?>">
+                                    <input class="form-control" readonly="" type="text" name="fecha_ticket" value="<?php echo $reg['fecha'];?>">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre']) && isset($_POST['correo']
                             <label class="col-sm-2 control-label">Nombre:</label>
                             <div class='col-sm-10'>
                                 <div class="input-group">
-                                    <input class="form-control"   type="text" name="nombre"   value="<?php echo $reg['nombre']?>">
+                                    <input class="form-control"   type="text" name="nombre"   value="<?php echo $reg['nombre'];?>">
                                     <span class="input-group-addon"><i class="fa fa-barcode"></i></span>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre']) && isset($_POST['correo']
                             <label class="col-sm-2 control-label">Correo:</label>
                             <div class='col-sm-10'>
                                 <div class="input-group">
-                                    <input class="form-control"   type="text" name="correo"   value="<?php echo $reg['correo']?>">
+                                    <input class="form-control"   type="text" name="correo"  value="<?php echo $reg['correo'];?>">
                                     <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
                                 </div>
                             </div>
@@ -141,7 +141,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre']) && isset($_POST['correo']
                           <label for="inputEmail3" class="col-sm-2 control-label">Contacto:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                  <input type="email" readonly="" class="form-control"  name="email_contacto" readonly="" value="<?php echo $reg['email_cliente']?>">
+                                  <input type="email"   class="form-control"  name="email_contacto" readonly="" value="<?php echo $reg['email_cliente'];?>">
                                 <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
                               </div> 
                           </div>
@@ -151,7 +151,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre']) && isset($_POST['correo']
                           <label  class="col-sm-2 control-label">Descripción:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                  <input type="text"  class="form-control"  name="descripcion"  value="<?php echo $reg['descripcion']?>">
+                                  <input type="text"  class="form-control"  name="descripcion"  value="<?php echo $reg['descripcion'];?>">
                                 <span class="input-group-addon"><i class="fa fa-users"></i></span>
                               </div> 
                           </div>

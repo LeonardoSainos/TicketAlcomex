@@ -64,7 +64,15 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
     if($autoriza==true) {
         if(MysqlQuery::Guardar("ticket", "foto,serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende", "'$imagen_ticket','$id_ticket','$asunto_ticket','$mensaje_ticket',$id,'$departamento_ticket',94574,$tecnico")) {
             MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente", "$iid,'Insertar','".date("Y-m-d H:i:s") ."','ticket'");
-           
+            echo '
+            <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="text-center">TICKET CREADO</h4>
+                <p class="text-center">
+                    Ticket creado con éxito '.$_SESSION['nombre'].'<br>El TICKET ID es: <strong>'.$id_ticket.'</strong>
+                </p>
+            </div>
+        ';
               $destino = Mysql::consulta("SELECT c.id_cliente,c.nombre_completo,c.email_cliente,d.nombre  FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $tecnico");
               $destinoArray = mysqli_fetch_array($destino,MYSQLI_ASSOC);
               $Correo= $destinoArray['email_cliente'];
@@ -135,15 +143,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                 echo " <script> alert( {$mail->ErrorInfo}); </scripyt>";
             }
 
-            echo '
-                <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="text-center">TICKET CREADO</h4>
-                    <p class="text-center">
-                        Ticket creado con éxito '.$_SESSION['nombre'].'<br>El TICKET ID es: <strong>'.$id_ticket.'</strong>
-                    </p>
-                </div>
-            ';
+          
 
         } else {
             echo '
