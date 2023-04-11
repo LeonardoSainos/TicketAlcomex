@@ -2,7 +2,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception; 
-require '/xampp/htdocs/TL11EST.github.io/vendor/autoload.php';
+require '/xampp/htdocs/TicketAlcomex/vendor/autoload.php';
 
 if(isset($_SESSION['nombre']) && ($_SESSION['rol']==9947 ||  $_SESSION['rol']==4046 || $_SESSION['rol']==5267 )){
         $iid= $_SESSION['id'];

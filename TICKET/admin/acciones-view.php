@@ -8,7 +8,7 @@ setlocale(LC_TIME, 'spanish');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception; 
-require '/xampp/htdocs/TL11EST.github.io/vendor/autoload.php';
+require '/xampp/htdocs/TicketAlcomex/vendor/autoload.php';
 
 
 

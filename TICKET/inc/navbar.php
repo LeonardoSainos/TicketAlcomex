@@ -1,6 +1,12 @@
 <?php
-    if(isset($_POST['nombre_login']) && isset($_POST['contrasena_login'])){
+    if(isset($_POST['nombre_login']) && isset($_POST['contrasena_login']) ){
+
+       
+
+
         include "./process/login.php";
+    
+
     }
 ?>
 
@@ -95,11 +101,40 @@
                 <?php endif; ?>
 
             </ul>
-            <form class="navbar-form navbar-right hidden-xs" role="search">
+            <form class="navbar-form navbar-right hidden-xs" role="search" method="POST" action="">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Buscar">
+                    <input type="text" name="buscar" class="form-control" placeholder="Buscar">
                 </div>
-                <button type="button" class="btn btn-warning">Buscar</button>
+                <button type="submit" class="btn btn-warning">Buscar</button>
+          
+                <?php 
+
+                if(isset($_POST['buscar'])){
+                    $buscar= MysqlQuery::RequestPost('buscar');
+                        switch($buscar){
+                            case'Ticket':               
+                                echo '<script> window.open("/TicketAlcomex/TICKET/index.php?view=soporte");</script>';             
+                               break;
+                            case'ticket':
+                                echo '<script> window.open("/TicketAlcomex/TICKET/index.php?view=soporte");</script>';
+                            break;  
+                            case'Nuevo':
+                                echo '<script> window.open("/TicketAlcomex/TICKET/index.php?view=ticket");</script>';
+                            break;
+                            case'nuevo':
+                                echo '<script> window.open("/TicketAlcomex/TICKET/index.php?view=ticket");</script>';
+                                break;
+                           
+                        }
+                    }
+                    else{
+
+
+                    }
+                
+                
+                ?>
+              
             </form>
         </div>
     </div>

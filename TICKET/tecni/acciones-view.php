@@ -7,7 +7,7 @@ setlocale(LC_TIME, 'spanish');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception; 
-require '/xampp/htdocs/TL11EST.github.io/vendor/autoload.php';
+require '/xampp/htdocs/TicketAlcomex/vendor/autoload.php';
  
 if($_POST['nombre']!="" && $_POST['rol']==5267 && $_POST['id']){ 
     
