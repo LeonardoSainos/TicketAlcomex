@@ -101,6 +101,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
             </p>
             <p style="text-align:center;">
                 Creado: ' .  date("Y-m-d H:i:s").  ' <br>
+                Ticket: ' .$id_ticket . '<br>
                 Usuario :'. $NombreEmisor.' <br>
                 Correo : '. $CorreoEmisor .' <br> 
                 Asunto :'. $asunto_ticket. '<br>
