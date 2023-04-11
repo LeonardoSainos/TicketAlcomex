@@ -44,6 +44,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                 $AEstatus= $reg['Nombre'];
                 $Asolucion=$reg['solucion'];
                 $Acorreo = $reg['email_cliente'];
+                $Aserie = $reg['serie'];
 
                 $segunda= Mysql :: consulta("SELECT c.nombre_completo, c.email_cliente, d.nombre as depa FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $Atiende_edit");
                 $segundaa= mysqli_fetch_array($segunda,MYSQLI_ASSOC);
@@ -70,12 +71,12 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                 $mail->CharSet = 'UTF-8';                           //Set email format to HTML
                 $mail->Subject = 'Actualización de ticket #' . $Aserie;
                 $mail->Body=  '<h2 style="text-align:center; color: #fb5d14;">
-                ¡Hola <strong> ' . $ANombre . '. ! </strong> </h2><br>
+                ¡Hola <strong> ' . $ANombre . ' ! </strong> </h2><br>
                 <p style="text-align:center;" ><b>Se ha actualizado el estatus de tu Ticket:</b><br>
             </p>
             <p style="text-align:center;">
                 Actualizado: ' .  date("Y-m-d H:i:s").  ' <br>
-                Ticket : ' . $dd . '<br>
+                Ticket : ' . $Aserie . '<br>
                 Atiende :'. $NombreEmisor.' <br>
                 Correo : '. $CorreoEmisor .' <br> 
                 Estatus : <strong style="color:red;"> '.$AEstatus .' </strong><br>
