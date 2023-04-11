@@ -549,7 +549,7 @@
 $("#mt").click(BuscarUsuario);
     function BuscarUsuario(){
          var URL = "./admin.php?view=searchUsers&" + $("#where").val() + "=" + $("#busqueda").val();                    
-        alert(URL);
+        
          $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }
@@ -561,7 +561,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroUsers(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterUsers&" + $("#where").val() + "=" + $("#nombre").val();   
-                alert(URL);
+              
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -572,7 +572,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroFecha(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterUsers&" + $("#where").val() + "=" + $("#fecha").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -583,7 +583,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroEstatus(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterUsers&" + $("#where").val() + "=" + $("#estatusss").val();   
-                alert(URL);
+             
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -594,7 +594,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroCorreo(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterUsers&" + $("#where").val() + "=" + $("#correo").val();   
-                alert(URL);
+             
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -604,7 +604,7 @@ $("#mt").click(BuscarUsuario);
             function NextPage(pageId){
             var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
             var URL2 = "./admin.php?view=filterUsers&" + $("#where").val() + "=" + "&pagina=" + $(newPageId).val();   
-            alert(URL2);
+           
             $.get(URL2, function(datos, estado) {
                 $("#contenido").html(datos);
             });

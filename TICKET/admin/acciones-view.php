@@ -150,7 +150,7 @@ if(@$_POST['Desbloquear'])
                                   <br>
                                   <br>
                                   <p style="text-align:justify;">
-                                  Atentamente Soporte técnico Alcomex
+                                  Atentamente Soporte Técnico Alcomex
                                   <br>
                                   <hr>
                                   Esperamos haber atendido satisfactoriamente su problema.

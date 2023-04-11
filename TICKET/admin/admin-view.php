@@ -511,7 +511,7 @@
 $("#mt").click(BuscarUsuario);
     function BuscarUsuario(){
          var URL = "./admin.php?view=searchUsers&admin=" + $("#busqueda").val();                    
-            alert(URL);
+           
          $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }
@@ -523,7 +523,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroUsers(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterUsers&admin=" + $("#nombre").val();   
-                alert(URL);
+                
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -534,7 +534,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroFecha(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterUsers&admin=" + $("#fecha").val();   
-                alert(URL);
+             
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -547,7 +547,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroCorreo(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterUsers&admin=" + $("#correo").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -559,7 +559,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroEstatus(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterUsers&admin=" + $("#estatusss").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }

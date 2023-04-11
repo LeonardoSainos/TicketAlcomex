@@ -98,12 +98,13 @@ if(@$_POST['Desbloquear'])
                                 $mail->Subject = 'Reseteo de contraseña';
                                 $mail->Body= '<p style="text-align:justify;">Estimado usuario <strong> ' . $Nombre . '.: </strong> <br> Hemos reseteado su contraseña como lo solicitó. <br> Su nueva contraseña para acceder a su usuario de soporte técnico es: <b> <strong>' .$cifrado. '</strong></b><br><br><br>'.
             
-                                '  <img src="Support.png">'  .'
+                                ' <img width="250px" height="auto" src="https://scontent.fpbc1-1.fna.fbcdn.net/v/t39.30808-6/340835079_219065740720635_4950595825896346541_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=dbeb18&_nc_ohc=luxwI7hBcLoAX966O2M&_nc_ht=scontent.fpbc1-1.fna&oh=00_AfD9I8W2OeZ8hANUKlp9wcDfCd6mrA5fshIMCbP6tlaRmQ&oe=6438D9D3" />'  .'
+                                '  .'
                                   <br>
                                   <br>
                                   <br>
                                   <p style="text-align:justify;">
-                                  Atentamente Soporte técnico Alcomex
+                                  Atentamente Soporte Técnico Alcomex
                                   <br>
                                   <hr>
                                   Esperamos haber atendido satisfactoriamente su problema.

@@ -327,7 +327,7 @@ $("#fechaa").click(FiltroTicketf);
             function FiltroTicketf(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterTicket&filtro=" + $("#fecha").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -338,7 +338,7 @@ $("#fechaa").click(FiltroTicketf);
             function  FiltroTickets(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterTicket&filtro=" + $("#serie").val();   
-                alert(URL);
+                
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -349,7 +349,7 @@ $("#fechaa").click(FiltroTicketf);
             function  FiltroTickete(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterTicket&filtro=" + $("#eestatus").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -360,7 +360,7 @@ $("#fechaa").click(FiltroTicketf);
             function FiltroTicketa(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterTicket&filtro=" + $("#actualizado").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -370,7 +370,7 @@ $("#fechaa").click(FiltroTicketf);
             function FiltroTicketr(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterTicket&filtro=" + $("#creador").val();   
-                alert(URL);
+                
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }

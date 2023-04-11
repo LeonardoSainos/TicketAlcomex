@@ -460,7 +460,7 @@
             function FiltroDepaNombre(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterDepa&filtro=" + $("#nombre").val();   
-                alert(URL);
+                 
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -471,7 +471,7 @@
             function FiltroDepaFecha(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterDepa&filtro=" + $("#fecha").val();   
-                alert(URL);
+           
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -482,7 +482,7 @@
             function FiltroDepaLider(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterDepa&filtro=" + $("#lider").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -493,7 +493,7 @@
             function FiltroDepaCorreo(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterDepa&filtro=" + $("#correo").val();   
-                alert(URL);
+                
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }

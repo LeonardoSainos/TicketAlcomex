@@ -69,18 +69,18 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                 //Content
                 $mail->isHTML(true);       
                 $mail->CharSet = 'UTF-8';                           //Set email format to HTML
-                $mail->Subject = 'Actualización de ticket #' . $Aserie;
+                $mail->Subject = 'Actualización de Ticket #' . $Aserie;
                 $mail->Body=  '<h2 style="text-align:center; color: #fb5d14;">
                 ¡Hola <strong> ' . $ANombre . ' ! </strong> </h2><br>
                 <p style="text-align:center;" ><b>Se ha actualizado el estatus de tu Ticket:</b><br>
             </p>
             <p style="text-align:center;">
-                Actualizado: ' .  date("Y-m-d H:i:s").  ' <br>
+                Actualizado : ' .  date("Y-m-d H:i:s").  ' <br>
                 Ticket : ' . $Aserie . '<br>
-                Atiende :'. $NombreEmisor.' <br>
+                Atiende : '. $NombreEmisor.' <br>
                 Correo : '. $CorreoEmisor .' <br> 
-                Estatus : <strong style="color:red;"> '.$AEstatus .' </strong><br>
-                Solución : <strong style="color:red;"> '.$Asolucion. '</strong><br>
+                Estatus :<strong style="color:red;"> '.$AEstatus .' </strong><br>
+                Solución :<strong style="color:red;"> '.$Asolucion. '</strong><br>
 
             </p>
                <br> '.
@@ -277,20 +277,20 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                             <textarea class="form-control" rows="3"  name="solucion_ticket" required=""><?php echo $reg['solucion'];?></textarea>
                           </div>
                         </div>
-                    <center>
-                    <div class="form-group">
+                   
+                    <div class="form-group text-center">
                           <label  class="col-sm-2 control-label">Foto:</label>
                           <div class="col-sm-10">
-                                    <img style='padding:20px;border:2px solid #fb5d14;'  src='<?php echo"./user/". $reg['foto'] ?>' alt='foto ticket' width="150px" height="auto">
+                                    <img  style=" margin:5px; text-shadow: 0 0 30px #fb5d14; box-shadow: 0 0 20px #fb5d14; border-radius:1em;"  src='<?php echo"./user/". $reg['foto'] ?>' alt='Sin imagen' width="10%" height="auto">
                           </div>
                         </div>
-                    </center>
+                 
                        
 
                         <div class="row">
                             <div class="col-sm-offset-5">
                                 <div class="radio">
-                                    <label>
+                                 <label>
                                         <input type="radio" name="optionsRadios" value="option1" checked>
                                         No enviar solución al email del usuario
                                     </label>
@@ -298,7 +298,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
 
 
                                 <div class="radio">
-                                    <label>
+                                    <label >
                                         <input type="radio" name="optionsRadios" value="option2">
                                          Enviar solución al email del usuario
                                     </label>

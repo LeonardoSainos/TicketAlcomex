@@ -366,7 +366,7 @@ $("#fechaa").click(FiltroTicketf);
             function FiltroTicketf(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./index.php?view=filterTicket&filtro=" + $("#fecha").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -377,7 +377,7 @@ $("#fechaa").click(FiltroTicketf);
             function  FiltroTickets(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./index.php?view=filterTicket&filtro=" + $("#serie").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -388,7 +388,7 @@ $("#fechaa").click(FiltroTicketf);
             function  FiltroTickete(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./index.php?view=filterTicket&filtro=" + $("#eestatus").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -399,7 +399,7 @@ $("#fechaa").click(FiltroTicketf);
             function FiltroTicketa(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./index.php?view=filterTicket&filtro=" + $("#actualizado").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -409,7 +409,7 @@ $("#fechaa").click(FiltroTicketf);
             function FiltroTicketr(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./index.php?view=filterTicket&filtro=" + $("#creador").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -420,7 +420,7 @@ $("#fechaa").click(FiltroTicketf);
     function NextPage(pageId){
     var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
     var URL2 = "./index.php?view=filterTicket&filtro=" + $("#filtro").val() + "&pagina=" + $(newPageId).val();   
-    alert(URL2);
+    
     $.get(URL2, function(datos, estado) {
         $("#contenido").html(datos);
     });

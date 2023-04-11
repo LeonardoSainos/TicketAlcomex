@@ -100,8 +100,8 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                 <p style="text-align:center;" ><b>Se te ha asignado un nuevo ticket, los datos del ticket son los siguientes:</b><br>
             </p>
             <p style="text-align:center;">
-                Creado: ' .  date("Y-m-d H:i:s").  ' <br>
-                Ticket: ' .$id_ticket . '<br>
+                Creado : ' .  date("Y-m-d H:i:s").  ' <br>
+                Ticket : ' .$id_ticket . '<br>
                 Usuario :'. $NombreEmisor.' <br>
                 Correo : '. $CorreoEmisor .' <br> 
                 Asunto :'. $asunto_ticket. '<br>
@@ -259,17 +259,19 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Foto</label>
                           <div class="col-sm-10">
- 
-                              <div class='input-group'>
-                                <input type="file"  required class="form-control form-control-sm" placeholder="Foto(opcional)" name="foto" />
-                                <span class="input-group-addon"><i class="fa fa-image"></i></span>
+                              <div class='input-group text-center'>                            
+                                   <img width="25%" height="50%" style=" margin:15px;  text-shadow: 0 0 30px #fb5d14; box-shadow: 0 0 20px #fb5d14;" class="sombra" id="output"/>
+                                   <br>
+                                    <label for="imageUpload"  class="btn btn-warning btn-block btn-outlined"style=" padding:7px; text-shadow: 0 0 20px #fb5d14; box-shadow: 0 0 10px #fb5d14;">Añadir foto o imagen</label>  
+                                     <br>
+                                  <input type="file" accept="image/*" name="foto"  id="imageUpload"  style="display: none; text-shadow: 0 0 30px rgb(48, 26, 241); box-shadow: 0 0 20px rgb(19, 70, 238);" onchange="loadFile(event)">
                               </div>
                           </div>
                         </div>
                         
 
                         <div class="form-group">
-                          <div class="col-sm-offset-2 col-sm-10">
+                          <div class="col-sm-offset-2 col-sm-10 text-center">
                             <button type="submit" class="btn btn-warning">Abrir ticket</button>
                           </div>
                         </div>

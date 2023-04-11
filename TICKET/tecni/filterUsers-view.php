@@ -471,7 +471,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroUsers(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&users=" + $("#nombre").val();   
-                alert(URL);
+                
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -482,7 +482,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroFecha(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&users=" + $("#fecha").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -495,7 +495,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroCorreo(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&users=" + $("#correo").val();   
-                alert(URL);
+         
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -507,7 +507,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroEstatus(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&users=" + $("#estatusss").val();   
-                alert(URL);
+             
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -517,7 +517,7 @@ $("#mt").click(BuscarUsuario);
             function NextPage(pageId){
             var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
             var URL2 = "./tecni.php?view=filterUsers&" + $("#where").val() + "=" + "&pagina=" + $(newPageId).val();   
-            alert(URL2);
+      
             $.get(URL2, function(datos, estado) {
                 $("#contenido").html(datos);
             });

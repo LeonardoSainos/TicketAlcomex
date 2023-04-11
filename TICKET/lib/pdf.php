@@ -51,10 +51,6 @@ $html = $html .
                 
                     </tr>
 
-               
-                  
-
-
             </thead>
 </table>
 

@@ -530,7 +530,7 @@ $("#mt").click(BuscarUsuario);
     function BuscarUsuario(){
        // var URL="http://localhost:8888/9/Grafica/getimg.php?ancho="+$("#txtancho").val()+"&alto="+$("#txtalto").val();
         var URL = "./admin.php?view=searchUsers&" + $("#where").val() + "=" + $("#busqueda").val();    
-        alert(URL);    
+       
         $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }
@@ -541,7 +541,7 @@ $("#mt").click(BuscarUsuario);
     function NextPage(pageId){
     var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
     var URL2 = "./admin.php?view=searchUsers&" + $("#where").val() + "=" + $("#busqueda").val() + "&pagina=" + $(newPageId).val();   
-    alert(URL2);
+    
     $.get(URL2, function(datos, estado) {
         $("#contenido").html(datos);
     });
