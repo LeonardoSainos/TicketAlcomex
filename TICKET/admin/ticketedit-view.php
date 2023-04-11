@@ -71,14 +71,15 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                 $mail->Subject = 'Actualización de ticket #' . $Aserie;
                 $mail->Body=  '<h2 style="text-align:center; color: #fb5d14;">
                 ¡Hola <strong> ' . $ANombre . '. ! </strong> </h2><br>
-                <p style="text-align:center;" ><b>Se ha actualizado el estatus de tu ticket:</b><br>
+                <p style="text-align:center;" ><b>Se ha actualizado el estatus de tu Ticket:</b><br>
             </p>
             <p style="text-align:center;">
                 Actualizado: ' .  date("Y-m-d H:i:s").  ' <br>
+                Ticket : ' . $dd . '<br>
                 Atiende :'. $NombreEmisor.' <br>
                 Correo : '. $CorreoEmisor .' <br> 
                 Estatus : <strong style="color:red;"> '.$AEstatus .' </strong><br>
-                Solución : <strong style="color:red;"> '.$Asolucion.  '</strong>
+                Solución : <strong style="color:red;"> '.$Asolucion. '</strong><br>
 
             </p>
                <br> '.
@@ -89,7 +90,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                 </center>
                 <br>
                 <p style="text-align:center;">
-                Atentamente Soporte técnico Alcomex
+                Atentamente Soporte Técnico Alcomex
                 <br>
                 <hr>
                 </p>

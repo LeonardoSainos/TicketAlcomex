@@ -115,7 +115,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                 <br>
                
                 <p style="text-align:center;">
-                Atentamente Soporte técnico Alcomex
+                Atentamente Soporte Técnico Alcomex
                 <br>
                 <hr>
                 </p>
