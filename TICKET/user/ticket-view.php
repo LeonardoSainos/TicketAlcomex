@@ -21,7 +21,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
     $numero_filas = mysqli_num_rows($num);
 
     $numero_filas_total=$numero_filas+1;
-    $id_ticket="TK".$codigo."N".$numero_filas_total;
+    $id_ticket="TK".$codigo."ALC".$numero_filas_total;
     /*Fin codigo numero de ticket*/
     // $fecha_ticket= MysqlQuery::RequestPost('fecha_ticket');
     $nombre_ticket= MysqlQuery::RequestPost('name_ticket');
