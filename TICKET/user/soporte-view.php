@@ -5,7 +5,7 @@
     </div>
     <div class="col-sm-9 lead">
       <h2 class="text-info">Bienvenido al centro de soporte Alcomex</h2>
-      <p>Es muy facil de usar, si usted tiene algún problema,nos puede enviar un nuevo ticket, nosotros lo respondemos y solucionaremos su problema.<br>Si ya nos ha enviado un ticket puede consultar el estado de este mediante su <strong>Ticket ID</strong>.</p>
+      <p>Es muy fácil de usar, si usted tiene algún problema,nos puede enviar un nuevo ticket, nosotros lo respondemos y solucionaremos su problema.<br>Si ya nos ha enviado un ticket puede consultar el estado de este mediante su <strong>Ticket ID</strong>.</p>
     </div>
   </div><!--fin row 1-->
 

@@ -13,7 +13,7 @@
             <?php
               $orderby=["d.nombre","d.fecha","c.nombre_completo","d.correo"];
               $ordenamuestra= $orderby[0];
-               $iid= $_SESSION['id'];
+          
             // ELIMINAR DEPARTAMENTOS
                 if(isset($_POST['id_dele'])){
                     $id = MysqlQuery::RequestPost('id_dele');
@@ -439,7 +439,7 @@
        var datos=$tr.children("#tabla tbody tr td").map(function() {
        return $(this).text(); 
         });
-       $("#borrar_id").val(datos[8]);                                           
+       $("#borrar_id").val(datos[9]);                                           
         });
        
         
