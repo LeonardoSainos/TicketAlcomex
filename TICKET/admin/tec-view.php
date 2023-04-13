@@ -12,6 +12,7 @@
                         $iproc= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" .$id_user . "'");
                          $iproc2 = mysqli_fetch_array($iproc, MYSQLI_ASSOC);
                          $idBorrar = $iproc2['id_cliente'];   
+                     
                           // $eliminar= "email_cliente='$id_user'";                               
                             $cr = Mysql:: consulta(" SELECT * FROM ticket WHERE idUsuario = $idBorrar");
                             $creados = mysqli_num_rows($cr);
@@ -22,7 +23,7 @@
                             $pro = Mysql:: consulta ("SELECT * FROM  ticket WHERE id_Atiende = $idBorrar AND idStatus = 94575");
                             $proceso = mysqli_num_rows($pro);
       
-                if(MysqlQuery::ProcedimientoAlmacenado("EliminarUsuario","$idBorrar,'". date("Y-m-d")  ."','" . date("Y-m-d") . "',$pendientes, $creados, $resueltos, $proceso")){
+                if(MysqlQuery::ProcedimientoAlmacenado("EliminarUsuario","$idBorrar,'". date("Y-m-d") ."','" .date("Y-m-d"). "',$pendientes, $creados, $resueltos, $proceso")){
                     MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','cliente'");
                     MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','ticket'");
                     MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','departamento'");
@@ -508,7 +509,7 @@
        var datos=$tr.children("#tabla tbody td").map(function() {
        return $(this).text(); 
         });
-       $("#borrar_id").val(datos[4]);                                           
+       $("#borrar_id").val(datos[5]);                                           
         });        
 </script>
 

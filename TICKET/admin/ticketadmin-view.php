@@ -75,6 +75,12 @@
                 $num_ticket_my=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.id_atiende = $user  ORDER BY $ordenamuestra DESC ;");
                 $num_total_my=mysqli_num_rows($num_ticket_my);
 
+                /*Creados */
+
+                $num_ticket_cre=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idUsuario = $user  ORDER BY $ordenamuestra DESC ;");
+                $num_total_cre=mysqli_num_rows($num_ticket_cre);
+
+
 
             ?>
 
@@ -121,6 +127,7 @@
                             <li><a href="./admin.php?view=ticketadmin&ticket=process"><i class="fa fa-folder-open"></i>&nbsp;&nbsp;Tickets en proceso&nbsp;&nbsp;<span class="badge"><?php echo $num_total_proceso; ?></span></a></li>
                             <li><a href="./admin.php?view=ticketadmin&ticket=resolved"><i class="fa fa-thumbs-o-up"></i>&nbsp;&nbsp;Tickets resueltos&nbsp;&nbsp;<span class="badge"><?php echo $num_total_res; ?></span></a></li>
                             <li><a href="./admin.php?view=ticketadmin&ticket=myticket"><i class="fa fa-user-o"></i>&nbsp;&nbsp;Mis tickets&nbsp;&nbsp;<span class="badge"><?php echo $num_total_my; ?></span></a></li>
+                            <li><a href="./admin.php?view=ticketadmin&ticket=created"><i class="fa fa-user-o"></i>&nbsp;&nbsp;Creados&nbsp;&nbsp;<span class="badge"><?php echo $num_total_cre; ?></span></a></li>
                     
                         </ul>
                     </div>
@@ -162,13 +169,13 @@
                                         $estatus= '<input type="hidden" name="estatus" value="myticket" id="estatus"/>';
                                         echo $estatus;
                                     }
-                                    
-                                    
-                                    else{
-                                        $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  ORDER BY t.fecha DESC LIMIT $inicio, $regpagina";
-                                        $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
+                                    elseif($_GET['ticket']=="created"){
+                                        $consulta = "SELECT  SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente, c.telefono_celular,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idUsuario = $user  ORDER BY t.fecha DESC";
+                                        $estatus= '<input type="hidden" name="estatus" value="created" id="estatus"/>';
                                         echo $estatus;
                                     }
+                                    
+                                     
                                 }else{
                                     $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario,c.email_cliente, d.nombre as departamento , e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  ORDER BY t.fecha DESC LIMIT $inicio, $regpagina";
                                     $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
@@ -193,8 +200,8 @@
                                         <th class="text-center">Fecha</th>
                                         <th class="text-center">Serie</th>
                                         <th class="text-center">Estado</th>
-                                        <th class="text-center">Nombre</th>
-                                        <th class="text-center">Email</th>
+                                        <th class="text-center">Usuario</th>
+                                        <th class="text-center">Email usuario</th>
                                         <th class="text-center">Teléfono</th>
                                         <th class="text-center">Departamento</th>     
                                         <th class="text-center">Opciones</th>
@@ -376,17 +383,18 @@ $("#mt").click(BuscarTicket);
     function BuscarTicket(){
         //admin.php?view=ticketadmin&ticket=all
          var URL = "./admin.php?view=searchTicket&ticket=" + $("#estatus").val() + "&busqueda=" + $("#busqueda").val();   
+         alert(URL);
         $.get(URL,function (datos,estado){
             $("#contenido").html(datos); 
         }
         );
 }
  
-$("#fechaa").click(FiltroTicketf);
+            $("#fechaa").click(FiltroTicketf);
             function FiltroTicketf(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./admin.php?view=filterTicket&filtro=" + $("#fecha").val();   
-              
+                var URL = "./admin.php?view=filterTicket&ticket=" + $("#estatus").val() +"&filtro=" + $("#fecha").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -396,8 +404,8 @@ $("#fechaa").click(FiltroTicketf);
             $("#seriee").click(FiltroTickets);
             function  FiltroTickets(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./admin.php?view=filterTicket&filtro=" + $("#serie").val();   
-         
+                var URL = "./admin.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#serie").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -407,8 +415,8 @@ $("#fechaa").click(FiltroTicketf);
             $("#estatuss").click(FiltroTickete);
             function  FiltroTickete(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./admin.php?view=filterTicket&filtro=" + $("#eestatus").val();   
-              
+                var URL = "./admin.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#eestatus").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -418,8 +426,8 @@ $("#fechaa").click(FiltroTicketf);
             $("#actualizadoo").click(FiltroTicketa);
             function FiltroTicketa(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./admin.php?view=filterTicket&filtro=" + $("#actualizado").val();   
-                
+                var URL = "./admin.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#actualizado").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -428,8 +436,8 @@ $("#fechaa").click(FiltroTicketf);
             $("#creadorr").click( FiltroTicketr);
             function FiltroTicketr(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./admin.php?view=filterTicket&filtro=" + $("#creador").val();   
-              
+                var URL = "./admin.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#creador").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }

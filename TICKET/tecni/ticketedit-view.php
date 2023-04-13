@@ -75,8 +75,8 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
           Ticket : ' . $Aserie . '<br>
           Atiende : '. $NombreEmisor.' <br>
           Correo : '. $CorreoEmisor .' <br> 
-          Estatus : <strong style="color:red;">'.$AEstatus .' </strong><br>
-          Solución : <strong style="color:red;">'.$Asolucion. '</strong><br>
+          Estatus : <strong style="color:red;">'.$estado_edit .' </strong><br>
+          Solución : <strong style="color:red;">'.$solucion_edit. '</strong><br>
 
       </p>
          <br> '.

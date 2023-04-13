@@ -6,13 +6,14 @@
         /*Eliminar */
             if(isset($_POST['id_dele'])){
                         $id_user=MysqlQuery::RequestPost('id_dele');
+                       
                         $iproc= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" .$id_user . "'");
                          $iproc2 = mysqli_fetch_array($iproc, MYSQLI_ASSOC);
                          $idBorrar = $iproc2['id_cliente'];   
                           // $eliminar= "email_cliente='$id_user'";                               
-                            $cr = Mysql:: consulta(" SELECT * FROM ticket WHERE idUsuario = $idBorrar");
+                            $cr = Mysql:: consulta("SELECT * FROM ticket WHERE idUsuario = $idBorrar");
                             $creados = mysqli_num_rows($cr);
-                            $re= Mysql:: consulta(" SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94576");
+                            $re= Mysql:: consulta("SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94576");
                             $resueltos= mysqli_num_rows($re); 
                             $pen= Mysql:: consulta  ("SELECT * FROM ticket WHERE id_Atiende = $idBorrar AND idStatus = 94574 ");
                             $pendientes = mysqli_num_rows($pen);
@@ -513,7 +514,7 @@
        var datos=$tr.children("#tabla tbody td").map(function() {
        return $(this).text(); 
         });
-       $("#borrar_id").val(datos[4]);                                           
+       $("#borrar_id").val(datos[5]);                                           
         });
 
 $("#mt").click(BuscarUsuario);

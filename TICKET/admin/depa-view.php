@@ -13,14 +13,14 @@
             <?php
               $orderby=["d.nombre","d.fecha","c.nombre_completo","d.correo"];
               $ordenamuestra= $orderby[0];
-          
+              $idM = $_SESSION['id'];
             // ELIMINAR DEPARTAMENTOS
                 if(isset($_POST['id_dele'])){
                     $id = MysqlQuery::RequestPost('id_dele');
                   
                     if($id!=null || $id!=""){
                                 $eliminar = MysqlQuery::ProcedimientoAlmacenado("Depa", "$id");
-                                $idM = $_SESSION['id'];                            
+                                                     
                                 MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$idM,'Eliminar','".date("Y-m-d H:i:s") ."','departamento'");
                                 
                         echo '
@@ -58,7 +58,7 @@
                     $Existe = Mysql::consulta("SELECT * FROM departamento WHERE correo = '" . $Gcorreo . "' OR nombre = '" . $Gnombre . "'");
                     if(mysqli_num_rows($Existe)<=0){
                         if(MysqlQuery :: Guardar("departamento","nombre,correo,descripcion,idEstatus,idJefe","'$Gnombre','$Gcorreo','$Gdescripcion',$Gestatus, $Glider")){
-                            MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Insertar','".date("Y-m-d H:i:s") ."','departamento'");
+                            MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$idM,'Insertar','".date("Y-m-d H:i:s") ."','departamento'");
 
                      
                             echo '
@@ -87,7 +87,7 @@
 
                 }
                 /* Todos los departamentos*/
-                $num_depa_all=Mysql::consulta("SELECT DISTINCT d.idDepartamento,d.nombre,d.correo,d.descripcion, e.Nombre, c.nombre_completo, c.email_cliente FROM departamento d INNER JOIN estatus e ON d.idEstatus = e.idEstatus INNER JOIN cliente c ON d.idJefe = c.id_cliente");
+                $num_depa_all=Mysql::consulta("SELECT DISTINCT d.idDepartamento,d.nombre,d.correo,d.descripcion, e.Nombre, c.nombre_completo, c.email_cliente FROM departamento d INNER JOIN estatus e ON d.idEstatus = e.idEstatus INNER JOIN cliente c ON d.idJefe = c.id_cliente WHERE idDepartamento <> 2505");
                 $num_total_all=mysqli_num_rows($num_depa_all);
             ?>
             
@@ -140,7 +140,7 @@
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
                                 $regpagina = 50;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
-                                    $consulta= "SELECT SQL_CALC_FOUND_ROWS d.fecha,d.idDepartamento,d.nombre,d.correo,d.descripcion, e.Nombre, c.nombre_completo, c.email_cliente FROM departamento d INNER JOIN estatus e ON d.idEstatus = e.idEstatus INNER JOIN cliente c ON d.idJefe = c.id_cliente   ORDER BY " . $ordenamuestra ." ASC LIMIT $inicio, $regpagina";
+                                    $consulta= "SELECT SQL_CALC_FOUND_ROWS d.fecha,d.idDepartamento,d.nombre,d.correo,d.descripcion, e.Nombre, c.nombre_completo, c.email_cliente FROM departamento d INNER JOIN estatus e ON d.idEstatus = e.idEstatus INNER JOIN cliente c ON d.idJefe = c.id_cliente  WHERE d.idDepartamento <>2505 ORDER BY " . $ordenamuestra ." ASC LIMIT $inicio, $regpagina";
                                 $seldepa=mysqli_query($mysqli,$consulta);
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);

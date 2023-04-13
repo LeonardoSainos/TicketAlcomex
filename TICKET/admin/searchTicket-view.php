@@ -67,6 +67,12 @@
                 $num_ticket_my=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.id_atiende = $user  ORDER BY t.fecha DESC ;");
                 $num_total_my=mysqli_num_rows($num_ticket_my);
 
+                 /*Creados */
+
+                 $num_ticket_cre=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idUsuario = $user  ORDER BY t.fecha DESC ;");
+                 $num_total_cre=mysqli_num_rows($num_ticket_cre);
+ 
+
 
             ?>
  <div id="contenido">           
@@ -99,6 +105,7 @@
                             <li><a href="./admin.php?view=ticketadmin&ticket=process"><i class="fa fa-folder-open"></i>&nbsp;&nbsp;Tickets en proceso&nbsp;&nbsp;<span class="badge"><?php echo $num_total_proceso; ?></span></a></li>
                             <li><a href="./admin.php?view=ticketadmin&ticket=resolved"><i class="fa fa-thumbs-o-up"></i>&nbsp;&nbsp;Tickets resueltos&nbsp;&nbsp;<span class="badge"><?php echo $num_total_res; ?></span></a></li>
                             <li><a href="./admin.php?view=ticketadmin&ticket=myticket"><i class="fa fa-user-o"></i>&nbsp;&nbsp;Mis tickets&nbsp;&nbsp;<span class="badge"><?php echo $num_total_my; ?></span></a></li>
+                            <li><a href="./admin.php?view=ticketadmin&ticket=created"><i class="fa fa-user-o"></i>&nbsp;&nbsp;Creados&nbsp;&nbsp;<span class="badge"><?php echo $num_total_cre; ?></span></a></li>
                     
                         </ul>
                     </div>
@@ -139,6 +146,11 @@
                                         $estatus ='<input type="hidden" name="estatus" value="myticket" id="estatus"/>';
                                         echo $estatus;
                                     }
+                                    elseif($_GET['ticket']=="created"){
+                                        $consulta = "SELECT SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie, t.asunto,t.mensaje, t.solucion, c.nombre_completo AS nombre_usuario, c.email_cliente, c.telefono_celular , d.nombre AS departamento, e.Nombre AS estado_ticket,t.fecha_actualizacion FROM ticket t INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento INNER JOIN estatus e ON t.idStatus=e.idEstatus INNER JOIN cliente c ON t.idUsuario = c.id_cliente WHERE (t.id LIKE '%$busqueda%' OR t.fecha LIKE '%$busqueda%' OR t.serie LIKE '%$busqueda%' OR t.asunto LIKE '%$busqueda%' OR t.mensaje LIKE '%$busqueda%' OR t.solucion LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR t.fecha_actualizacion LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%')  AND t.idUsuario = $user ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
+                                        $estatus= '<input type="hidden" name="estatus" value="created" id="estatus"/>';
+                                        echo $estatus;
+                                    }
                                 
                                      
                                 }else{
@@ -167,8 +179,8 @@
                                         <th class="text-center">Fecha</th>
                                         <th class="text-center">Serie</th>
                                         <th class="text-center">Estado</th>
-                                        <th class="text-center">Nombre</th>
-                                        <th class="text-center">Email</th>
+                                        <th class="text-center">Usuario</th>
+                                        <th class="text-center">Email usuario</th>
                                         <th class="text-center">Teléfono</th>
                                         <th class="text-center">Departamento</th>     
                                         <th class="text-center">Opciones</th>

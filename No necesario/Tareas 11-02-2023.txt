@@ -9,7 +9,7 @@ TAREAS POR HACER HOY:
  alter talbe registro_alteraciones drop foreign key
 
 24-02-2023
-1.- Arreglar diseño de index ***
+1.- Arreglar diseño de index ***///////////////////////////////////////////////////
 2.- Productos eliminar ///////////////////////////
 3.- Propiedad hover en nav bar de acuerdo al logotipo ////////////////////////
 4.- Color de tablas ////////////////////////////////
@@ -24,7 +24,7 @@ TAREAS POR HACER HOY:
 13.- Reseteo de contraseña*** //////////////////////////
 14.- Añadir usuario***  ////////////////////////////
 15.- CRUD departamento*** //////////////////////////
-16.- Funcionalidad de envio de correo*** 
+16.- Funcionalidad de envio de correo*** ////////////////////////////
 17.- Copias de seguridad diarias *** ///////////////////////////
 18.- Bug al superar los 20 tickets /////////////////////////
 19-. CRUD Usuario**** ///////////////////////////////
@@ -45,4 +45,4 @@ TAREAS POR HACER HOY:
 32.- En pdf cambiar Fecha por creado ///////////////////////////////
 33.- Filtros de busqueda /////////////////////////////////////
 34.- Bug pdf nuevo, en acentos /////////////////////////////////
-35.- App web progresiva
+35.- App web progresiva///////////////////////////////////

@@ -68,6 +68,12 @@
                 /* Tickets resueltos*/
                 $num_ticket_res=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE ( e.idEstatus = 94576 OR (e.Nombre='Resuelto' OR e.Nombre='RESUELTO')) AND t.id_atiende = $idAtiende ORDER BY " . $ordenamuestra. " DESC");
                 $num_total_res=mysqli_num_rows($num_ticket_res);
+
+                 /*Creados */
+
+                 $num_ticket_cre=Mysql::consulta("SELECT t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idUsuario = $idAtiende  ORDER BY $ordenamuestra DESC ;");
+                 $num_total_cre=mysqli_num_rows($num_ticket_cre);
+ 
             ?>
 
             <div class="container">
@@ -95,6 +101,8 @@
                             <li><a href="./tecni.php?view=ticketTecni&ticket=pending"><i class="fa fa-envelope"></i>&nbsp;&nbsp;Tickets pendientes&nbsp;&nbsp;<span class="badge"><?php echo $num_total_pend; ?></span></a></li>
                             <li><a href="./tecni.php?view=ticketTecni&ticket=process"><i class="fa fa-folder-open"></i>&nbsp;&nbsp;Tickets en proceso&nbsp;&nbsp;<span class="badge"><?php echo $num_total_proceso; ?></span></a></li>
                             <li><a href="./tecni.php?view=ticketTecni&ticket=resolved"><i class="fa fa-thumbs-o-up"></i>&nbsp;&nbsp;Tickets resueltos&nbsp;&nbsp;<span class="badge"><?php echo $num_total_res; ?></span></a></li>
+                            <li><a href="./tecni.php?view=ticketTecni&ticket=created"><i class="fa fa-user-o"></i>&nbsp;&nbsp;Creados&nbsp;&nbsp;<span class="badge"><?php echo $num_total_cre; ?></span></a></li>
+                    
                         </ul>
                     </div>
 
@@ -134,6 +142,12 @@
                                         $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
                                         echo $estatus;
                                     }
+                                    else if($_GET['ticket']=="created"){
+                                        $consulta = "SELECT  SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente, c.telefono_celular,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idUsuario = '$idAtiende' ORDER BY $ordenamuestra DESC";
+                                        $estatus= '<input type="hidden" name="estatus" value="created" id="estatus"/>';
+                                        echo $estatus;
+                                    }
+                                    
                                 }else{
                                     $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario,c.email_cliente, d.nombre as departamento , e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE t.id_atiende = '$idAtiende' ORDER BY  $ordenamuestra DESC LIMIT $inicio, $regpagina";
                                     $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
@@ -322,12 +336,11 @@ $("#mt").click(BuscarTicket);
 
 
 
-    
-$("#fechaa").click(FiltroTicketf);
+    $("#fechaa").click(FiltroTicketf);
             function FiltroTicketf(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterTicket&filtro=" + $("#fecha").val();   
-               
+                var URL = "./tecni.php?view=filterTicket&ticket=" + $("#estatus").val() +"&filtro=" + $("#fecha").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -336,9 +349,9 @@ $("#fechaa").click(FiltroTicketf);
 
             $("#seriee").click(FiltroTickets);
             function  FiltroTickets(){
-                //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterTicket&filtro=" + $("#serie").val();   
-                
+                //tecni.php?view=tickettecni&ticket=all
+                var URL = "./tecni.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#serie").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -347,9 +360,9 @@ $("#fechaa").click(FiltroTicketf);
 
             $("#estatuss").click(FiltroTickete);
             function  FiltroTickete(){
-                //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterTicket&filtro=" + $("#eestatus").val();   
-               
+                //tecni.php?view=tickettecni&ticket=all
+                var URL = "./tecni.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#eestatus").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -358,9 +371,9 @@ $("#fechaa").click(FiltroTicketf);
 
             $("#actualizadoo").click(FiltroTicketa);
             function FiltroTicketa(){
-                //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterTicket&filtro=" + $("#actualizado").val();   
-               
+                //tecni.php?view=ticketadmin&ticket=all
+                var URL = "./tecni.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#actualizado").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -368,9 +381,9 @@ $("#fechaa").click(FiltroTicketf);
             }
             $("#creadorr").click( FiltroTicketr);
             function FiltroTicketr(){
-                //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterTicket&filtro=" + $("#creador").val();   
-                
+                //tecni.php?view=ticketadmin&ticket=all
+                var URL = "./tecni.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#creador").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }

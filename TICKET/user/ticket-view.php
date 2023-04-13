@@ -21,7 +21,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
     $numero_filas = mysqli_num_rows($num);
 
     $numero_filas_total=$numero_filas+1;
-    $id_ticket="TK".$codigo."ALC".$numero_filas_total;
+    $id_ticket="TK".$codigo."N".$numero_filas_total;
     /*Fin codigo numero de ticket*/
     // $fecha_ticket= MysqlQuery::RequestPost('fecha_ticket');
     $nombre_ticket= MysqlQuery::RequestPost('name_ticket');
@@ -34,32 +34,39 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
 
     $autoriza= false;
     $imagen_ticket="";
-    if(isset($_FILES['foto'])) {
+    
+
+    if(isset($_FILES['foto']) && !empty($_FILES['foto']['tmp_name'])){
         $archivo = $_FILES['foto'];
         $nombre = $archivo['name'];
         $tipo= $archivo['type'];
-        $ruta_temporal = $archivo['tmp_name'];
         $size = $archivo['size'];
-        $dimensiones = getimagesize($ruta_temporal);
-       // $width= $dimensiones[0];
-        //$height= $dimensiones[1];
-        $carpeta = "../TICKET/user/Fotos";
-        if($tipo!= "image/jpg" && $tipo!="image/JPG" && $tipo!="image/jpeg" && $tipo!= "image/png" && $tipo!="image/gif") {
-            echo "<script>alert('El archivo que tratas de enviar no es una foto o imagen');            
+        $ruta_temporal = $archivo['tmp_name']; 
+    if(!empty($ruta_temporal)) {
+    $dimensiones = getimagesize($ruta_temporal);
+    $carpeta = "../TICKET/user/Fotos";
+    if($tipo!= "image/jpg" && $tipo!="image/JPG" && $tipo!="image/jpeg" && $tipo!= "image/png" && $tipo!="image/gif") {
+        echo "<script>alert('El archivo que tratas de enviar no es una foto o imagen');            
                   </script>";
-            $autoriza= false;
-        } elseif($size > 5 *1024*1024) {
-            echo "<script>alert('Error, el tamaño máximo permitido es de 5MB');
+        $autoriza= false;
+    } elseif($size > 5 *1024*1024) {
+        echo "<script>alert('Error, el tamaño máximo permitido es de 5MB');
         
                 </script>";
-            $autoriza= false;
-        } else {
-            $src = $carpeta . '/'. $nombre;
-            move_uploaded_file($ruta_temporal, $src);
-            $imagen_ticket= "Fotos/".$nombre;
-            $autoriza= true;
-        }
+        $autoriza= false;
+    } else {
+        $src = $carpeta . '/'. $nombre;
+        move_uploaded_file($ruta_temporal, $src);
+        $imagen_ticket= "Fotos/".$nombre;
+        $autoriza= true;
     }
+  }
+    }
+    else{
+      $autoriza= true;
+      $imagen_ticket= "Fotos/error.jp";
+    }
+   
 
     if($autoriza==true) {
         if(MysqlQuery::Guardar("ticket", "foto,serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende", "'$imagen_ticket','$id_ticket','$asunto_ticket','$mensaje_ticket',$id,'$departamento_ticket',94574,$tecnico")) {
@@ -105,7 +112,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                 //Content
                 $mail->isHTML(true);       
                 $mail->CharSet = 'UTF-8';                           //Set email format to HTML
-                $mail->Subject = 'Nuevo ticket #' . $id_ticket;
+                $mail->Subject = 'Nuevo Ticket #' . $id_ticket;
                 $mail->Body=  '<h2 style="text-align:center; color: #fb5d14;">
                 ¡Hola <strong> ' . $Nombre . ' ! </strong> </h2><br>
                 <p style="text-align:center;" ><b>Se te ha asignado un nuevo ticket, los datos del ticket son los siguientes:</b><br>
@@ -148,7 +155,8 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
 
           
 
-        } else {
+        } else  {
+          $autoriza == false;
             echo '
                 <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -204,7 +212,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                           <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                <input readonly="" type="email" class="form-control" id="inputEmail3" required  placeholder="Email" name="email_ticket" required="" title="Ejemplo@dominio.com" value="<?php echo $_SESSION['email']; ?>" >
+                                <input readonly="" type="email" class="form-control" id="inputEmail3"   placeholder="Email" name="email_ticket" required="" title="Ejemplo@dominio.com" value="<?php echo $_SESSION['email']; ?>" >
                                 <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
                               </div> 
                           </div>
