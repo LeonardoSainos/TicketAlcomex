@@ -106,7 +106,7 @@
                 <img src="./img/card_identy.png" alt="Image" class="img-responsive animated flipInY">
             </div>
             <div class="col-sm-10">
-              <p class="lead text-info">Bienvenido técnico, en esta página se muestran todos los <strong>Usuarios </strong> registrados en soporte técnico Alcomex. <?php echo $where ." " .  $rol; ?></p>
+              <p class="lead text-info">Bienvenido técnico, en esta página se muestran todos los <strong>Usuarios </strong> registrados en soporte técnico Alcomex.</p>
             </div>
           </div>
         </div>
