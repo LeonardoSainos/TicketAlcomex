@@ -383,7 +383,7 @@ $("#mt").click(BuscarTicket);
     function BuscarTicket(){
         //admin.php?view=ticketadmin&ticket=all
          var URL = "./admin.php?view=searchTicket&ticket=" + $("#estatus").val() + "&busqueda=" + $("#busqueda").val();   
-         alert(URL);
+        
         $.get(URL,function (datos,estado){
             $("#contenido").html(datos); 
         }
@@ -394,7 +394,7 @@ $("#mt").click(BuscarTicket);
             function FiltroTicketf(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterTicket&ticket=" + $("#estatus").val() +"&filtro=" + $("#fecha").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -405,7 +405,7 @@ $("#mt").click(BuscarTicket);
             function  FiltroTickets(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#serie").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -416,7 +416,7 @@ $("#mt").click(BuscarTicket);
             function  FiltroTickete(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#eestatus").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -427,7 +427,7 @@ $("#mt").click(BuscarTicket);
             function FiltroTicketa(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#actualizado").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -437,7 +437,7 @@ $("#mt").click(BuscarTicket);
             function FiltroTicketr(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./admin.php?view=filterTicket&ticket=" + $("#estatus").val() + "&filtro=" + $("#creador").val();   
-                alert(URL);
+               
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }

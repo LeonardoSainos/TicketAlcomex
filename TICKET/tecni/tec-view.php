@@ -515,7 +515,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroUsers(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&tec=" + $("#nombre").val(); 
-                alert(URL);
+                 
                  $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -526,7 +526,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroFecha(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&tec=" + $("#fecha").val();   
-                alert(URL);
+                 
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -539,7 +539,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroCorreo(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&tec=" + $("#correo").val();   
-                alert(URL);
+                 
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -551,7 +551,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroEstatus(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&tec=" + $("#estatusss").val();   
-                alert(URL);
+                 
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
