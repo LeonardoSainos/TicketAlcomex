@@ -1,7 +1,7 @@
 {
     "name":"Sistema de tickets soporte técnico Alcomex",
     "short_name":"Alcomex",
-    "start_url":"./index.php",
+    "start_url":"../index.php",
     "display":"standalone",
     "theme_color":"#fb5d14",
     "background_color":"#fb5d14",
