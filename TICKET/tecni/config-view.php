@@ -339,11 +339,11 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
                          <form role="form" action="" method="POST">
                          <div class="form-group">
                            <label><i class="fa fa-male"></i>&nbsp;Nombre completo</label>
-                           <input type="text" class="form-control" value="<?php echo $reg1['nombre_completo']; ?>" name="nombre" placeholder="Nombre completo" required="" pattern="[a-zA-Z ]{1,40}" title="Nombre Apellido" maxlength="40">
-                         </div>
+                           <input type="text" class="form-control" value="<?php echo $reg1['nombre_completo']; ?>" name="nombre" placeholder="Nombre completo" required=""  maxlength="65">
+                          </div>
                          <div class="form-group">
                            <label><i class="fa fa-user"></i>&nbsp;Nombre de Usuario</label>
-                           <input type="text" class="form-control" value="<?php echo $reg1['nombre_usuario']; ?>" name="nombre_usuario" placeholder="Nombre anterior de administrador" required="" pattern="[a-zA-Z0-9]{1,15}" title="Ejemplo7 maximo 15 caracteres" maxlength="15">
+                           <input type="text" class="form-control" value="<?php echo $reg1['nombre_usuario']; ?>" name="nombre_usuario" placeholder="Nombre anterior de administrador" required=""   maxlength="25">
                          </div>
                      
                          <div class="form-group">

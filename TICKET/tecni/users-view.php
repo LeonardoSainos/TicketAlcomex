@@ -95,8 +95,7 @@
                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
-                                                        <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" name="Resetear" value=" Resetear contraseña" /> </a></li>  
-                                            
+                                                         
                                                  </ul>
                                           </div>  
                                           <div style="display:flex; float:right;">
@@ -363,7 +362,7 @@
                                                       <div class='col-sm-10'>
                                                         <div class="input-group">
                                         
-                                                <?php $E=Mysql::consulta("SELECT d.idDepartamento , d.nombre from departamento d  INNER JOIN cliente c ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $user ");
+                                                <?php $E=Mysql::consulta("SELECT d.nombre,d.idDepartamento From departamento d INNER JOIN cliente c ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $user");
                                                 echo "
                                                     
                                                 <select REQUIRED  class='formu form-control'name='Gdepartamento'>";
@@ -438,7 +437,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroUsers(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&users=" + $("#nombre").val();   
-                
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -449,7 +448,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroFecha(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&users=" + $("#fecha").val();   
-               
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -462,7 +461,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroCorreo(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&users=" + $("#correo").val();   
-            
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -474,7 +473,7 @@ $("#mt").click(BuscarUsuario);
             function FiltroEstatus(){
                 //admin.php?view=ticketadmin&ticket=all
                 var URL = "./tecni.php?view=filterUsers&users=" + $("#estatusss").val();   
-               
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }

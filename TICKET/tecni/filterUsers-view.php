@@ -106,7 +106,7 @@
                 <img src="./img/card_identy.png" alt="Image" class="img-responsive animated flipInY">
             </div>
             <div class="col-sm-10">
-              <p class="lead text-info">Bienvenido técnico, en esta página se muestran todos los <strong>Usuarios </strong> registrados en soporte técnico Alcomex.</p>
+              <p class="lead text-info">Bienvenido técnico, en esta página se muestran todos los <strong>Usuarios </strong> registrados en soporte técnico Alcomex. <?php echo $where ." " .  $rol; ?></p>
             </div>
           </div>
         </div>
@@ -125,8 +125,7 @@
                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
-                                                        <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" name="Resetear" value=" Resetear contraseña" /> </a></li>  
-                                            
+                                                       
                                                  </ul>
                                           </div>  
                                           <div style="display:flex; float:right;">
@@ -163,7 +162,7 @@
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
                                 $regpagina = 15;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
-                                $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS cliente.id_cliente, cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta, cliente.Fecha_creacion FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=9947  ORDER BY $ordenamuestra LIMIT $inicio, $regpagina");
+                                $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS cliente.id_cliente, cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta, cliente.Fecha_creacion FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=$rol  ORDER BY $ordenamuestra LIMIT $inicio, $regpagina");
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);                        
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
@@ -458,7 +457,7 @@
 <script>
 $("#mt").click(BuscarUsuario);
     function BuscarUsuario(){
-         var URL = "./tecni.php?view=searchUsers&users=" + $("#busqueda").val();                    
+         var URL = "./tecni.php?view=searchUsers&" +$("#where").val() + "=" + $("#busqueda").val();                    
         $.get(URL,function (datos,estado){
             $("#contenido").html(datos);
         }
@@ -470,8 +469,9 @@ $("#mt").click(BuscarUsuario);
     $("#nombree").click(FiltroUsers);
             function FiltroUsers(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterUsers&users=" + $("#nombre").val();   
                 
+                var URL = "./tecni.php?view=filterUsers&"  + $("#where").val() + "=" + $("#nombre").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -481,8 +481,8 @@ $("#mt").click(BuscarUsuario);
             $("#fechaa").click(FiltroFecha);
             function FiltroFecha(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterUsers&users=" + $("#fecha").val();   
-               
+                var URL = "./tecni.php?view=filterUsers&" + $("#where").val() + "=" + $("#fecha").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -494,8 +494,8 @@ $("#mt").click(BuscarUsuario);
             $("#correoo").click(FiltroCorreo);
             function FiltroCorreo(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterUsers&users=" + $("#correo").val();   
-         
+                var URL = "./tecni.php?view=filterUsers&" + $("#where").val() + "=" + $("#correo").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -506,8 +506,8 @@ $("#mt").click(BuscarUsuario);
             $("#estatuss").click(FiltroEstatus);
             function FiltroEstatus(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterUsers&users=" + $("#estatusss").val();   
-             
+                var URL = "./tecni.php?view=filterUsers&" + $("#where").val() + "=" + $("#estatusss").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -517,7 +517,7 @@ $("#mt").click(BuscarUsuario);
             function NextPage(pageId){
             var newPageId = "#pagina" + pageId; // Construir el nuevo ID de la página
             var URL2 = "./tecni.php?view=filterUsers&" + $("#where").val() + "=" + "&pagina=" + $(newPageId).val();   
-      
+            alert(URL);
             $.get(URL2, function(datos, estado) {
                 $("#contenido").html(datos);
             });

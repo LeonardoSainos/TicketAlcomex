@@ -135,11 +135,10 @@
                                                 <!-- dropdown menu links -->
                                                         
                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
+                                                   
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
                                                         <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
-                                                        <li class=><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" name="Resetear" value=" Resetear contraseña" /> </a></li>  
-                                            
+                                                       
                                                  </ul>
                                           </div>  
                                           <div style="display:flex; float:right;">
@@ -178,13 +177,13 @@
                                 $regpagina = 15;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
 
-                                $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS cliente.id_cliente, cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta, cliente.Fecha_creacion  FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=5267  ORDER by $ordenamuestra LIMIT $inicio, $regpagina");
+                                $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS cliente.id_cliente, cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta, cliente.Fecha_creacion  FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  WHERE cliente.id_rol=5267  ORDER by $ordenamuestra LIMIT $inicio, $regpagina");
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);                        
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
                                 if(mysqli_num_rows($selusers)>0):
                             ?>
-                            <form id="acciones" method="POST" action="../TICKET/admin/acciones-view.php">
+                            <form id="acciones" method="POST" action="../TICKET/tecni/acciones-view.php">
                             <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre'] ;?>"/>
                             <input type="hidden" name="rol"value="<?php echo $_SESSION['rol'];?>"/>
                             <input type="hidden" name="id" value="<?php echo $_SESSION['id'];?>"/>
@@ -406,34 +405,16 @@
                                                       </div>
                                                    </div>
                                                 <br><br>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Rol:</label>
-                                                      <div class='col-sm-10'>
-                                                        <div class="input-group">
-                                                <?php $E=Mysql::consulta("SELECT * FROM rol ");
-                                                echo "
-                                                   <select REQUIRED  class='formu form-control'name='Grol'>";
-                                                if ($E) {
-                                                    while ($EST=mysqli_fetch_array($E,MYSQLI_ASSOC)) {
-                                                        echo"  <option value=" .$EST['idRol']. ">" .$EST['Nombre']. "</option>";
-                                                    }
-                                                }
-                                                 echo "</select>"
-                                                ?>
-                                                          <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-                           
-                                                        </div>
-                                                      </div>
-                                                </div>
-                                                <br>
-                                                <br>
+                                                <input type="hidden" name="Grol" value="9947"/>
+                                             
+                                                 
 
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">Departamento: </label>
                                                       <div class='col-sm-10'>
                                                         <div class="input-group">
                                         
-                                                <?php $E=Mysql::consulta("SELECT nombre,idDepartamento From departamento");
+                                                <?php $E=Mysql::consulta("SELECT d.nombre,d.idDepartamento From departamento d INNER JOIN cliente c ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $user");
                                                 echo "
                                                     
                                                 <select REQUIRED  class='formu form-control'name='Gdepartamento'>";
@@ -533,8 +514,8 @@ $("#mt").click(BuscarUsuario);
     $("#nombree").click(FiltroUsers);
             function FiltroUsers(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterUsers&users=" + $("#nombre").val(); 
-
+                var URL = "./tecni.php?view=filterUsers&tec=" + $("#nombre").val(); 
+                alert(URL);
                  $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -544,8 +525,8 @@ $("#mt").click(BuscarUsuario);
             $("#fechaa").click(FiltroFecha);
             function FiltroFecha(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterUsers&users=" + $("#fecha").val();   
-                 
+                var URL = "./tecni.php?view=filterUsers&tec=" + $("#fecha").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -557,8 +538,8 @@ $("#mt").click(BuscarUsuario);
             $("#correoo").click(FiltroCorreo);
             function FiltroCorreo(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterUsers&users=" + $("#correo").val();   
-               
+                var URL = "./tecni.php?view=filterUsers&tec=" + $("#correo").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
@@ -569,8 +550,8 @@ $("#mt").click(BuscarUsuario);
             $("#estatuss").click(FiltroEstatus);
             function FiltroEstatus(){
                 //admin.php?view=ticketadmin&ticket=all
-                var URL = "./tecni.php?view=filterUsers&users=" + $("#estatusss").val();   
-            
+                var URL = "./tecni.php?view=filterUsers&tec=" + $("#estatusss").val();   
+                alert(URL);
                 $.get(URL,function (datos,estado){
                     $("#contenido").html(datos);
                 }
