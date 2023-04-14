@@ -38,13 +38,15 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
             ';
 			if($radio_email=="option2"){          
 
-             
-                $Aserie = $reg['serie'];
-                $ANombre= $reg['nombre_completo'];
-                $AEstatus= $reg['Nombre'];
+              
+                $sqly = Mysql::consulta("SELECT t.foto,t.id_atiende as atender,t.id, t.fecha, t.serie, t.asunto, t.mensaje, t.solucion, c.nombre_completo , c.email_cliente, d.nombre as departamento, e.Nombre as Esta, e.idEstatus FROM ticket t INNER JOIN cliente c ON t.idUsuario = c.id_cliente INNER JOIN departamento d ON d.idDepartamento = t.idDepartamento INNER JOIN estatus e ON t.idStatus = e.idEstatus  WHERE t.id= $id");
+                $regy=mysqli_fetch_array($sql, MYSQLI_ASSOC);
+                $Aserie = $regy['serie'];
+                $ANombre= $regy['nombre_completo'];
+                $AEstatus= $regy['Esta'];
                 $Asolucion=$reg['solucion'];
-                $Acorreo = $reg['email_cliente'];
-                $Aserie = $reg['serie'];
+                $Acorreo = $regy['email_cliente'];
+                $Aserie = $regy['serie'];
 
                 $segunda= Mysql :: consulta("SELECT c.nombre_completo, c.email_cliente, d.nombre as depa FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $Atiende_edit");
                 $segundaa= mysqli_fetch_array($segunda,MYSQLI_ASSOC);
@@ -80,12 +82,12 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                 <p style="text-align:center;" ><b>Se ha actualizado el estatus de tu Ticket:</b><br>
             </p>
             <p style="text-align:center;">
-                Actualizado : ' .  date("Y-m-d H:i:s").  ' <br>
+                Actualizado : ' .  date("Y-m-d H:i:s") .  ' <br>
                 Ticket : ' . $Aserie . '<br>
                 Atiende : '. $NombreEmisor.' <br>
                 Correo : '. $CorreoEmisor .' <br> 
-                Estatus :<strong style="color:red;"> '.$estado_edit .' </strong><br>
-                Solución :<strong style="color:red;"> '.$solucion_edit . '</strong><br>
+                Estatus :<strong style="color:red;"> '.$AEstatus .' </strong><br>
+                Solución :<strong style="color:red;"> '.$Aserie . '</strong><br>
 
             </p>
                <br> '.

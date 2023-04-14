@@ -7,7 +7,7 @@ require '/xampp/htdocs/TicketAlcomex/vendor/autoload.php';
 $id = MysqlQuery::RequestGet('id');
 $sql = Mysql::consulta("SELECT t.foto,t.id_atiende as atender,t.id, t.fecha, t.serie, t.asunto, t.mensaje, t.solucion, c.nombre_completo , c.email_cliente, d.nombre as departamento, e.Nombre, e.idEstatus FROM ticket t INNER JOIN cliente c ON t.idUsuario = c.id_cliente INNER JOIN departamento d ON d.idDepartamento = t.idDepartamento INNER JOIN estatus e ON t.idStatus = e.idEstatus  WHERE t.id= $id");
 $reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
-
+$iid = $_SESSION['id'];   
 
 if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST['estado_ticket']) && isset($_SESSION['id'])){
 		$id_edit=MysqlQuery::RequestPost('id_edit');
@@ -15,8 +15,8 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
 		$solucion_edit=  MysqlQuery::RequestPost('solucion_ticket');
 		$radio_email=  MysqlQuery::RequestPost('optionsRadios');
  		if(MysqlQuery::Actualizar("ticket", "idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'")){
-      $id = $_SESSION['id'];                            
-      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','ticket'"))
+                          
+      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Actualizar','".date("Y-m-d H:i:s") ."','ticket'"))
  
       echo '
                 <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
@@ -38,13 +38,13 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
           $Acorreo = $reg['email_cliente'];
           $Aserie = $reg['serie'];
 
-          $segunda= Mysql :: consulta("SELECT c.nombre_completo, c.email_cliente, d.nombre as depa FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $Atiende_edit");
+          $segunda= Mysql :: consulta("SELECT c.nombre_completo, c.email_cliente, d.nombre as depa FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $iid");
           $segundaa= mysqli_fetch_array($segunda,MYSQLI_ASSOC);
           $depa = $segundaa['depa'];
           $NombreEmisor= $segundaa['nombre_completo'];
           $CorreoEmisor = $segundaa['email_cliente'];
 
-      $ $send = Mysql:: consulta("SELECT cast(aes_decrypt(e.contraseña, 'AES') as char) as RECUPERAR ,d.correo FROM enviocorreo e INNER JOIN departamento d ON e.correo = d.idDepartamento WHERE e.id = 2");
+       $send = Mysql:: consulta("SELECT cast(aes_decrypt(e.contraseña, 'AES') as char) as RECUPERAR ,d.correo FROM enviocorreo e INNER JOIN departamento d ON e.correo = d.idDepartamento WHERE e.id = 2");
       $sendd = mysqli_fetch_array($send,MYSQLI_ASSOC);
       $esend = $sendd['correo'];
               $ep= $sendd['RECUPERAR'];
@@ -75,7 +75,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
           Ticket : ' . $Aserie . '<br>
           Atiende : '. $NombreEmisor.' <br>
           Correo : '. $CorreoEmisor .' <br> 
-          Estatus : <strong style="color:red;">'.$estado_edit .' </strong><br>
+          Estatus : <strong style="color:red;">'.$AEstatus .' </strong><br>
           Solución : <strong style="color:red;">'.$solucion_edit. '</strong><br>
 
       </p>

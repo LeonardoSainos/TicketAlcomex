@@ -78,19 +78,23 @@ if(@$_POST['Desbloquear'])
                     $Nombre=$Datos['nombre_completo'];
                     $n=$Datos['id_cliente'];
                     $depa = $Datos['Depa'];
+                    $send = Mysql:: consulta("SELECT cast(aes_decrypt(e.contraseña, 'AES') as char) as RECUPERAR ,d.correo FROM enviocorreo e INNER JOIN departamento d ON e.correo = d.idDepartamento WHERE e.id = 2");
+                    $sendd = mysqli_fetch_array($send,MYSQLI_ASSOC);
+                    $esend = $sendd['correo'];
+                            $ep= $sendd['RECUPERAR'];
                     $mail = new PHPMailer(true);
-                            try {
+                                try {
                                 //Server settings
                                 $mail->SMTPDebug = SMTP::DEBUG_SERVER;                    //Enable verbose debug output
                                 $mail->isSMTP();                                            //Send using SMTP
                                 $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
                                 $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                                $mail->Username   = 'correodepruebasutp@gmail.com';                     //SMTP username
-                                $mail->Password   = 'ikezrnpsjnzipfha';                               //SMTP password
+                                $mail->Username   = $esend;                     //SMTP username
+                                $mail->Password   = $ep;                               //SMTP password
                                 $mail->SMTPSecure =  PHPMailer:: ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
                                 $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
                                 //Recipients
-                                $mail->setFrom('correodepruebasutp@gmail.com', 'Soporte técnico Alcomex ' . $depa);
+                                $mail->setFrom($esend, 'Soporte técnico ' . $depa . ' Alcomex');
                                 $mail->addAddress($Correo, $Nombre);     //Add a recipient
                                 //Content
                                 $mail->isHTML(true);       
