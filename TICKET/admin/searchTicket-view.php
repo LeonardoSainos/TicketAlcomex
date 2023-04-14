@@ -125,36 +125,37 @@
                                     if($where=="all"){
                                           $consulta = "SELECT SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie, t.asunto,t.mensaje, t.solucion, c.nombre_completo AS nombre_usuario, c.email_cliente, c.telefono_celular , d.nombre AS departamento, e.Nombre AS estado_ticket,t.fecha_actualizacion FROM ticket t INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento INNER JOIN estatus e ON t.idStatus=e.idEstatus INNER JOIN cliente c ON t.idUsuario = c.id_cliente WHERE (t.id LIKE '%$busqueda%' OR t.fecha LIKE '%$busqueda%' OR t.serie LIKE '%$busqueda%' OR t.asunto LIKE '%$busqueda%' OR t.mensaje LIKE '%$busqueda%' OR t.solucion LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR t.fecha_actualizacion LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%')  ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                           $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
-                                          echo $estatus;
+                                          echo $estatus;    $mio= true;
                                         
                                    }
                                    else if($where=="pending"){
                                         $consulta = "SELECT SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie, t.asunto,t.mensaje, t.solucion, c.nombre_completo AS nombre_usuario, c.email_cliente, c.telefono_celular , d.nombre AS departamento, e.Nombre AS estado_ticket,t.fecha_actualizacion FROM ticket t INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento INNER JOIN estatus e ON t.idStatus=e.idEstatus INNER JOIN cliente c ON t.idUsuario = c.id_cliente WHERE (t.id LIKE '%$busqueda%' OR t.fecha LIKE '%$busqueda%' OR t.serie LIKE '%$busqueda%' OR t.asunto LIKE '%$busqueda%' OR t.mensaje LIKE '%$busqueda%' OR t.solucion LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR t.fecha_actualizacion LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%')  AND t.idStatus = 94574 ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="pending" id="estatus"/>';
-                                        echo $estatus;
+                                        echo $estatus;    $mio= true;
                                     }else if($where=="process"){
                                         $consulta = "SELECT SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie, t.asunto,t.mensaje, t.solucion, c.nombre_completo AS nombre_usuario, c.email_cliente, c.telefono_celular , d.nombre AS departamento, e.Nombre AS estado_ticket,t.fecha_actualizacion FROM ticket t INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento INNER JOIN estatus e ON t.idStatus=e.idEstatus INNER JOIN cliente c ON t.idUsuario = c.id_cliente WHERE (t.id LIKE '%$busqueda%' OR t.fecha LIKE '%$busqueda%' OR t.serie LIKE '%$busqueda%' OR t.asunto LIKE '%$busqueda%' OR t.mensaje LIKE '%$busqueda%' OR t.solucion LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR t.fecha_actualizacion LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%')  AND t.idStatus = 94575 ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="process" id="estatus"/>';
-                                        echo $estatus;
+                                        echo $estatus;    $mio= true;
                                     }else if($where=="resolved"){
                                         $consulta = "SELECT SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie, t.asunto,t.mensaje, t.solucion, c.nombre_completo AS nombre_usuario, c.email_cliente, c.telefono_celular , d.nombre AS departamento, e.Nombre AS estado_ticket,t.fecha_actualizacion FROM ticket t INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento INNER JOIN estatus e ON t.idStatus=e.idEstatus INNER JOIN cliente c ON t.idUsuario = c.id_cliente WHERE (t.id LIKE '%$busqueda%' OR t.fecha LIKE '%$busqueda%' OR t.serie LIKE '%$busqueda%' OR t.asunto LIKE '%$busqueda%' OR t.mensaje LIKE '%$busqueda%' OR t.solucion LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR t.fecha_actualizacion LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%')  AND t.idStatus = 94576 ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="resolved" id="estatus"/>';
-                                        echo $estatus;
+                                        echo $estatus;    $mio= true;
                                      }
                                       elseif($where=="myticket"){
                                         $consulta = "SELECT SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie, t.asunto,t.mensaje, t.solucion, c.nombre_completo AS nombre_usuario, c.email_cliente, c.telefono_celular , d.nombre AS departamento, e.Nombre AS estado_ticket,t.fecha_actualizacion FROM ticket t INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento INNER JOIN estatus e ON t.idStatus=e.idEstatus INNER JOIN cliente c ON t.idUsuario = c.id_cliente WHERE (t.id LIKE '%$busqueda%' OR t.fecha LIKE '%$busqueda%' OR t.serie LIKE '%$busqueda%' OR t.asunto LIKE '%$busqueda%' OR t.mensaje LIKE '%$busqueda%' OR t.solucion LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR t.fecha_actualizacion LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%')  AND t.id_atiende = $user ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="myticket" id="estatus"/>';
-                                        echo $estatus;
+                                        echo $estatus;    $mio= true;
                                     }
                                     elseif($_GET['ticket']=="created"){
                                         $consulta = "SELECT SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie, t.asunto,t.mensaje, t.solucion, c.nombre_completo AS nombre_usuario, c.email_cliente, c.telefono_celular , d.nombre AS departamento, e.Nombre AS estado_ticket,t.fecha_actualizacion FROM ticket t INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento INNER JOIN estatus e ON t.idStatus=e.idEstatus INNER JOIN cliente c ON t.idUsuario = c.id_cliente WHERE (t.id LIKE '%$busqueda%' OR t.fecha LIKE '%$busqueda%' OR t.serie LIKE '%$busqueda%' OR t.asunto LIKE '%$busqueda%' OR t.mensaje LIKE '%$busqueda%' OR t.solucion LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR t.fecha_actualizacion LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%')  AND t.idUsuario = $user ORDER BY t.fecha DESC   LIMIT $inicio, $regpagina";
                                         $estatus= '<input type="hidden" name="estatus" value="created" id="estatus"/>';
-                                        echo $estatus;
+                                        echo $estatus;    $mio= false;
                                     }
                                 
                                      
                                 }else{
                                     $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario,c.email_cliente, d.nombre as departamento , e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento  ORDER BY t.fecha DESC LIMIT $inicio, $regpagina";
+                                    $mio= true;
                                 }
 
 
@@ -204,7 +205,7 @@
                                         <td style= "display:none" class="text-center"><?php echo $row['id'];?></td>
                                         <td class="text-center">
                                             <a href="./lib/pdf.php?id_del=<?php echo $row['serie']; ?>" class="btn btn-sm btn-success" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
-                                            <a href="admin.php?view=ticketedit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                            <?php if($mio==true){?>  <a href="admin.php?view=ticketedit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a> <?php }?>
                                                 <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
                                                 <button type="button" data-toggle='modal'   data-target='#pregunta' type="button" class="dropbtn btn btn-sm btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>                                                                        
                                         </td>

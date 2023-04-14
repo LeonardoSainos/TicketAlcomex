@@ -30,13 +30,15 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
 			if($radio_email=="option2"){
              
 
-             
-          $Aserie = $reg['serie'];
-          $ANombre= $reg['nombre_completo'];
-          $AEstatus= $reg['Nombre'];
-          $Asolucion=$reg['solucion'];
-          $Acorreo = $reg['email_cliente'];
-          $Aserie = $reg['serie'];
+        $sqly = Mysql::consulta("SELECT t.foto,t.id_atiende as atender,t.id, t.fecha, t.serie, t.asunto, t.mensaje, t.solucion, c.nombre_completo , c.email_cliente, d.nombre as departamento, e.Nombre as Esta, e.idEstatus FROM ticket t INNER JOIN cliente c ON t.idUsuario = c.id_cliente INNER JOIN departamento d ON d.idDepartamento = t.idDepartamento INNER JOIN estatus e ON t.idStatus = e.idEstatus  WHERE t.id= $id");
+        $regy=mysqli_fetch_array($sqly, MYSQLI_ASSOC);
+   
+          $Aserie = $regy['serie'];
+          $ANombre= $regy['nombre_completo'];
+          $AEstatus= $regy['Esta'];
+          $Asolucion=$regy['solucion'];
+          $Acorreo = $regy['email_cliente'];
+          $Aserie = $regy['serie'];
 
           $segunda= Mysql :: consulta("SELECT c.nombre_completo, c.email_cliente, d.nombre as depa FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $iid");
           $segundaa= mysqli_fetch_array($segunda,MYSQLI_ASSOC);
@@ -134,7 +136,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                 <img src="./img/Edit.png" alt="Image" class="img-responsive animated tada">
             </div>
             <div class="col-sm-9">
-                <a href="./tecni.php?view=ticketTecni" class="btn btn-primary btn-sm pull-right"><i class="fa fa-reply"></i>&nbsp;&nbsp;Volver administrar Tickets</a>
+                <a href="./tecni.php?view=ticketTecni" class="btn btn-warning btn-sm pull-right"><i class="fa fa-reply"></i>&nbsp;&nbsp;Volver administrar Tickets</a>
             </div>
           </div>
         </div>

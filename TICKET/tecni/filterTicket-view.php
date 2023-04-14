@@ -155,33 +155,35 @@
                                         $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento    ORDER BY  $ordenamuestra DESC   LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
                                         echo $estatus;
+                                        $mio= true;
                                     }elseif($_GET['ticket']=="pending"){
                                         $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94574 AND t.id_atiende = '$idAtiende'   ORDER BY  $ordenamuestra DESC   LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="pending" id="estatus"/>';
-                                        echo $estatus;
+                                        echo $estatus;   $mio= true;
                                     }elseif($_GET['ticket']=="process"){
                                     $consulta = "SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94575 AND t.id_atiende = '$idAtiende'    ORDER BY  $ordenamuestra DESC   LIMIT $inicio, $regpagina";
                                     $estatus ='<input type="hidden" name="estatus" value="process" id="estatus"/>';
-                                    echo $estatus;
+                                    echo $estatus;    $mio= true;
                                     }elseif($_GET['ticket']=="resolved"){
                                     $consulta = "SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idStatus = 94576  AND t.id_atiende = '$idAtiende'  ORDER BY  $ordenamuestra DESC   LIMIT $inicio, $regpagina";
                                     $estatus ='<input type="hidden" name="estatus" value="resolved" id="estatus"/>';
-                                    echo $estatus;
+                                    echo $estatus;    $mio= true;
                                     }else if ($_GET['ticket']=="all"){
                                         $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.telefono_celular ,c.nombre_completo as nombre_usuario ,c.email_cliente, d.nombre as departamento, e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE t.id_atiende = '$idAtiende' ORDER BY  $ordenamuestra DESC LIMIT $inicio, $regpagina";
                                         $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
-                                        echo $estatus;
+                                        echo $estatus;    $mio= true;
                                     }
                                     else if($_GET['ticket']=="created"){
                                         $consulta = "SELECT  SQL_CALC_FOUND_ROWS t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion, c.nombre_completo as nombre_usuario , c.email_cliente, c.telefono_celular,d.nombre as departamento,  e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE  t.idUsuario = '$idAtiende'  ORDER BY $ordenamuestra DESC";
                                         $estatus= '<input type="hidden" name="estatus" value="created" id="estatus"/>';
-                                        echo $estatus;
+                                        echo $estatus;    $mio= false;
                                     }
                                     
                                 }else{
                                     $consulta="SELECT SQL_CALC_FOUND_ROWS  t.id, t.fecha, t.serie , t.asunto, t.mensaje, t.solucion,c.telefono_celular , c.nombre_completo as nombre_usuario,c.email_cliente, d.nombre as departamento , e.Nombre as estado_ticket FROM ticket t INNER JOIN estatus e ON t.idStatus = e.idEstatus INNER JOIN cliente c ON c.id_cliente = t.idUsuario INNER JOIN departamento d ON t.idDepartamento = d.idDepartamento WHERE t.id_atiende = '$idAtiende' ORDER BY  $ordenamuestra DESC LIMIT $inicio, $regpagina";
                                     $estatus ='<input type="hidden" name="estatus" value="all" id="estatus"/>';
                                     echo $estatus;
+                                    $mio= true;
                                 }
 
 
@@ -228,8 +230,8 @@
                                         <td class="text-center"><?php echo $row['departamento']; ?></td>
                                         <td class="text-center">
                                             <a href="./lib/pdf.php?id_del=<?php echo $row['serie']; ?>" class="btn btn-sm btn-success" target="_blank"><i class="fa fa-print" aria-hidden="true"></i></a>
-
-                                            <a href="tecni.php?view=ticketedit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                            <?php if($mio==true){?>
+                                            <a href="tecni.php?view=ticketedit&id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a> <?php }?>
                                         </td>
                                     </tr>
                                     <?php
