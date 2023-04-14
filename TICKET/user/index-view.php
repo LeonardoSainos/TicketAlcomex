@@ -12,8 +12,7 @@
         <li data-target="#carousel-example-generic" data-slide-to="1"></li>
         <li data-target="#carousel-example-generic" data-slide-to="2"></li>
         <li data-target="#carousel-example-generic" data-slide-to="3"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="4"></li>
-      </ol>
+           </ol>
       <div class="carousel-inner">
         <div class="item active">
           <img class="img-fluid d-block" src="img/trailers/2T.jpg" alt="">
@@ -35,12 +34,7 @@
           <div class="carousel-caption">
           </div>
         </div>
-        <div class="item ">
-          <img class="img-fluid d-block" src="img/Trailers/camion.jpg" alt="">
-          <div class="carousel-caption">
-         
-          </div>
-        </div>
+        
       </div>
       <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
         <span class="icon-prev"></span>

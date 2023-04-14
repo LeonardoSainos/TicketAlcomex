@@ -159,7 +159,7 @@
                                                
                                           </div>
                                           <div style="display:flex; float:right;">
-                                                   <input id="busqueda" style="width: 80%; float:left;" placeholder="Buscar administradores" id="search" name="busqueda" value="<?php echo $busqueda; ?>" class="form-control mr-sm-2 alin" type="text">
+                                                   <input id="busqueda" style="width: 80%; float:left;" placeholder="Buscar " id="search" name="busqueda" value="<?php echo $busqueda; ?>" class="form-control mr-sm-2 alin" type="text">
                                                    <input id="where" type="hidden" name="where" value="<?php echo $where;?>">
                                                    <a id="mt" href="javascript:void()" style="float:right;"placeholder="Buscar"class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-search"></span></a>
                                                        
