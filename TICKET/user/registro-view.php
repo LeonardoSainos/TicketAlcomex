@@ -5,9 +5,7 @@
         $clave=md5(MysqlQuery::RequestPost('clave'));
         $clave1=md5(MysqlQuery::RequestPost('clave1'));
         $email=MysqlQuery::RequestPost('email_cliente');
-        
         $telefono=MysqlQuery::RequestPost('telefono');
-     
          
         $correo= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '$email' OR telefono_celular = '$telefono'");
           
@@ -23,7 +21,7 @@
                 $nuevo1 = mysqli_fetch_array($nuevo,MYSQLI_ASSOC);
                 $newFecha = $nuevo1['Fecha_creacion'];
                 $newid = $nuevo1['id_cliente'];
-                echo $newid . "hola";
+            
                 MysqlQuery::ProcedimientoAlmacenado("NuevoUsuario","$newid,'Insertar','".date("Y-m-d H:i:s") ."','cliente'");
 
                echo '

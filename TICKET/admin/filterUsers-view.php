@@ -44,7 +44,7 @@
           //ELIMINAR USUARIO
             if(isset($_POST['id_dele'])){
                 $id_user=MysqlQuery::RequestPost('id_dele');
-                        $iproc= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" .$id_user . "'");
+                        $iproc= Mysql::consulta("SELECT * FROM cliente WHERE id_cliente = '" .$id_user . "'");
                          $iproc2 = mysqli_fetch_array($iproc, MYSQLI_ASSOC);
                          $idBorrar = $iproc2['id_cliente'];   
                           // $eliminar= "email_cliente='$id_user'";                               
@@ -251,6 +251,8 @@
                                         <td class="text-center"><?php echo $row['Depa']; ?> </td>
                                         <td class="text-center"><?php echo $row['Esta'];?> </td>
                                         <td class="text-center"><?php echo $row['celular'];?> </td>
+                                        <td style="display:none"  ><?php echo $row['id_cliente']; ?></td>  
+                                   
                                         <td class="text-center">
                                                   <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
                                                   <a href="admin.php?view=useredit&id=<?php echo $row['id_cliente']; ?>" class="btn btn-sm btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></a>
@@ -262,7 +264,7 @@
                                         endwhile; 
                                     ?>
                                     <tr>
-                                        <td class="text-center"  colspan="9"> Seleccionar :<input onclick="MarcarCheckBox(this);"  type="checkbox" /> Todos | Ninguno </td>
+                                        <td class="text-center"  colspan="10"> Seleccionar :<input onclick="MarcarCheckBox(this);"  type="checkbox" /> Todos | Ninguno </td>
                                     </tr>
                                 </tbody>
                             </table>

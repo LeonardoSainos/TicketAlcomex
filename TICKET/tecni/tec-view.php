@@ -491,7 +491,7 @@
        var datos=$tr.children("#tabla tbody td").map(function() {
        return $(this).text(); 
         });
-       $("#borrar_id").val(datos[4]);                                           
+       $("#borrar_id").val(datos[5]);                                           
         });
 </script> 
 

@@ -5,9 +5,17 @@
                 $ordenamuestra= $orderby[0];
         /*Eliminar */
             if(isset($_POST['id_dele'])){
-                        $id_user=MysqlQuery::RequestPost('id_dele');
-                       
-                        $iproc= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" .$id_user . "'");
+
+                $id_user=MysqlQuery::RequestPost('id_dele');
+                $other= Mysql:: consulta("SELECT * FROM cliente WHERE id_cliente = " . $id_user);;
+                $o= mysqli_fetch_array($other,MYSQLI_ASSOC);
+                $departamento = $o['id_departamento'];
+                $tecnicos = Mysql :: consulta("SELECT * FROM cliente WHERE (id_departamento = ". $departamento . " AND id_cliente <> $id_user )  AND (id_rol = 4046 OR id_rol = 5267)" );
+                $num=mysqli_num_rows($tecnicos);
+                if($num>=1)
+                {
+                      
+                        $iproc= Mysql::consulta("SELECT * FROM cliente WHERE id_cliente = '" .$id_user . "'");
                          $iproc2 = mysqli_fetch_array($iproc, MYSQLI_ASSOC);
                          $idBorrar = $iproc2['id_cliente'];   
                           // $eliminar= "email_cliente='$id_user'";                               
@@ -48,6 +56,12 @@
                         </div>
                     ';
                 }
+              }
+
+              else{
+                echo "<script>alert('Por el momento no es posible eliminar el usuario porque no hay más técnicos');
+                window.history.go(-1);</script>";
+            }
             }
 
             // Guardar nuevo usuario
@@ -234,7 +248,7 @@
                                         }
                                     ?>
                                         <tr> 
-                                           <td  class= "text-center" colspan="9"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
+                                           <td  class= "text-center" colspan="10"> Seleccionar : <input  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
                                         </tr>
                                 
                                 </tbody>

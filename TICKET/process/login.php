@@ -14,6 +14,7 @@
                 $_SESSION['clave']=$contra;
                 $_SESSION['rol'] = $reg['id_rol'];
                 $_SESSION['estatus'] = $reg['idEstatus'];
+                $_SESSION['departamento'] = $reg['id_departamento'];
 //                $_SESSION['tipo']="admin";
             }else{
                echo '
@@ -37,6 +38,7 @@
                 $_SESSION['clave']=$contra;
                 $_SESSION['rol'] = $reg['id_rol'];
                 $_SESSION['estatus'] = $reg['idEstatus'];
+                $_SESSION['departamento'] = $reg['id_departamento'];
                // $_SESSION['tipo']="user";
             }
             else{
@@ -65,6 +67,7 @@
                 $_SESSION['clave']=$contra;
                 $_SESSION['rol'] = $reg['id_rol'];
                 $_SESSION['estatus'] = $reg['idEstatus'];
+                $_SESSION['departamento'] = $reg['id_departamento'];
                // $_SESSION['tipo']="user";
             }
             else{

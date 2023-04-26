@@ -2,12 +2,14 @@
 require "./fpdf/fpdf.php";
 include './class_mysql.php';
 include './config.php';
+date_default_timezone_set('America/Mexico_City');
+setlocale(LC_TIME, 'spanish');
 //require '../inc/timezone.php';
 header('Content-Type: text/html; charset=UTF8');  
 require_once __DIR__. "/vendor/autoload.php";
 
 $id = MysqlQuery::RequestGet('id');
-$sql = Mysql::consulta("SELECT t.id_atiende, t.fecha,t.serie, e.Nombre as estado_ticket, c.nombre_completo, c.nombre_usuario,c.email_cliente, d.nombre as departamento, t.asunto, t.solucion, t.mensaje,t.fecha_actualizacion as actualizacion FROM ticket t LEFT JOIN cliente c ON t.idUsuario= c.id_cliente INNER JOIN estatus e ON e.idEstatus = t.idStatus INNER JOIN departamento d ON d.idDepartamento= t.idDepartamento WHERE t.serie = '$id';");
+$sql = Mysql::consulta("SELECT t.id_atiende, t.fecha,t.serie,t.fecha_actualizacion, e.Nombre as estado_ticket, c.nombre_completo, c.nombre_usuario,c.email_cliente, d.nombre as departamento, t.asunto, t.solucion, t.mensaje,t.fecha_actualizacion as actualizacion FROM ticket t LEFT JOIN cliente c ON t.idUsuario= c.id_cliente INNER JOIN estatus e ON e.idEstatus = t.idStatus INNER JOIN departamento d ON d.idDepartamento= t.idDepartamento WHERE t.serie = '$id';");
 $reg = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 
 
@@ -34,7 +36,7 @@ $html = $html .
                 <tr colspan='4'>
                     <td><strong>Creado :</strong>" . $reg['fecha']. "</td>
                     <td colspan='2' rowspan='2'><h3>Solicitud de servicio TI</h3></td>
-                    <td><strong>Actualizado:</strong>" . $reg['actualización']." </td>
+                    <td><strong>Actualizado:</strong>" . $reg['fecha_actualizacion']." </td>
                 </tr>
                 <tr colspan='3'>
                     <td><strong>Creador:</strong>" . $reg['nombre_completo'] . " </td>
@@ -43,7 +45,7 @@ $html = $html .
                 <tr colspan='4' rowspan='1'>
                     <td > <strong>Departamento: </strong>".$reg['departamento']."</td>
                     <td ><strong>Asunto :</strong>".$reg['asunto']."</td>
-                    <td ><strong>Fecha de cierre:</strong>". date("Y-m-d h:i:s")."</td>
+                    <td ><strong>Fecha de cierre:</strong>". $reg['fecha_actualizacion'] ."</td>
                     <td ><strong>Estatus:</strong> ". $reg['estado_ticket']. "</td>
                 </tr>
 

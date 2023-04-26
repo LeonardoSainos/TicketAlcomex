@@ -191,7 +191,7 @@
                                     ?>
 
                                          <tr> 
-                                           <td  class= "text-center" colspan="9"> Seleccionar : <input form="acciones"  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
+                                           <td  class= "text-center" colspan="10"> Seleccionar : <input form="acciones"  type="checkbox" onclick="MarcarCheckBox(this);" />  Todos | Ninguno  </td>
                                         </tr>
                                 </tbody>
                             </table>

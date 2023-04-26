@@ -85,7 +85,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
           '
           <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
           <center>
-          <img style="align-items: center; justify-content: center;" width="250px" height="auto" src="https://scontent.fpbc1-1.fna.fbcdn.net/v/t39.30808-6/340835079_219065740720635_4950595825896346541_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=dbeb18&_nc_ohc=luxwI7hBcLoAX966O2M&_nc_ht=scontent.fpbc1-1.fna&oh=00_AfD9I8W2OeZ8hANUKlp9wcDfCd6mrA5fshIMCbP6tlaRmQ&oe=6438D9D3" />
+          <img style="align-items: center; justify-content: center;" width="250px" height="auto" src="https://i.pinimg.com/564x/bd/e3/f8/bde3f81141a064e60a231874c29ddd6e.jpg" />
           </center>
           <br>
           <p style="text-align:center;">

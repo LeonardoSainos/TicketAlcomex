@@ -6,6 +6,7 @@ require '/xampp/htdocs/TicketAlcomex/vendor/autoload.php';
 
 if(isset($_SESSION['nombre']) && ($_SESSION['rol']==9947 ||  $_SESSION['rol']==4046 || $_SESSION['rol']==5267 )){
         $iid= $_SESSION['id'];
+        $ddd= $_SESSION['departamento'];
         
 
 if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
@@ -129,7 +130,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                 '
                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                 <center>
-                <img style="align-items: center; justify-content: center;" width="250px" height="auto" src="https://scontent.fpbc1-1.fna.fbcdn.net/v/t39.30808-6/340835079_219065740720635_4950595825896346541_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=dbeb18&_nc_ohc=luxwI7hBcLoAX966O2M&_nc_ht=scontent.fpbc1-1.fna&oh=00_AfD9I8W2OeZ8hANUKlp9wcDfCd6mrA5fshIMCbP6tlaRmQ&oe=6438D9D3" />
+                <img style="align-items: center; justify-content: center;" width="250px" height="auto" src="https://i.pinimg.com/564x/bd/e3/f8/bde3f81141a064e60a231874c29ddd6e.jpg" />
                 </center>
                 <br>
                
@@ -224,7 +225,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                               <select id="departamento" class="form-control" name="departamento_ticket">
                                 <option>Selecciona un departamento</option>
                                       <?php 
-                                        $sql = Mysql::consulta("SELECT * FROM departamento WHERE idDepartamento <> 2505");
+                                        $sql = Mysql::consulta("SELECT * FROM departamento WHERE idDepartamento <> 2505 AND idDepartamento <>" . $ddd . " ORDER BY nombre");
                                         while( $reg1=mysqli_fetch_array($sql, MYSQLI_ASSOC)){
                                           echo "
                                             <option value='" . $reg1['idDepartamento']  . "'>" .
@@ -239,16 +240,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                           </div>
                         </div>
 
-                        <div class="form-group">
-                          <label  class="col-sm-2 control-label">Asunto</label>
-                          <div class="col-sm-10">
-                              <div class='input-group'>
-                                <input type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="60" required="">
-                                <span class="input-group-addon"><i class="fa fa-paperclip"></i></span>
-                              </div> 
-                          </div>
-                        </div>
-
+                     
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Técnico</label>
                           <div class="col-sm-10">
@@ -260,6 +252,17 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                               </div> 
                           </div>
                         </div>
+
+                        <div class="form-group">
+                          <label  class="col-sm-2 control-label">Asunto</label>
+                          <div class="col-sm-10">
+                              <div class='input-group'>
+                                <input type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="60" required="">
+                                <span class="input-group-addon"><i class="fa fa-paperclip"></i></span>
+                              </div> 
+                          </div>
+                        </div>
+
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Detalles del problema</label>
                           <div class="col-sm-10">

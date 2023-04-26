@@ -9,7 +9,14 @@
           //ELIMINAR USUARIO
             if(isset($_POST['id_dele'])){
                 $id_user=MysqlQuery::RequestPost('id_dele');
-                        $iproc= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" .$id_user . "'");
+                $other= Mysql:: consulta("SELECT * FROM cliente WHERE id_cliente = " . $id_user);;
+                $o= mysqli_fetch_array($other,MYSQLI_ASSOC);
+                $departamento = $o['id_departamento'];
+                $tecnicos = Mysql :: consulta("SELECT * FROM cliente WHERE (id_departamento = ". $departamento . " AND id_cliente <> $id_user )  AND (id_rol = 4046 OR id_rol = 5267)" );
+                $num=mysqli_num_rows($tecnicos);
+                if($num>=1)
+                {
+                        $iproc= Mysql::consulta("SELECT * FROM cliente WHERE id_cliente = '" .$id_user . "'");
                          $iproc2 = mysqli_fetch_array($iproc, MYSQLI_ASSOC);
                          $idBorrar = $iproc2['id_cliente'];   
                           // $eliminar= "email_cliente='$id_user'";                               
@@ -22,31 +29,36 @@
                             $pro = Mysql:: consulta ("SELECT * FROM  ticket WHERE id_Atiende = $idBorrar AND idStatus = 94575");
                             $proceso = mysqli_num_rows($pro);
       
-                if(MysqlQuery::ProcedimientoAlmacenado("EliminarUsuario","$idBorrar,'". date("Y-m-d")  ."','" . date("Y-m-d") . "',$pendientes, $creados, $resueltos, $proceso")){
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','cliente'");
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','ticket'");
-                    MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','departamento'");
-                  
-                    echo '
-                        <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            <h4 class="text-center">ADMINISTRADOR ELIMINADO</h4>
-                            <p class="text-center">
-                                El administrador fue eliminado del sistema con exito
-                            </p>
-                        </div>
-                    ';
-                }else{
-                    echo '
-                        <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            <h4 class="text-center">OCURRIÓ UN ERROR</h4>
-                            <p class="text-center">
-                                No hemos podido eliminar el administrador
-                            </p>
-                        </div>
-                    ';
-                } 
+                    if(MysqlQuery::ProcedimientoAlmacenado("EliminarUsuario","$idBorrar,'". date("Y-m-d")  ."','" . date("Y-m-d") . "',$pendientes, $creados, $resueltos, $proceso")){
+                        MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','cliente'");
+                        MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','ticket'");
+                        MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'EliminarU','".date("Y-m-d H:i:s") ."','departamento'");
+                    
+                        echo '
+                            <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="text-center">ADMINISTRADOR ELIMINADO</h4>
+                                <p class="text-center">
+                                    El administrador fue eliminado del sistema con exito
+                                </p>
+                            </div>
+                        ';
+                    }else{
+                        echo '
+                            <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                                <p class="text-center">
+                                    No hemos podido eliminar el administrador
+                                </p>
+                            </div>
+                        ';
+                    } 
+                }
+                else{
+                    echo "<script>alert('Por el momento no es posible eliminar el usuario porque no hay más técnicos');
+                    window.history.go(-1);</script>";
+                }
             }
 
             // GUARDAR NUEVO USUARIO 
@@ -216,6 +228,8 @@
                                         <td class="text-center"><?php echo $row['Depa']; ?> </td>
                                         <td class="text-center"><?php echo $row['Esta'];?> </td>
                                         <td class="text-center"><?php echo $row['celular'];?> </td>
+                                        <td style="display:none"  ><?php echo $row['id_cliente']; ?></td>  
+                                   
                                         <td class="text-center">
                                                   <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
                                                   <a href="admin.php?view=useredit&id=<?php echo $row['id_cliente']; ?>" class="btn btn-sm btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></a>
@@ -502,7 +516,7 @@
        var datos=$tr.children("#tabla tbody td").map(function() {
        return $(this).text(); 
         });
-       $("#borrar_id").val(datos[5]);                                           
+       $("#borrar_id").val(datos[9]);                                           
         });        
 </script> 
  

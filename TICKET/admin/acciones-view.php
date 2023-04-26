@@ -66,7 +66,15 @@ if(@$_POST['Desbloquear'])
         if(@$_POST['Usuarios']!=null)
         {
             foreach ($_POST['Usuarios'] as  $idBorrar)
-            {        
+            {     
+                
+                $other= Mysql:: consulta("SELECT * FROM cliente WHERE id_cliente = " . $idBorrar);;
+                $o= mysqli_fetch_array($other,MYSQLI_ASSOC);
+                $departamento = $o['id_departamento'];
+                $tecnicos = Mysql :: consulta("SELECT * FROM cliente WHERE (id_departamento = ". $departamento . " AND id_cliente <> $idBorrar )  AND (id_rol = 4046 OR id_rol = 5267)" );
+                $num=mysqli_num_rows($tecnicos);
+                if($num>=1)
+                {
                   // $eliminar= "email_cliente='$id_user'";                               
                   $cr = Mysql:: consulta(" SELECT * FROM ticket WHERE idUsuario = $idBorrar");
                   $creados = mysqli_num_rows($cr);
@@ -81,19 +89,30 @@ if(@$_POST['Desbloquear'])
                     MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','cliente'");
                     MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','ticket'");
                     MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$user,'EliminarU','".date("Y-m-d H:i:s") ."','departamento'");
-                  }      
+                  }    
+                  
+                  
+                  if($llamar)
+                  {
+                  echo "<script>alert('Usuarios eliminados');
+                  window.history.go(-1);
+                  </script>";
+                  }
+                  else  
+                  {
+                      echo "<script>alert('Algo falló, revisa tu conexión a Internet');
+                      window.history.go(-1);
+                      </script>
+                      ";
+                  }
+                }
+                else{
+                    echo "<script>alert('Por el momento no es posible eliminar el usuario porque no hay más técnicos');
+                    window.history.go(-1);</script>";
+                }
             }
 
-            if($llamar)
-            {
-            echo "<script>alert('Usuarios eliminados');
-            window.history.go(-1);
-            </script>";
-            }
-            else  
-            {
-                echo "<script>alert('Algo falló, revisa tu conexión a Internet');</script>";
-            }
+          
         }
         else  if(@$_POST['Usuarios']==null) {
             ?>
@@ -151,7 +170,7 @@ if(@$_POST['Desbloquear'])
                                 $mail->Subject = 'Reseteo de contraseña';
                                 $mail->Body= '<p style="text-align:justify;">Estimado usuario <strong> ' . $Nombre . ': </strong> <br> Hemos reseteado su contraseña como lo solicitó. <br> Su nueva contraseña para acceder a su usuario de soporte técnico es: <b> <strong>' .$cifrado. '</strong></b><br><br><br>'.
             
-                                '<img width="250px" height="auto" src="https://scontent.fpbc1-1.fna.fbcdn.net/v/t39.30808-6/340835079_219065740720635_4950595825896346541_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=dbeb18&_nc_ohc=luxwI7hBcLoAX966O2M&_nc_ht=scontent.fpbc1-1.fna&oh=00_AfD9I8W2OeZ8hANUKlp9wcDfCd6mrA5fshIMCbP6tlaRmQ&oe=6438D9D3" />'  .'
+                                '<img width="250px" height="auto" src="https://i.pinimg.com/564x/bd/e3/f8/bde3f81141a064e60a231874c29ddd6e.jpg" />'  .'
                                   <br>
                                   <br>
                                   <br>

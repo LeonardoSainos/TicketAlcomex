@@ -5,8 +5,8 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
     $departamento = MysqlQuery:: RequestPost('departamento_cliente');
 	 $rol= MysqlQuery::RequestPost('rol_cliente');
    $correo = MysqlQuery::RequestPost('email_cliente');
-	 
-		if(MysqlQuery::Actualizar("cliente", "email_cliente='$correo',id_departamento = '$departamento', id_rol='$rol', idEstatus= '$estado'", "id_cliente='$id_edit'")){
+   $telefono = MysqlQuery:: RequestPost('telefono');	 
+		if(MysqlQuery::Actualizar("cliente", "telefono_celular = $telefono, email_cliente='$correo',id_departamento = '$departamento', id_rol='$rol', idEstatus= '$estado'", "id_cliente='$id_edit'")){
       $id = $_SESSION['id'];                            
       if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','cliente'")){
  
@@ -164,7 +164,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
                           <label for="inputEmail3" class="col-sm-2 control-label">Teléfono:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                  <input type="email" readonly="" class="form-control"  name="telefono" readonly="" value="<?php echo $reg['telefono_celular']?>">
+                                  <input type="tel" class="form-control"  name="telefono"   value="<?php echo $reg['telefono_celular']?>">
                                 <span class="input-group-addon"><i class="fa fa-phone-square"></i></span>
                               </div> 
                           </div>
