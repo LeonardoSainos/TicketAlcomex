@@ -45,12 +45,12 @@
     $CargarClave =md5( MysqlQuery::RequestPost('clave'));
 
     $nombre=MysqlQuery::RequestPost('nombre');
-    $usuario=MysqlQuery::RequestPost('nombre_usuario'); 
+    $usuario=mb_strtoupper(MysqlQuery::RequestPost('nombre_usuario')); 
     $clave=md5(MysqlQuery::RequestPost('clave'));
-    $email=MysqlQuery::RequestPost('email_usuario');
+    $email=strtolower(MysqlQuery::RequestPost('email_usuario'));
     $celular=MysqlQuery::RequestPost('telefono');
 
-
+  
 
     $id = $_SESSION['id'];
     $todo = Mysql::Consulta("SELECT * FROM cliente where id_cliente = $id");

@@ -51,10 +51,10 @@ if(isset($_POST['nom_admin_reg']) && isset($_POST['admin_reg']) && isset($_POST[
     $CargarName = MysqlQuery::RequestPost('nombre_usuario');
     $CargarClave =md5( MysqlQuery::RequestPost('clave'));
 
-    $nombre=MysqlQuery::RequestPost('nombre');
+    $nombre=mb_strtoupper(MysqlQuery::RequestPost('nombre'));
     $usuario=MysqlQuery::RequestPost('nombre_usuario'); 
     $clave=md5(MysqlQuery::RequestPost('clave'));
-    $email=MysqlQuery::RequestPost('email_usuario');
+    $email=strtolower(MysqlQuery::RequestPost('email_usuario'));
     $celular=MysqlQuery::RequestPost('telefono');
 
 

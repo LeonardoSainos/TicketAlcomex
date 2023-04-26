@@ -235,7 +235,8 @@
                                         <td class="text-center"><?php echo $row['Depa']; ?> </td>
                                         <td class="text-center"><?php echo $row['Esta'];?> </td>
                                         <td class="text-center"><?php echo $row['celular'];?> </td>
-                                      
+                                        <td style="display:none"  ><?php echo $row['id_cliente']; ?></td>  
+                                   
                                         <td class="text-center">
                                                   <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
                                                   <a href="admin.php?view=useredit&id=<?php echo $row['id_cliente']; ?>" class="btn btn-sm btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></a>
@@ -528,7 +529,7 @@
        var datos=$tr.children("#tabla tbody td").map(function() {
        return $(this).text(); 
         });
-       $("#borrar_id").val(datos[5]);                                           
+       $("#borrar_id").val(datos[9]);                                           
         });
 
 $("#mt").click(BuscarUsuario);

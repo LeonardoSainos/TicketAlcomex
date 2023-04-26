@@ -3,10 +3,12 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
 		$id_edit=MysqlQuery::RequestPost('id_edit');
     $estado = MysqlQuery::RequestPost('estado_cliente');
     $departamento = MysqlQuery:: RequestPost('departamento_cliente');
-	 $rol= MysqlQuery::RequestPost('rol_cliente');
-   $correo = MysqlQuery::RequestPost('email_cliente');
+	  $rol= MysqlQuery::RequestPost('rol_cliente');
+   $correo=strtolower(MysqlQuery::RequestPost('email_cliente'));
    $telefono = MysqlQuery:: RequestPost('telefono');	 
-		if(MysqlQuery::Actualizar("cliente", "telefono_celular = $telefono, email_cliente='$correo',id_departamento = '$departamento', id_rol='$rol', idEstatus= '$estado'", "id_cliente='$id_edit'")){
+
+   $nombre = mb_strtoupper(MysqlQuery::RequestPost('nombre_completo'));
+		if(MysqlQuery::Actualizar("cliente", "nombre_completo='$nombre',telefono_celular = $telefono, email_cliente='$correo',id_departamento = '$departamento', id_rol='$rol', idEstatus= '$estado'", "id_cliente='$id_edit'")){
       $id = $_SESSION['id'];                            
       if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','cliente'")){
  
@@ -66,7 +68,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
                             <label class="col-sm-2 control-label">Nombre:</label>
                             <div class='col-sm-10'>
                                 <div class="input-group">
-                                    <input class="form-control"   type="text" name="nombre_completo"  readonly=""  value="<?php echo $reg['nombre_completo']?>">
+                                    <input class="form-control"  readonly="" type="text" name="nombre_completo"   value="<?php echo $reg['nombre_completo']?>">
                                     <span class="input-group-addon"><i class="fa fa-barcode"></i></span>
                                 </div>
                             </div>

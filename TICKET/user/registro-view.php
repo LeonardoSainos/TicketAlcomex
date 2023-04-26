@@ -1,10 +1,10 @@
 <?php
     if(isset($_POST['nombre_usuario']) && isset($_POST['clave']) && isset($_POST['nombre'])){
-        $nombre=MysqlQuery::RequestPost('nombre');
+        $nombre=mb_strtoupper(MysqlQuery::RequestPost('nombre'));
         $usuario=MysqlQuery::RequestPost('nombre_usuario');
         $clave=md5(MysqlQuery::RequestPost('clave'));
         $clave1=md5(MysqlQuery::RequestPost('clave1'));
-        $email=MysqlQuery::RequestPost('email_cliente');
+        $email=strtolower(MysqlQuery::RequestPost('email_cliente'));
         $telefono=MysqlQuery::RequestPost('telefono');
          
         $correo= Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '$email' OR telefono_celular = '$telefono'");
@@ -84,7 +84,7 @@
             <form role="form" action="" method="POST">
             <div class="form-group">
               <label><i class="fa fa-male"></i>&nbsp;Nombre completo</label>
-              <input type="text" class="form-control" name="nombre" placeholder="Nombre completo" required=""   title="Nombre Apellido" maxlength="65">
+              <input type="text" class="form-control" id="nombre_completo" name="nombre" placeholder="Nombre completo" required=""   title="Nombre Apellido" maxlength="65">
             </div>
             <div class="form-group has-success has-feedback">
               <label class="control-label"><i class="fa fa-user"></i>&nbsp;Nombre de usuario</label>
@@ -101,7 +101,7 @@
             </div>
             <div class="form-group">
               <label><i class="fa fa-envelope"></i>&nbsp;Email</label>
-              <input type="email" class="form-control"  name="email_cliente"  placeholder="Escriba su email" required="">
+              <input type="email" class="form-control" id="email_usuario" name="email_cliente"  placeholder="Escriba su email" required="">
             </div>
             <div class="form-group">
               <label><i class="fa fa-phone"></i>&nbsp;Teléfono</label>
@@ -132,4 +132,22 @@
             });
         });
     });
+
+
+function convertir(){
+
+  
+let nombre = document.getElementById("nombre_completo");
+let correo = document.getElementById("email_usuario");
+
+let n2 = nombre.toUpperCase();
+let c2 = correo.toLowerCase();
+
+
+console.log(n2 " nombre " + c2 + "correo");
+}
+
+
+convertir();
+
 </script>
