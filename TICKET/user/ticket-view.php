@@ -116,11 +116,8 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                 window.history.go(-1);
                 </script>";
             } catch (Exception $e) {
-                echo " <script> alert( {$mail->ErrorInfo}); </scripyt>";
+                echo " <script> alert( {$mail->ErrorInfo}); </script>";
             }
-
-          
-
         } else  {
           $autoriza == false;
             echo '
@@ -165,7 +162,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                           <fieldset>
                       
                         <div class="form-group">
-                          <label  class="col-sm-2 control-label">Nombre</label>
+                          <label  class="col-sm-2 control-label">Nombre:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
                                 <input type="text" readonly="" class="form-control" placeholder="Nombre" required=""   name="name_ticket"   value="<?php echo $_SESSION['nombre_completo']; ?>" >
@@ -175,7 +172,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                         </div>
 
                         <div class="form-group">
-                          <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                          <label for="inputEmail3" class="col-sm-2 control-label">Email:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
                                 <input readonly="" type="email" class="form-control" id="inputEmail3"   placeholder="Email" name="email_ticket" required="" title="Ejemplo@dominio.com" value="<?php echo $_SESSION['email']; ?>" >
@@ -184,7 +181,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                           </div>
                         </div>
                         <div class="form-group">
-                          <label  class="col-sm-2 control-label">Departamento</label>
+                          <label  class="col-sm-2 control-label">Enviar a:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
                               <select id="departamento" class="form-control" name="departamento_ticket">
@@ -207,7 +204,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
 
                      
                         <div class="form-group">
-                          <label  class="col-sm-2 control-label">Técnico</label>
+                          <label  class="col-sm-2 control-label">Técnico:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
                                           <select required id="tecnico" class="form-control" name="tecnico">
@@ -219,7 +216,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                         </div>
 
                         <div class="form-group">
-                          <label  class="col-sm-2 control-label">Asunto</label>
+                          <label  class="col-sm-2 control-label">Asunto:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
                                 <input type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="60" required="">
@@ -229,14 +226,14 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                         </div>
 
                         <div class="form-group">
-                          <label  class="col-sm-2 control-label">Detalles del problema</label>
+                          <label  class="col-sm-2 control-label">Detalles del problema:</label>
                           <div class="col-sm-10">
                             <textarea class="form-control" rows="3" placeholder= "Describa su problema" name="mensaje_ticket" required=""></textarea>
                           </div>
                         </div>
 
                         <div class="form-group">
-                          <label  class="col-sm-2 control-label">Foto</label>
+                          <label  class="col-sm-2 control-label">Foto:</label>
                           <div class="col-sm-10">
                               <div class='input-group text-center'>                            
                                    <img width="25%" height="50%" style=" margin:15px;  text-shadow: 0 0 30px #fb5d14; box-shadow: 0 0 20px #fb5d14;" class="sombra" id="output"/>

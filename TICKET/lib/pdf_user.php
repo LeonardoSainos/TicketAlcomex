@@ -8,14 +8,31 @@ setlocale(LC_TIME, 'spanish');
 header('Content-Type: text/html; charset=UTF8');  
 require_once __DIR__. "/vendor/autoload.php";
 
-$id = MysqlQuery::RequestGet('id');
-$sql = Mysql::consulta("SELECT t.id_atiende, t.fecha,t.serie,t.fecha_actualizacion, e.Nombre as estado_ticket, c.nombre_completo, c.nombre_usuario,c.email_cliente, d.nombre as departamento, t.asunto, t.solucion, t.mensaje,t.fecha_actualizacion as actualizacion FROM ticket t LEFT JOIN cliente c ON t.idUsuario= c.id_cliente INNER JOIN estatus e ON e.idEstatus = t.idStatus INNER JOIN departamento d ON d.idDepartamento= t.idDepartamento WHERE t.serie = '$id';");
+$id = MysqlQuery::RequestGet('id_del');
+$sql = Mysql::consulta("SELECT t.fecha_actualizacion,t.foto,t.respuestafoto,t.id_atiende, t.fecha,t.serie, e.Nombre as estado_ticket, c.nombre_completo, c.nombre_usuario,c.email_cliente, d.nombre as departamento, t.asunto, t.solucion, t.mensaje,t.fecha_actualizacion as actualizacion FROM ticket t LEFT JOIN cliente c ON t.idUsuario= c.id_cliente INNER JOIN estatus e ON e.idEstatus = t.idStatus INNER JOIN departamento d ON d.idDepartamento= t.idDepartamento WHERE t.serie = '$id';");
 $reg = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 
 
-
-$atiende = Mysql::consulta("SELECT c.id_cliente, c.nombre_usuario ,c.nombre_completo,c.email_cliente,c.telefono_celular,t.serie FROM cliente c INNER JOIN ticket t ON t.id_atiende = c.id_cliente WHERE t.serie = '$id';");
+$atiende = Mysql::consulta("SELECT c.id_cliente, c.nombre_usuario ,c.nombre_completo,c.email_cliente,c.telefono_celular,c.id_rol, t.serie,t.foto FROM cliente c INNER JOIN ticket t ON t.id_atiende = c.id_cliente WHERE t.serie = '$id';");
 $reg1 = mysqli_fetch_array($atiende, MYSQLI_ASSOC);
+
+
+
+$respuestafoto =$reg['respuestafoto'];
+if($respuestafoto != "" && $reg1['id_rol']==4046){
+    $imprime =  "<td colspan='2' ><strong>Solución:</strong> " . $reg['solucion']." <br><br><img src='../admin/". $respuestafoto . "' width=100px height='auto' alt='foto ticket'/> </td>";
+}
+else if($respuestafoto != "" && $reg1['id_rol']==5267){
+    $imprime =  "<td colspan='2' ><strong>Solución:</strong> " . $reg['solucion']."  <br><br><img src='../tecni/". $respuestafoto . "' width=100px height='auto' alt='foto ticket'/> </td>";
+
+}
+
+else if($respuestafoto=="" && ($reg1['id_rol']==5267 || $reg1['id_rol']==4046) ){
+
+    $imprime =  "<td colspan='2' ><strong>Solución:</strong> " . $reg['solucion']." </td>";
+
+
+}
 
 
 $html = "";
@@ -52,7 +69,8 @@ $html = $html .
                 
                 <tr colspan='4'>
                     <td  colspan='2' style='text-align: left;'   ><strong>Foto:</strong><br><br><img src='../user/". $reg['foto'] . "' width=100px height='auto' alt='foto ticket'/> </td>
-                    <td colspan='2' ><strong>Solución:</strong> " . $reg['solucion']." </td>
+                    ".
+                    $imprime ."
                 
                     </tr>
 
