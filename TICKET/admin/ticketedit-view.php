@@ -7,9 +7,9 @@ require '/xampp/htdocs/TicketAlcomex/vendor/autoload.php';
 
 
 $id = MysqlQuery::RequestGet('id');
-$sql = Mysql::consulta("SELECT t.foto,t.id_atiende as atender,t.id, t.fecha, t.serie, t.asunto, t.mensaje, t.solucion, c.nombre_completo , c.email_cliente, d.nombre as departamento, e.Nombre, e.idEstatus FROM ticket t INNER JOIN cliente c ON t.idUsuario = c.id_cliente INNER JOIN departamento d ON d.idDepartamento = t.idDepartamento INNER JOIN estatus e ON t.idStatus = e.idEstatus  WHERE t.id= $id");
+$sql = Mysql::consulta("SELECT t.foto,t.respuestafoto,t.id_atiende as atender,t.id, t.fecha, t.serie, t.asunto, t.mensaje, t.solucion, c.nombre_completo , c.email_cliente, d.nombre as departamento, e.Nombre, e.idEstatus FROM ticket t INNER JOIN cliente c ON t.idUsuario = c.id_cliente INNER JOIN departamento d ON d.idDepartamento = t.idDepartamento INNER JOIN estatus e ON t.idStatus = e.idEstatus  WHERE t.id= $id");
 $reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
-
+$fotoR = $reg['respuestafoto'];
 
 if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST['estado_ticket'])){
 
@@ -25,8 +25,14 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
 
     $resultado = Imagen::procesar_imagen("../TICKET/admin/Respuesta", "respuesta");
 		if($resultado['autoriza']==true){
-      MysqlQuery::Actualizar("ticket", "respuestafoto= '". $resultado['imagen_ticket'] . "',fecha='$fecha',id_atiende='$Atiende_edit', idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion='" . date("Y-m-d H:i:s"). "'","id=$id_edit");                            
-      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Actualizar','".date("Y-m-d H:i:s") ."','ticket'"))
+      if($fotoR==""){  
+        MysqlQuery::Actualizar("ticket", "respuestafoto= '". $resultado['imagen_ticket'] . "',idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'");
+        }              
+        else{
+          MysqlQuery::Actualizar("ticket", "idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'");
+       
+        }      
+     if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Actualizar','".date("Y-m-d H:i:s") ."','ticket'"))
  
       
       echo '

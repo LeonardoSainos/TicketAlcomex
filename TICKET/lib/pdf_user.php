@@ -71,13 +71,7 @@ $html = $html .
                     <td  colspan='2' style='text-align: left;'   ><strong>Foto:</strong><br><br><img src='../user/". $reg['foto'] . "' width=100px height='auto' alt='foto ticket'/> </td>
                     ".
                     $imprime ."
-                
                     </tr>
-
-               
-                  
-
-
             </thead>
 </table>
 

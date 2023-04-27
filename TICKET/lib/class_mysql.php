@@ -57,7 +57,7 @@ class Mysql{
         }
         else{
             $autoriza = true;
-            $imagen_ticket = $nombreimagen."/error.jpg";
+            $imagen_ticket = "";
         }
         // Retorna los valores calculados
         return array(
