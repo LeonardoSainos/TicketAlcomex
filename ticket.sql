@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-04-2023 a las 01:16:11
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.2.0
+-- Tiempo de generación: 27-04-2023 a las 18:28:32
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -50,10 +50,12 @@ Declare aleatorio2 int DEFAULT 0;
 DECLARE rol int DEFAULT 0;
 DECLARE departamento varchar(50);
 DECLARE nombreCompleto varchar(60);
+DECLARE depaUsuDele int DEFAULT 0;
+
 START TRANSACTION;
 
-
-SET admin=(SELECT id_cliente FROM cliente where id_cliente <> id and id_rol=5267 order by fecha_creacion DESC LIMIT 0,1);
+SET depaUsuDele = (SELECT id_departamento FROM cliente WHERE id_cliente = id);
+SET admin=(SELECT id_cliente FROM cliente where id_cliente <> id and (id_rol=5267 AND id_departamento=depaUsuDele) order by fecha_creacion DESC LIMIT 0,1);
 UPDATE departamento SET idJefe=admin WHERE idJefe=id;
 SET tecnico =(SELECT COUNT(*) FROM ticket WHERE id_atiende = admin AND fecha BETWEEN  CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin,' 23:59:59'));              
  
@@ -62,10 +64,10 @@ set departamento= (SELECT departamento.nombre FROM cliente INNER JOIN departamen
 set nombreCompleto = (SELECT nombre_completo FROM cliente WHERE id_cliente = id); 
 
 IF tecnico <=20 THEN 
-    UPDATE ticket SET id_atiende = tecnico WHERE id_atiende = id  AND fecha BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');
+    UPDATE ticket SET id_atiende = admin WHERE id_atiende = id  AND fecha BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');
 	SET aleatorio =(SELECT id_cliente FROM cliente WHERE id_rol= 4046 ORDER BY email_cliente LIMIT 0,1);
     UPDATE ticket SET id_atiende = aleatorio WHERE id_atiende = id AND  fecha NOT BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');
-    DELETE FROM ticket WHERE idUsuario = id;
+    DELETE FROM ticket WHERE idUsuario = id or id_atiende = id;
       INSERT INTO user_delete (idUsuario,nombre_completo,id_rol,id_departamento,pendiente,creados,resuelto,proceso) VALUES (id,nombreCompleto,rol,departamento,pen,cre,res,pro);
     DELETE FROM cliente WHERE id_cliente = id;
 COMMIT;           
@@ -73,12 +75,13 @@ ELSEIF tecnico >=20 THEN
       set aleatorio =(SELECT id_cliente FROM cliente WHERE id_rol= 4046 ORDER BY email_cliente LIMIT 0,1);
        UPDATE ticket SET id_atiende = aleatorio WHERE id_atiende = id AND  fecha NOT BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');
        SET aleatorio2 = (SELECT id_cliente FROM cliente WHERE id_rol= 4046 AND id_cliente<> aleatorio ORDER BY email_cliente LIMIT 0,1);
-       UPDATE ticket SET id_atiende = aleatorio2 WHERE id_atiende = id AND  fecha BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');                         		   INSERT INTO user_delete (idUsuario,nombre_completo,id_rol,id_departamento,pendiente,creados,resuelto,proceso) VALUES (id,nombreCompleto,rol,departamento,pen,cre,res,pro);
-       DELETE FROM ticket WHERE idUsuario = id;
+       UPDATE ticket SET id_atiende = aleatorio2 WHERE id_atiende = id AND  fecha BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');   
+       INSERT INTO user_delete (idUsuario,nombre_completo,id_rol,id_departamento,pendiente,creados,resuelto,proceso) VALUES (id,nombreCompleto,rol,departamento,pen,cre,res,pro);
+       DELETE FROM ticket WHERE idUsuario = id or id_atiende = id;
        DELETE FROM cliente WHERE id_cliente = id;
 COMMIT;
 END IF;
-ROLLBACK;
+ 
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `NuevoUsuario` (IN `usuario` INT, IN `acciones` VARCHAR(12), IN `fechad` VARCHAR(20), IN `tablad` VARCHAR(15))   BEGIN
@@ -150,23 +153,23 @@ CREATE TABLE `cliente` (
 --
 
 INSERT INTO `cliente` (`id_cliente`, `nombre_completo`, `nombre_usuario`, `email_cliente`, `clave`, `id_departamento`, `id_rol`, `telefono_celular`, `Fecha_creacion`, `idEstatus`) VALUES
-(1, 'Leonardo Saínos Pérez', 'LeonardoSainos', 'leonardosainos@gmail.com', '5e8667a439c68f5145dd2fcbecf02209', 2526, 4046, '2228412398', '2023-02-21 15:43:55', 31448),
-(3, 'Alondra Sanchez Torivio', 'Alo250518', 'alondrasanchez@gmail.com', '25d55ad283aa400af464c76d713c07ad', 2505, 5267, '2228660690', '2023-01-30 19:39:32', 31448),
-(5, 'Andrés Sebastián Sánchez Cortez', 'Oaxaco', 'andressebas@gmail.com', '0094bcd09edc457cf5efd7d93ad995f3', 2505, 5267, '5535291605', '2023-02-22 20:37:38', 31448),
-(7, 'Luis Enrique Granillo Gamino', 'Gamino', 'kikegamino@gmail.com', '25d55ad283aa400af464c76d713c07ad', 2505, 5267, '2222335566', '2023-01-18 23:25:39', 31448),
-(8, 'Roman Sanchez', 'Roman08', 'roman@gmail.com', 'e2a8423214be5cd507325221dea72022', 2505, 9947, '2225469883', '2023-02-11 18:04:26', 31448),
-(12, 'Luis Enrique Granillo Gamino', 'TecnicoKike', 'LuisGranillo@gmail.com', 'ed2b1f468c5f915f3f1cf75d7068baae', 2505, 4046, '2225277033', '2023-02-21 16:44:32', 31448),
-(22, 'Bruno Absalon Flores Rosas', 'PeterGordo', 'bruno@gmail.com', 'ed2b1f468c5f915f3f1cf75d7068baae', 2505, 5267, '2213516726', '2023-02-22 17:40:19', 19231),
-(23, 'Luis Hernandez Escuela', 'Escuela@alcomex', 'schoolmusic@gmail.com', 'helloworld', 2510, 4046, '2228526358', '2023-03-13 17:05:23', 31448),
-(29, 'Edson Montiell Alvarez', 'EdsonRH', 'utp0143830@alumno.utpuebla.edu.mx', '25d55ad283aa400af464c76d713c07ad', 2524, 5267, '2221917939', '2023-03-14 19:26:32', 31448),
-(30, 'Minerva Salas', 'Miche', 'mine@gmail.com', '113065d2207b574501892641d0383875', 9, 4046, '2228412399', '2023-03-22 15:49:33', 25542),
-(31, 'Gibran Antonio Garcia Xicohtencatl', 'Gibran', 'sistemas@alcomex.mx', '342ef382d282dceaac9bfc51ebd7bae6', 2505, 4046, '2223245928', '2023-03-23 16:45:16', 31448),
-(38, 'Jenny Ortega Garcia', 'Jenny', 'jennyortega@gmail.com', '25d55ad283aa400af464c76d713c07ad', 2505, 5267, '5566778844', '2023-03-27 20:01:07', 31448),
-(40, 'Uriel Isai Hernández Hernández ', 'UriCss', 'uricss@gmail.com', '25d55ad283aa400af464c76d713c07ad', 2505, 5267, '2491739802', '2023-03-28 20:12:27', 31448),
-(50, 'Ajax AjaxJquery', 'Ajax', 'jqueryprueba@gmail.com', '', 3, 9947, ' 554657689', '2023-03-31 15:41:03', 31448),
-(52, 'Prueba buscador buscador', 'GibranTecnologiasdsds', 'tallsdsdserb2@alcomex.mx', '', 7, 9947, ' 234558781', '2023-04-04 19:24:40', 31448),
-(53, 'Taller B2assa asasa', 'ass', 'asaasassas@gmail.coma', '', 2505, 9947, ' 132345543', '2023-04-04 19:39:28', 31448),
-(54, 'Reseteo de contraseña Contraseña', 'Reseteo', 'gabyperez@gmail.com', 'e8e314069531793728024b4b1792f4bd', 2524, 9947, ' 213455565', '2023-04-10 20:09:02', 31448);
+(1, 'LEONARDO SAINOS PÉREZ', 'LeonardoSainos', 'tecnologias.alcomex@gmail.com', '5e8667a439c68f5145dd2fcbecf02209', 2526, 4046, '2228412398', '2023-02-21 15:43:55', 31448),
+(29, 'EDSON MONTIEL ALVAREZ', 'EdsonRH', 'alcomex2022@gmail.com', 'e205a48b5fdc022bf2f202897c243f07', 2524, 5267, '2221917939', '2023-03-14 19:26:32', 31448),
+(31, 'GIBRAN ANTONIO GARCIA XICOHTENCATL', 'Gibran', 'sistemas@alcomex.mx', 'b171e652897341d6ac679cd76c1b1a8f', 2526, 4046, '2223245928', '2023-03-23 16:45:16', 31448),
+(59, 'ANA PATRICIA  ARROYO VIEYRA', 'Patty', 'anapatriciaarroyo7@gmail.com', '1634b5ea562876a8aa28812b2c9961bb', 2531, 5267, '221649581', '2023-04-14 16:07:11', 31448),
+(64, 'JOSEPH MISAEL SALDAÑA LEYVA', 'joseph', 'seguridadpatrimonial@alcomex.mx', '2226cb2bd3f2573223d8dd5f90a77364', 2534, 5267, '2225999552', '2023-04-21 18:01:48', 31448),
+(65, 'ANA LAURA TREJO MORENO ', 'AnaLau2023', 'ana.trejo@alcomex.mx', '5e3c061fc9f7d18f0bc9b1166823fa7a', 2536, 5267, '2221804412', '2023-04-21 18:02:20', 31448),
+(66, 'ALMA HUITZIL ORTIZ', 'Alma', 'enthemar@gmail.com', '3ed7d067901834e62d1b4ddda804a3d7', 2531, 5267, '2227279900', '2023-04-21 18:11:14', 31448),
+(67, 'ARACELI JUAREZ HERNANDEZ', 'JUAREZARACELI', 'transporte-logistica@alcomex.mx', '00485c72e98b4556153bfcc6a29c55e3', 2540, 5267, '2211053781', '2023-04-21 18:11:25', 31448),
+(68, 'JESSICA MORALES ALARCON', 'moralesjessica', 'facturacion@alcomex.mx', '7aa5754554899c4e61a731d2d3913bb5', 2539, 5267, '2221521783', '2023-04-21 18:12:32', 31448),
+(69, 'ALEJANDRO DAMAZO', 'AlejandroD', 'alejandro.damazo@alcomex.mx', 'e955a29b180129018367c8bc8c988b4d', 2532, 5267, '2223342375', '2023-04-21 18:18:59', 31448),
+(70, 'JOSUE GONZALEZ HUERTA', 'Monitoreo', 'monitoreo@alcomex.mx', '2dac9d087e6e970067c81c3edd20903c', 2534, 5267, '2228673417', '2023-04-21 18:25:08', 31448),
+(71, 'ALEJANDRA VERÓNICA TÉLLEZ SÁNCHEZ', 'ALEJANDRA', 'transporte-logistica@alcomex.mx', '30dcdfabd738069d5f0a06362ed71843', 2535, 5267, '2228131844', '2023-04-21 18:26:02', 31448),
+(72, 'MIRIAM LIZBETH ESPINOSA HERNANDEZ', 'MiriamEspinosa', 'lunaazul1688@gmail.com', 'fb6293a9bc14a34d1388a4988998e75d', 2536, 5267, '2225543721', '2023-04-21 18:40:29', 31448),
+(73, 'KAREN REYNOSO', 'Karen', 'anakaren.reynoso@alcomex.mx', '34eca06f123e3fe940a0a8cd92ef986d', 2538, 5267, '2223345850', '2023-04-21 18:44:11', 31448),
+(74, 'LUIS MANUEL AMARO VAZQUEZ', 'manuel', 'luis.amaro@alcomex.mx', '22536308e001c4b6e553c75310836485', 2536, 5267, '2221542607', '2023-04-21 21:22:59', 31448),
+(75, 'BRENDA FLORES', 'BRENDA', 'monitoreo@alcomex.mx', '25f9e794323b453885f5181f1b624d0b', 2534, 5267, '2228673417', '2023-04-22 00:00:31', 31448),
+(76, 'CARLOS ALBERTO DIAZ MARTINEZ', 'CONTADOR', 'charlydm20@gmail.com', '7ed863b3e798b5c0708cab0ffe87c999', 2531, 5267, '2225496780', '2023-04-24 15:54:29', 31448);
 
 --
 -- Disparadores `cliente`
@@ -205,20 +208,22 @@ CREATE TABLE `departamento` (
 --
 
 INSERT INTO `departamento` (`idDepartamento`, `nombre`, `correo`, `descripcion`, `idEstatus`, `idJefe`, `fecha`) VALUES
-(3, 'Prueba', 'Prueba@gmail.com', 'esto es una prueba', 31448, 22, '2023-03-09 18:16:27'),
-(7, 'Talleres', 'deportes@utpuebla.edu.mx', 'Talleres deportivos y culturales ', 31448, 1, '2023-03-09 18:16:27'),
-(9, 'Titulacion', 'titulacionalcomex@utpuebla.mx', 'Area encargada del proceso de titulacion', 31448, 40, '2023-03-09 18:16:27'),
-(2505, 'Sin departamento', '', '', 31448, 3, '2023-03-09 18:16:27'),
-(2506, 'Cuentas por cobrar', 'cuentasporcobrar@alcomex.mx', 'Departamento del área de finanzas', 31448, 3, '2023-03-09 18:16:27'),
-(2507, 'Prueba1', 'correo@gmail.com', 'Esto es una prueba de CRUD', 31448, 1, '2023-03-09 20:00:17'),
-(2510, 'Prueba1', 'correo032@gmail.com', 'Esto es una prueba de CRUD', 31448, 1, '2023-03-09 22:38:28'),
-(2519, 'Prueba10', 'icorreo9@gmail.com', 'Esto es una prueba de CRUD', 31448, 1, '2023-03-09 22:38:28'),
-(2522, 'Taller B2', 'tallerb2@alcomex.mx', 'Esta área se encarga de dar mantenimiento a los equipos de carga ', 31448, 3, '2023-03-13 18:55:57'),
-(2523, 'Sistemas', 'sistemas@alcomex.mx', 'Soporte técnico  ', 31448, 1, '2023-03-14 19:27:21'),
-(2524, 'Recursos Humanos', 'alcomex2022@gmail.com', 'Recursos humanos alcomex', 31448, 29, '2023-03-14 19:29:28'),
-(2525, 'Triggers', 'triggers@gmail.com', 'Prueba de desencadenadores', 31448, 40, '2023-03-27 20:14:20'),
-(2526, 'B1 Sopte técnico', 'tecnologias.alcomex@gmail.com', 'Sopte técnico de sistemas', 31448, 1, '2023-04-11 22:28:06'),
-(2527, 'B1 prueba', 'creodepruebasutp@gmail.com', 'Sopte técnico de sistemas para pruebas', 31448, 31, '2023-04-11 22:30:45');
+(2505, 'Sin departamento', '', '', 31448, NULL, '2023-03-09 18:16:27'),
+(2524, 'B1 Recursos Humanos', 'alcomex2022@gmail.com', 'Recursos humanos alcomex', 31448, 29, '2023-03-14 19:29:28'),
+(2526, 'B1 Soporte técnico', 'tecnologias.alcomex@gmail.com', 'Soporte técnico de sistemas', 31448, 31, '2023-04-11 22:28:06'),
+(2528, 'B2 Taller', 'almacen.alcomex@gmail.com', 'Taller de  tractos San Pablo Xochimehuacan', 31448, 31, '2023-04-14 15:37:45'),
+(2529, 'B3 Encierro ', 'Jpbrindis@hotmail.com', 'Encierro principal de tractos', 31448, 31, '2023-04-14 15:40:17'),
+(2530, 'B4 Gasolinera', 'alcomexB4@gmail.com', 'Gasolinera Amozoc', 31448, 1, '2023-04-14 15:42:23'),
+(2531, 'B1 Contabilidad', 'contabilidad2023alcomex@gmail.com', 'Departamento de contabilidad', 31448, 76, '2023-04-14 16:10:16'),
+(2532, 'B1 Coordinación tráfico', 'luis.amaro@alcomex.mx', 'Coordinación de tráfico Alcomex', 31448, NULL, '2023-04-14 16:19:36'),
+(2533, 'B1 Coordinación de unidades', 'alejandro.damazo@alcomex.mx', 'Coordinación de unidades', 31448, 69, '2023-04-21 18:10:33'),
+(2534, 'B1 Seguridad patrimonial', 'seguridadpatrimonial@alcomex.mx', 'Área de monitoreo', 31448, 64, '2023-04-21 18:13:27'),
+(2535, 'B1 Cuentas por cobrar', 'transporte-logistica@alcomex.mx', 'Área de cuentas por cobrar', 31448, 71, '2023-04-21 18:16:23'),
+(2536, 'B1 Coordinación logística ', 'ana.trejo@alcomex.mx', 'Área encargada de administrar logística ', 31448, 74, '2023-04-21 18:24:47'),
+(2537, 'B1 Gerencia de operaciones', 'heribertoalvarez@alcomex.mx', 'Gerencia de operaciones', 31448, 31, '2023-04-21 19:28:50'),
+(2538, 'B1 Coordinación logística de C', 'anakaren.reynoso@alcomex.mx', 'Coordinación logística ', 31448, 73, '2023-04-21 22:33:38'),
+(2539, 'B1 Facturación', 'facturacion@alcomex.mx', 'Área de facturación', 31448, 68, '2023-04-24 21:50:33'),
+(2540, 'B1 Devoluciones', 'transportesalcomex@gmail.com', 'Área de devoluciones', 31448, 67, '2023-04-24 22:01:31');
 
 --
 -- Disparadores `departamento`
@@ -254,7 +259,6 @@ CREATE TABLE `enviocorreo` (
 --
 
 INSERT INTO `enviocorreo` (`correo`, `contraseña`, `fecha`, `id`) VALUES
-(2527, '¼)‡ÒÅ¬w½JÚÇ¹¡hNÅÒ×ñÔüY)	Qùe', '2023-04-11 16:41:05', 1),
 (2526, '„sä‘ô_ÆÝe/õ«®$´²ÅÒ×ñÔüY)	Qùe', '2023-04-11 16:43:50', 2);
 
 -- --------------------------------------------------------
@@ -301,249 +305,158 @@ CREATE TABLE `registro_alteraciones` (
 --
 
 INSERT INTO `registro_alteraciones` (`id_registro`, `usuario`, `fecha`, `accion`, `idAlterado`, `tabla`) VALUES
-(284, 1, '2023-03-25 19:37:35', 'Eliminar', 59, 'ticket'),
-(285, 1, '2023-03-25 19:37:41', 'Eliminar', 53, 'ticket'),
-(286, 1, '2023-03-27 19:16:56', 'Actualizar', 3, 'cliente'),
-(287, 1, '2023-03-27 19:18:46', 'Actualizar', 8, 'cliente'),
-(288, 1, '2023-03-27 19:19:20', 'Actualizar', 30, 'cliente'),
-(293, 1, '2023-03-27 19:29:17', 'Actualizar', 30, 'cliente'),
-(296, 1, '2023-03-27 19:37:54', 'Insertar', 35, 'cliente'),
-(297, 1, '2023-03-27 19:55:53', 'Insertar', 36, 'cliente'),
-(298, 37, '2023-03-27 19:57:13', 'Insertar', 1, 'cliente'),
-(299, 38, '2023-03-27 20:01:07', 'Insertar', 38, 'cliente'),
-(302, 1, '2023-03-27 20:06:02', 'Actualizar', 2506, 'departamento'),
-(303, 36, '2023-03-27 20:06:51', 'Actualizar', 65, 'ticket'),
-(304, 1, '2023-03-27 20:07:11', 'Eliminar', 60, 'ticket'),
-(305, 1, '2023-03-27 20:13:35', 'Insertar', 68, 'ticket'),
-(306, 1, '2023-03-27 20:14:20', 'Insertar', 2525, 'departamento'),
-(307, 1, '2023-03-27 20:58:48', 'Actualizar', 33, 'cliente'),
-(308, 0, '2023-03-27 20:58:54', 'Eliminar', 33, 'cliente'),
-(309, 0, '2023-03-27 21:02:54', 'Eliminar', 34, 'cliente'),
-(310, 1, '2023-03-27 21:03:17', 'Actualizar', 36, 'cliente'),
-(315, 0, '2023-03-27 21:05:11', 'Eliminar', 36, 'cliente'),
-(316, 1, '2023-03-27 21:07:40', 'Insertar', 39, 'cliente'),
-(369, 1, '2023-03-28 20:08:32', 'Actualizar', 2506, 'departamento'),
-(370, 0, '2023-03-28 20:10:42', '', 5, 'cliente'),
-(371, 40, '2023-03-28 20:12:27', 'Insertar', 40, 'cliente'),
-(372, 0, '2023-03-28 20:21:18', '', 2506, 'departamento'),
-(373, 1, '2023-03-28 20:21:44', 'Actualizar', 2523, 'departamento'),
-(374, 0, '2023-03-28 20:23:32', '', 2523, 'departamento'),
-(375, 1, '2023-03-28 20:23:46', 'Actualizar', 2523, 'departamento'),
-(376, 1, '2023-03-28 20:38:53', 'Actualizar', 2522, 'departamento'),
-(377, 1, '2023-03-28 20:39:01', 'Actualizar', 2522, 'departamento'),
-(378, 1, '2023-03-28 20:39:08', 'Actualizar', 2522, 'departamento'),
-(379, 1, '2023-03-28 20:41:23', 'Actualizar', 2522, 'departamento'),
-(380, 1, '2023-03-28 20:42:24', 'Actualizar', 2522, 'departamento'),
-(381, 1, '2023-03-28 20:43:44', 'Actualizar', 2523, 'departamento'),
-(382, 1, '2023-03-28 21:29:14', 'Actualizar', 2523, 'departamento'),
-(383, 1, '2023-03-28 21:29:19', 'Actualizar', 2523, 'departamento'),
-(384, 1, '2023-03-28 21:29:24', 'Actualizar', 2523, 'departamento'),
-(385, 1, '2023-03-28 21:32:42', 'Actualizar', 2523, 'departamento'),
-(386, 1, '2023-03-28 21:46:38', 'Actualizar', 2506, 'departamento'),
-(387, 1, '2023-03-28 21:46:49', 'Actualizar', 2506, 'departamento'),
-(388, 1, '2023-03-28 21:47:22', 'Actualizar', 2506, 'departamento'),
-(389, 1, '2023-03-28 21:59:42', 'Actualizar', 2506, 'departamento'),
-(390, 1, '2023-03-28 22:07:56', 'Actualizar', 2506, 'departamento'),
-(391, 1, '2023-03-28 22:12:46', 'Actualizar', 2506, 'departamento'),
-(392, 1, '2023-03-28 22:12:57', 'Actualizar', 2506, 'departamento'),
-(393, 1, '2023-03-28 22:13:48', 'Actualizar', 2506, 'departamento'),
-(394, 1, '2023-03-28 22:14:11', 'Actualizar', 1, 'cliente'),
-(395, 1, '2023-03-28 22:14:32', 'Actualizar', 1, 'cliente'),
-(396, 1, '2023-03-28 22:17:04', 'Actualizar', 2506, 'departamento'),
-(397, 1, '2023-03-28 22:17:14', 'Actualizar', 2506, 'departamento'),
-(398, 1, '2023-03-28 22:17:36', 'Actualizar', 1, 'cliente'),
-(399, 1, '2023-03-28 22:18:02', 'Actualizar', 1, 'cliente'),
-(400, 0, '2023-03-28 22:19:01', '', 1, 'cliente'),
-(401, 1, '2023-03-28 22:31:48', 'Actualizar', 2506, 'departamento'),
-(402, 1, '2023-03-28 22:32:12', 'Actualizar', 2506, 'departamento'),
-(403, 1, '2023-03-28 22:33:25', 'Actualizar', 2506, 'departamento'),
-(404, 1, '2023-03-28 22:35:36', 'Actualizar', 2506, 'departamento'),
-(405, 1, '2023-03-28 22:37:29', 'Actualizar', 2506, 'departamento'),
-(406, 1, '2023-03-28 22:37:48', 'Actualizar', 2506, 'departamento'),
-(407, 1, '2023-03-28 22:40:11', 'Actualizar', 1, 'cliente'),
-(408, 1, '2023-03-28 22:40:42', 'Actualizar', 2523, 'departamento'),
-(409, 1, '2023-03-28 22:40:53', 'Actualizar', 2522, 'departamento'),
-(410, 40, '2023-03-28 22:41:48', 'Actualizar', 40, 'cliente'),
-(411, 40, '2023-03-28 22:44:01', 'Insertar', 69, 'ticket'),
-(412, 40, '2023-03-28 22:46:57', 'Insertar', 70, 'ticket'),
-(413, 40, '2023-03-28 22:47:02', 'Insertar', 71, 'ticket'),
-(414, 40, '2023-03-28 22:47:06', 'Insertar', 72, 'ticket'),
-(415, 40, '2023-03-28 22:47:09', 'Insertar', 73, 'ticket'),
-(416, 40, '2023-03-28 22:47:12', 'Insertar', 74, 'ticket'),
-(417, 40, '2023-03-28 22:47:15', 'Insertar', 75, 'ticket'),
-(418, 40, '2023-03-28 22:47:18', 'Insertar', 76, 'ticket'),
-(419, 40, '2023-03-28 22:47:21', 'Insertar', 77, 'ticket'),
-(420, 40, '2023-03-28 22:47:23', 'Insertar', 78, 'ticket'),
-(421, 40, '2023-03-28 22:47:27', 'Insertar', 79, 'ticket'),
-(422, 40, '2023-03-28 22:47:31', 'Insertar', 80, 'ticket'),
-(423, 40, '2023-03-28 22:47:34', 'Insertar', 81, 'ticket'),
-(424, 40, '2023-03-28 22:47:37', 'Insertar', 82, 'ticket'),
-(425, 40, '2023-03-28 22:47:41', 'Insertar', 83, 'ticket'),
-(426, 40, '2023-03-28 22:47:44', 'Insertar', 84, 'ticket'),
-(427, 40, '2023-03-28 22:47:47', 'Insertar', 85, 'ticket'),
-(428, 40, '2023-03-28 22:47:50', 'Insertar', 86, 'ticket'),
-(429, 40, '2023-03-28 22:47:54', 'Insertar', 87, 'ticket'),
-(430, 40, '2023-03-28 22:47:58', 'Insertar', 88, 'ticket'),
-(431, 40, '2023-03-28 22:48:02', 'Insertar', 89, 'ticket'),
-(432, 40, '2023-03-28 22:48:06', 'Insertar', 90, 'ticket'),
-(433, 40, '2023-03-28 22:48:10', 'Insertar', 91, 'ticket'),
-(434, 40, '2023-03-28 22:48:13', 'Insertar', 92, 'ticket'),
-(435, 40, '2023-03-28 22:48:16', 'Insertar', 93, 'ticket'),
-(436, 40, '2023-03-28 22:48:21', 'Insertar', 94, 'ticket'),
-(437, 40, '2023-03-28 22:48:58', 'Insertar', 95, 'ticket'),
-(438, 40, '2023-03-28 22:49:03', 'Insertar', 96, 'ticket'),
-(439, 40, '2023-03-28 22:49:06', 'Insertar', 97, 'ticket'),
-(440, 40, '2023-03-28 22:49:10', 'Insertar', 98, 'ticket'),
-(441, 40, '2023-03-28 22:49:13', 'Insertar', 99, 'ticket'),
-(442, 40, '2023-03-28 22:49:17', 'Insertar', 100, 'ticket'),
-(443, 40, '2023-03-28 22:49:21', 'Insertar', 101, 'ticket'),
-(444, 1, '2023-03-28 22:49:58', 'Actualizar', 2525, 'departamento'),
-(445, 1, '2023-03-28 22:50:30', 'Actualizar', 40, 'cliente'),
-(446, 40, '2023-03-28 22:52:06', 'Actualizar', 35, 'ticket'),
-(447, 0, '2023-03-28 23:00:30', '', 78, 'ticket'),
-(448, 1, '2023-03-28 23:12:11', 'Actualizar', 1, 'cliente'),
-(449, 0, '2023-03-28 23:16:06', '', 1, 'cliente'),
-(451, 1, '2023-03-28 23:41:51', 'Actualizar', 9, 'departamento'),
-(453, 1, '2023-03-28 23:53:56', 'Insertar', 41, 'cliente'),
-(454, 0, '2023-03-29 00:03:11', 'Eliminar', 41, 'cliente'),
-(455, 1, '2023-03-29 17:17:54', 'Insertar', 42, 'cliente'),
-(456, 1, '2023-03-29 17:18:00', 'EliminarU', 42, 'cliente'),
-(457, 1, '2023-03-29 17:18:07', 'Actualizar', 40, 'cliente'),
-(458, 1, '2023-03-29 17:21:27', 'Insertar', 43, 'cliente'),
-(459, 1, '2023-03-29 17:21:42', 'EliminarUsua', 43, 'cliente'),
-(460, 1, '2023-03-29 17:22:37', 'Insertar', 44, 'cliente'),
-(461, 1, '2023-03-29 17:24:07', 'Actualizar', 44, 'cliente'),
-(462, 1, '2023-03-29 17:24:07', 'Actualizar', 44, 'cliente'),
-(463, 1, '2023-03-29 17:24:10', 'Actualizar', 44, 'cliente'),
-(464, 1, '2023-03-29 17:29:09', 'EliminarUsua', 44, 'cliente'),
-(465, 1, '2023-03-29 17:30:08', 'Actualizar', 7, 'cliente'),
-(466, 1, '2023-03-29 17:30:18', 'Actualizar', 7, 'cliente'),
-(467, 1, '2023-03-29 17:30:28', 'Actualizar', 29, 'cliente'),
-(468, 1, '2023-03-29 17:30:28', 'Actualizar', 7, 'cliente'),
-(469, 1, '2023-03-29 17:30:33', 'Actualizar', 29, 'cliente'),
-(470, 1, '2023-03-29 17:30:33', 'Actualizar', 7, 'cliente'),
-(471, 1, '2023-03-29 17:32:26', 'Actualizar', 40, 'cliente'),
-(472, 1, '2023-03-29 17:45:13', 'Insertar', 45, 'cliente'),
-(473, 1, '2023-03-29 17:45:25', 'EliminarU', 45, 'cliente'),
-(474, 1, '2023-03-29 17:46:52', 'Insertar', 46, 'cliente'),
-(477, 1, '2023-03-29 17:47:23', 'Actualizar', 35, 'cliente'),
-(478, 1, '2023-03-29 17:47:33', 'Actualizar', 46, 'cliente'),
-(479, 1, '2023-03-29 17:47:48', 'EliminarU', 65, 'ticket'),
-(480, 1, '2023-03-29 17:47:48', 'EliminarU', 35, 'cliente'),
-(481, 1, '2023-03-29 17:47:48', 'EliminarU', 46, 'cliente'),
-(482, 1, '2023-03-29 17:50:07', 'Insertar', 47, 'cliente'),
-(483, 1, '2023-03-29 17:50:43', 'Insertar', 48, 'cliente'),
-(484, 1, '2023-03-29 17:50:57', 'EliminarU', 48, 'cliente'),
-(485, 1, '2023-03-29 17:50:57', 'EliminarU', 47, 'cliente'),
-(486, 1, '2023-03-29 23:36:34', 'Actualizar', 1, 'cliente'),
-(487, 0, '2023-03-30 15:35:23', '', 1, 'cliente'),
-(488, 1, '2023-03-30 16:09:22', 'Actualizar', 31, 'cliente'),
-(489, 1, '2023-03-31 15:40:24', 'Insertar', 49, 'cliente'),
-(490, 1, '2023-03-31 15:40:37', 'EliminarU', 49, 'cliente'),
-(491, 1, '2023-03-31 15:41:03', 'Insertar', 50, 'cliente'),
-(492, 1, '2023-03-31 18:37:04', 'Actualizar', 1, 'cliente'),
-(493, 1, '2023-03-31 23:07:10', 'Actualizar', 1, 'cliente'),
-(494, 1, '2023-04-01 17:28:44', 'Insertar', 51, 'cliente'),
-(495, 1, '2023-04-01 17:29:00', 'EliminarU', 51, 'cliente'),
-(496, 1, '2023-04-01 17:57:12', 'Eliminar', 65, 'ticket'),
-(497, 1, '2023-04-01 17:58:10', 'Actualizar', 38, 'cliente'),
-(498, 1, '2023-04-01 18:36:16', 'Actualizar', 1, 'cliente'),
-(499, 1, '2023-04-03 18:24:29', 'Actualizar', 50, 'cliente'),
-(500, 1, '2023-04-03 18:28:23', 'Eliminar', 34, 'ticket'),
-(501, 1, '2023-04-03 19:36:54', 'Actualizar', 1, 'cliente'),
-(502, 0, '2023-04-04 16:12:03', '', 1, 'cliente'),
-(503, 1, '2023-04-04 19:07:57', 'Eliminar', 35, 'ticket'),
-(504, 1, '2023-04-04 19:10:43', 'Actualizar', 1, 'cliente'),
-(505, 1, '2023-04-04 19:24:40', 'Insertar', 52, 'cliente'),
-(506, 1, '2023-04-04 19:39:28', 'Insertar', 53, 'cliente'),
-(507, 1, '2023-04-04 19:43:54', 'Actualizar', 50, 'cliente'),
-(508, 1, '2023-04-04 19:46:30', 'Actualizar', 50, 'cliente'),
-(509, 0, '2023-04-04 19:47:11', '', 1, 'cliente'),
-(510, 0, '2023-04-04 19:47:41', '', 1, 'cliente'),
-(511, 0, '2023-04-04 20:06:29', '', 1, 'cliente'),
-(512, 0, '2023-04-05 15:45:40', '', 1, 'cliente'),
-(513, 0, '2023-04-05 15:46:43', '', 1, 'cliente'),
-(514, 0, '2023-04-05 15:53:57', '', 72, 'ticket'),
-(515, 0, '2023-04-05 15:53:57', '', 73, 'ticket'),
-(516, 0, '2023-04-05 15:53:57', '', 74, 'ticket'),
-(517, 0, '2023-04-05 16:27:38', '', 1, 'cliente'),
-(518, 0, '2023-04-06 16:14:29', '', 1, 'cliente'),
-(519, 1, '2023-04-10 15:23:49', 'Insertar', 102, 'ticket'),
-(520, 1, '2023-04-10 15:35:23', 'Actualizar', 1, 'cliente'),
-(521, 1, '2023-04-10 16:35:47', 'Insertar', 103, 'ticket'),
-(522, 1, '2023-04-10 16:37:05', 'Insertar', 104, 'ticket'),
-(523, 0, '2023-04-10 20:07:52', '', 1, 'cliente'),
-(524, 1, '2023-04-10 20:09:02', 'Insertar', 54, 'cliente'),
-(525, 1, '2023-04-10 20:10:03', 'Actualizar', 54, 'cliente'),
-(526, 1, '2023-04-10 20:13:52', 'Actualizar', 54, 'cliente'),
-(527, 1, '2023-04-10 20:15:36', 'Actualizar', 54, 'cliente'),
-(528, 1, '2023-04-10 20:17:29', 'Actualizar', 54, 'cliente'),
-(529, 1, '2023-04-10 20:17:50', 'Actualizar', 54, 'cliente'),
-(530, 1, '2023-04-10 20:20:24', 'Actualizar', 54, 'cliente'),
-(531, 1, '2023-04-10 20:20:33', 'Actualizar', 54, 'cliente'),
-(532, 1, '2023-04-10 20:24:32', 'Actualizar', 54, 'cliente'),
-(533, 1, '2023-04-10 20:26:18', 'Actualizar', 54, 'cliente'),
-(534, 1, '2023-04-10 20:26:55', 'Actualizar', 54, 'cliente'),
-(535, 1, '2023-04-10 20:32:42', 'Actualizar', 54, 'cliente'),
-(536, 1, '2023-04-10 20:35:49', 'Actualizar', 54, 'cliente'),
-(537, 1, '2023-04-10 20:38:33', 'Actualizar', 54, 'cliente'),
-(538, 1, '2023-04-10 20:39:46', 'Actualizar', 54, 'cliente'),
-(539, 1, '2023-04-10 20:46:41', 'Actualizar', 54, 'cliente'),
-(540, 1, '2023-04-10 20:50:33', 'Actualizar', 54, 'cliente'),
-(541, 1, '2023-04-10 20:55:15', 'Actualizar', 54, 'cliente'),
-(542, 1, '2023-04-10 20:56:26', 'Actualizar', 54, 'cliente'),
-(543, 1, '2023-04-10 20:56:44', 'Actualizar', 54, 'cliente'),
-(544, 1, '2023-04-10 20:57:32', 'Actualizar', 54, 'cliente'),
-(545, 1, '2023-04-10 21:01:34', 'Actualizar', 54, 'cliente'),
-(546, 1, '2023-04-10 21:02:59', 'Actualizar', 54, 'cliente'),
-(547, 1, '2023-04-10 21:56:16', 'Actualizar', 54, 'cliente'),
-(548, 1, '2023-04-10 22:00:57', 'Actualizar', 54, 'cliente'),
-(549, 1, '2023-04-10 22:08:34', 'Actualizar', 54, 'cliente'),
-(550, 1, '2023-04-10 22:13:27', 'Actualizar', 54, 'cliente'),
-(551, 1, '2023-04-10 22:15:28', 'Actualizar', 54, 'cliente'),
-(552, 1, '2023-04-10 23:01:48', 'Insertar', 105, 'ticket'),
-(553, 1, '2023-04-10 23:12:57', 'Actualizar', 29, 'cliente'),
-(554, 1, '2023-04-10 23:15:55', 'Insertar', 106, 'ticket'),
-(555, 1, '2023-04-10 23:20:37', 'Insertar', 107, 'ticket'),
-(556, 1, '2023-04-10 23:22:39', 'Insertar', 108, 'ticket'),
-(557, 1, '2023-04-10 23:36:55', 'Insertar', 109, 'ticket'),
-(558, 1, '2023-04-10 23:37:59', 'Insertar', 110, 'ticket'),
-(559, 1, '2023-04-11 00:04:42', 'Actualizar', 110, 'ticket'),
-(560, 1, '2023-04-11 00:06:18', 'Actualizar', 110, 'ticket'),
-(561, 1, '2023-04-11 00:07:53', 'Actualizar', 110, 'ticket'),
-(562, 1, '2023-04-11 15:27:35', 'Insertar', 111, 'ticket'),
-(563, 1, '2023-04-11 15:28:11', 'Insertar', 112, 'ticket'),
-(564, 1, '2023-04-11 16:49:17', 'Insertar', 113, 'ticket'),
-(565, 1, '2023-04-11 20:40:43', 'Insertar', 114, 'ticket'),
-(566, 1, '2023-04-11 21:28:26', 'Actualizar', 2505, 'departamento'),
-(567, 1, '2023-04-11 22:28:06', 'Insertar', 2526, 'departamento'),
-(568, 1, '2023-04-11 22:29:56', 'Actualizar', 31, 'cliente'),
-(569, 1, '2023-04-11 22:30:45', 'Insertar', 2527, 'departamento'),
-(570, 1, '2023-04-11 22:45:48', 'Actualizar', 2527, 'departamento'),
-(571, 1, '2023-04-11 22:47:10', 'Actualizar', 2527, 'departamento'),
-(572, 1, '2023-04-11 22:47:39', 'Actualizar', 2527, 'departamento'),
-(573, 1, '2023-04-11 22:47:48', 'Actualizar', 2527, 'departamento'),
-(574, 1, '2023-04-11 22:50:01', 'Actualizar', 2527, 'departamento'),
-(575, 1, '2023-04-11 22:50:26', 'Actualizar', 2527, 'departamento'),
-(576, 1, '2023-04-11 22:50:34', 'Actualizar', 2527, 'departamento'),
-(577, 1, '2023-04-11 22:51:21', 'Actualizar', 114, 'ticket'),
-(578, 1, '2023-04-11 22:51:52', 'Actualizar', 50, 'cliente'),
-(579, 1, '2023-04-11 22:53:13', 'Actualizar', 2527, 'departamento'),
-(580, 1, '2023-04-11 22:53:19', 'Actualizar', 2527, 'departamento'),
-(581, 1, '2023-04-11 22:53:46', 'Actualizar', 2527, 'departamento'),
-(582, 1, '2023-04-11 22:54:31', 'Actualizar', 2527, 'departamento'),
-(583, 1, '2023-04-11 22:54:36', 'Actualizar', 2527, 'departamento'),
-(584, 0, '2023-04-11 22:54:55', '', 2527, 'departamento'),
-(585, 1, '2023-04-11 23:07:16', 'Actualizar', 1, 'cliente'),
-(586, 1, '2023-04-11 23:07:34', 'Actualizar', 2526, 'departamento'),
-(587, 1, '2023-04-11 23:09:29', 'Actualizar', 2526, 'departamento'),
-(588, 1, '2023-04-11 23:09:34', 'Actualizar', 2526, 'departamento'),
-(589, 1, '2023-04-11 23:09:40', 'Actualizar', 2526, 'departamento'),
-(590, 1, '2023-04-11 23:10:48', 'Actualizar', 2526, 'departamento'),
-(591, 1, '2023-04-11 23:10:57', 'Actualizar', 2526, 'departamento'),
-(592, 1, '2023-04-11 23:11:09', 'Actualizar', 2526, 'departamento'),
-(593, 1, '2023-04-11 23:13:24', 'Actualizar', 2527, 'departamento'),
-(594, 1, '2023-04-11 23:13:38', 'Actualizar', 2526, 'departamento');
+(871, 29, '2023-04-21 15:55:37', 'Insertar', 123, 'ticket'),
+(872, 29, '2023-04-21 15:58:01', 'Insertar', 124, 'ticket'),
+(876, 1, '2023-04-21 16:07:39', 'Actualizar', 124, 'ticket'),
+(878, 1, '2023-04-21 16:09:19', 'Actualizar', 123, 'ticket'),
+(879, 1, '2023-04-21 16:09:55', 'Eliminar', 122, 'ticket'),
+(884, 1, '2023-04-21 16:13:39', 'Eliminar', 2527, 'departamento'),
+(885, 0, '2023-04-21 16:39:05', 'Eliminar', 62, 'cliente'),
+(886, 1, '2023-04-21 16:40:28', 'Actualizar', 124, 'ticket'),
+(887, 1, '2023-04-21 16:42:35', 'Actualizar', 123, 'ticket'),
+(888, 1, '2023-04-21 17:18:39', 'Actualizar', 123, 'ticket'),
+(889, 63, '2023-04-21 17:54:02', 'Insertar', 63, 'cliente'),
+(890, 1, '2023-04-21 17:58:33', 'EliminarU', 63, 'cliente'),
+(891, 1, '2023-04-21 18:00:25', 'EliminarU', 12, 'cliente'),
+(892, 64, '2023-04-21 18:01:48', 'Insertar', 64, 'cliente'),
+(893, 65, '2023-04-21 18:02:20', 'Insertar', 65, 'cliente'),
+(894, 1, '2023-04-21 18:10:33', 'Insertar', 2533, 'departamento'),
+(895, 66, '2023-04-21 18:11:14', 'Insertar', 66, 'cliente'),
+(896, 67, '2023-04-21 18:11:25', 'Insertar', 67, 'cliente'),
+(897, 68, '2023-04-21 18:12:32', 'Insertar', 68, 'cliente'),
+(898, 1, '2023-04-21 18:13:27', 'Insertar', 2534, 'departamento'),
+(899, 1, '2023-04-21 18:13:42', 'Actualizar', 64, 'cliente'),
+(900, 1, '2023-04-21 18:15:18', 'Actualizar', 2533, 'departamento'),
+(901, 1, '2023-04-21 18:15:32', 'Actualizar', 2534, 'departamento'),
+(902, 1, '2023-04-21 18:16:23', 'Insertar', 2535, 'departamento'),
+(903, 69, '2023-04-21 18:18:59', 'Insertar', 69, 'cliente'),
+(904, 1, '2023-04-21 18:19:31', 'Actualizar', 69, 'cliente'),
+(905, 1, '2023-04-21 18:24:47', 'Insertar', 2536, 'departamento'),
+(906, 70, '2023-04-21 18:25:08', 'Insertar', 70, 'cliente'),
+(907, 1, '2023-04-21 18:25:49', 'Actualizar', 66, 'cliente'),
+(908, 71, '2023-04-21 18:26:02', 'Insertar', 71, 'cliente'),
+(909, 1, '2023-04-21 18:26:08', 'Actualizar', 66, 'cliente'),
+(910, 1, '2023-04-21 18:26:47', 'Actualizar', 70, 'cliente'),
+(911, 1, '2023-04-21 18:27:41', 'Actualizar', 65, 'cliente'),
+(912, 1, '2023-04-21 18:28:43', 'Actualizar', 2536, 'departamento'),
+(913, 1, '2023-04-21 18:30:33', 'Actualizar', 67, 'cliente'),
+(914, 1, '2023-04-21 18:30:41', 'Actualizar', 68, 'cliente'),
+(915, 1, '2023-04-21 18:31:01', 'Actualizar', 59, 'cliente'),
+(916, 1, '2023-04-21 18:32:00', 'Actualizar', 71, 'cliente'),
+(917, 1, '2023-04-21 18:32:20', 'Actualizar', 65, 'cliente'),
+(918, 1, '2023-04-21 18:32:28', 'Actualizar', 59, 'cliente'),
+(919, 72, '2023-04-21 18:40:29', 'Insertar', 72, 'cliente'),
+(920, 73, '2023-04-21 18:44:11', 'Insertar', 73, 'cliente'),
+(921, 1, '2023-04-21 18:48:40', 'Actualizar', 72, 'cliente'),
+(922, 29, '2023-04-21 18:50:44', 'Actualizar', 29, 'cliente'),
+(923, 1, '2023-04-21 18:55:57', 'Actualizar', 2526, 'departamento'),
+(924, 1, '2023-04-21 19:05:03', 'Actualizar', 1, 'cliente'),
+(925, 1, '2023-04-21 19:08:19', 'Actualizar', 1, 'cliente'),
+(926, 64, '2023-04-21 19:10:10', 'Insertar', 125, 'ticket'),
+(927, 1, '2023-04-21 19:11:35', 'Actualizar', 2533, 'departamento'),
+(928, 1, '2023-04-21 19:28:50', 'Insertar', 2537, 'departamento'),
+(929, 74, '2023-04-21 21:22:59', 'Insertar', 74, 'cliente'),
+(930, 1, '2023-04-21 21:57:26', 'Actualizar', 74, 'cliente'),
+(931, 1, '2023-04-21 21:57:58', 'Actualizar', 74, 'cliente'),
+(932, 1, '2023-04-21 22:19:59', 'EliminarU', 61, 'cliente'),
+(933, 1, '2023-04-21 22:33:38', 'Insertar', 2538, 'departamento'),
+(934, 1, '2023-04-21 22:34:01', 'Actualizar', 73, 'cliente'),
+(935, 1, '2023-04-21 22:48:03', 'Actualizar', 2535, 'departamento'),
+(936, 1, '2023-04-21 22:48:26', 'Actualizar', 71, 'cliente'),
+(937, 1, '2023-04-21 22:54:51', 'Actualizar', 68, 'cliente'),
+(938, 0, '2023-04-21 22:55:06', '', 67, 'cliente'),
+(939, 31, '2023-04-21 23:15:19', 'Actualizar', 125, 'ticket'),
+(940, 31, '2023-04-21 23:15:30', 'Actualizar', 125, 'ticket'),
+(941, 71, '2023-04-21 23:34:42', 'Insertar', 126, 'ticket'),
+(942, 31, '2023-04-21 23:35:44', 'Actualizar', 126, 'ticket'),
+(943, 1, '2023-04-21 23:55:24', 'Actualizar', 67, 'cliente'),
+(944, 75, '2023-04-22 00:00:31', 'Insertar', 75, 'cliente'),
+(945, 1, '2023-04-22 00:02:18', 'Actualizar', 75, 'cliente'),
+(946, 1, '2023-04-22 00:04:15', 'Actualizar', 75, 'cliente'),
+(947, 1, '2023-04-22 00:06:05', 'Actualizar', 75, 'cliente'),
+(948, 65, '2023-04-22 20:00:54', 'Insertar', 127, 'ticket'),
+(949, 0, '2023-04-22 20:04:08', '', 127, 'ticket'),
+(950, 76, '2023-04-24 15:54:29', 'Insertar', 76, 'cliente'),
+(951, 64, '2023-04-24 15:55:37', 'Insertar', 128, 'ticket'),
+(952, 76, '2023-04-24 15:56:43', 'Insertar', 129, 'ticket'),
+(953, 1, '2023-04-24 16:02:16', 'Actualizar', 76, 'cliente'),
+(954, 1, '2023-04-24 16:02:39', 'Actualizar', 2531, 'departamento'),
+(955, 31, '2023-04-24 16:10:26', 'Actualizar', 128, 'ticket'),
+(956, 64, '2023-04-24 16:45:07', 'Insertar', 130, 'ticket'),
+(957, 74, '2023-04-24 16:54:58', 'Insertar', 131, 'ticket'),
+(958, 31, '2023-04-24 17:26:33', 'Actualizar', 128, 'ticket'),
+(959, 31, '2023-04-24 17:28:03', 'Actualizar', 130, 'ticket'),
+(960, 31, '2023-04-24 17:28:33', 'Actualizar', 128, 'ticket'),
+(961, 31, '2023-04-24 17:28:34', 'Actualizar', 128, 'ticket'),
+(962, 69, '2023-04-24 17:43:41', 'Insertar', 132, 'ticket'),
+(963, 1, '2023-04-24 18:06:24', 'Actualizar', 132, 'ticket'),
+(964, 1, '2023-04-24 21:50:33', 'Insertar', 2539, 'departamento'),
+(965, 1, '2023-04-24 21:50:53', 'Actualizar', 68, 'cliente'),
+(966, 1, '2023-04-24 22:01:31', 'Insertar', 2540, 'departamento'),
+(967, 64, '2023-04-24 22:59:40', 'Insertar', 133, 'ticket'),
+(968, 1, '2023-04-24 23:50:02', 'Actualizar', 133, 'ticket'),
+(969, 1, '2023-04-24 23:51:40', 'Actualizar', 129, 'ticket'),
+(970, 1, '2023-04-24 23:52:08', 'Actualizar', 131, 'ticket'),
+(971, 1, '2023-04-24 23:56:19', 'Actualizar', 67, 'cliente'),
+(972, 1, '2023-04-24 23:56:43', 'Actualizar', 2536, 'departamento'),
+(973, 64, '2023-04-25 18:50:44', 'Insertar', 134, 'ticket'),
+(974, 1, '2023-04-25 18:53:54', 'Actualizar', 134, 'ticket'),
+(975, 75, '2023-04-25 18:55:15', 'Insertar', 135, 'ticket'),
+(976, 1, '2023-04-25 19:08:39', 'Actualizar', 135, 'ticket'),
+(977, 1, '2023-04-25 19:58:21', 'Actualizar', 59, 'cliente'),
+(978, 59, '2023-04-25 19:59:50', 'Insertar', 136, 'ticket'),
+(979, 59, '2023-04-25 20:01:03', 'Actualizar', 59, 'cliente'),
+(980, 1, '2023-04-25 20:02:14', 'Actualizar', 136, 'ticket'),
+(981, 1, '2023-04-25 20:53:13', 'Actualizar', 127, 'ticket'),
+(982, 1, '2023-04-25 20:53:48', 'Actualizar', 131, 'ticket'),
+(983, 64, '2023-04-25 21:59:47', 'Insertar', 137, 'ticket'),
+(984, 1, '2023-04-25 22:56:15', 'Actualizar', 131, 'ticket'),
+(985, 1, '2023-04-25 22:57:31', 'Actualizar', 127, 'ticket'),
+(986, 1, '2023-04-25 23:03:10', 'Actualizar', 137, 'ticket'),
+(987, 75, '2023-04-26 12:50:48', 'Insertar', 138, 'ticket'),
+(988, 1, '2023-04-26 15:29:30', 'Actualizar', 138, 'ticket'),
+(989, 1, '2023-04-26 15:37:12', 'Actualizar', 138, 'ticket'),
+(990, 1, '2023-04-26 15:39:17', 'Actualizar', 1, 'cliente'),
+(991, 1, '2023-04-26 16:09:39', 'EliminarU', 60, 'cliente'),
+(992, 1, '2023-04-26 16:16:21', 'Actualizar', 72, 'cliente'),
+(993, 64, '2023-04-26 17:03:53', 'Insertar', 139, 'ticket'),
+(994, 72, '2023-04-26 17:51:03', 'Insertar', 140, 'ticket'),
+(995, 0, '2023-04-26 18:04:11', '', 141, 'ticket'),
+(996, 72, '2023-04-26 18:06:14', 'Insertar', 142, 'ticket'),
+(997, 1, '2023-04-26 18:20:29', 'Actualizar', 140, 'ticket'),
+(998, 1, '2023-04-26 18:21:18', 'Actualizar', 140, 'ticket'),
+(999, 1, '2023-04-26 18:23:15', 'Actualizar', 141, 'ticket'),
+(1000, 1, '2023-04-26 18:26:08', 'Actualizar', 137, 'ticket'),
+(1001, 64, '2023-04-26 19:17:38', 'Insertar', 143, 'ticket'),
+(1002, 31, '2023-04-26 19:44:54', 'Actualizar', 139, 'ticket'),
+(1003, 31, '2023-04-26 19:45:44', 'Actualizar', 142, 'ticket'),
+(1004, 31, '2023-04-26 19:45:53', 'Actualizar', 142, 'ticket'),
+(1005, 31, '2023-04-26 19:47:10', 'Actualizar', 143, 'ticket'),
+(1006, 31, '2023-04-26 20:11:21', 'Actualizar', 143, 'ticket'),
+(1007, 77, '2023-04-26 20:29:20', 'Insertar', 77, 'cliente'),
+(1008, 1, '2023-04-26 20:31:15', 'Actualizar', 77, 'cliente'),
+(1009, 1, '2023-04-26 20:31:18', 'EliminarU', 77, 'cliente'),
+(1010, 1, '2023-04-26 22:22:41', 'Actualizar', 139, 'ticket'),
+(1011, 1, '2023-04-26 22:28:02', 'Actualizar', 1, 'cliente'),
+(1012, 1, '2023-04-26 22:33:31', 'Actualizar', 1, 'cliente'),
+(1013, 1, '2023-04-26 22:41:01', 'Actualizar', 1, 'cliente'),
+(1014, 1, '2023-04-26 23:09:49', 'Actualizar', 71, 'cliente'),
+(1015, 1, '2023-04-26 23:10:05', 'Actualizar', 69, 'cliente'),
+(1016, 1, '2023-04-26 23:10:12', 'Actualizar', 66, 'cliente'),
+(1017, 1, '2023-04-26 23:10:20', 'Actualizar', 65, 'cliente'),
+(1018, 0, '2023-04-26 23:11:25', '', 31, 'cliente'),
+(1019, 0, '2023-04-26 23:11:39', '', 59, 'cliente'),
+(1020, 1, '2023-04-26 23:11:47', 'Actualizar', 72, 'cliente'),
+(1021, 1, '2023-04-26 23:11:55', 'Actualizar', 74, 'cliente'),
+(1022, 1, '2023-04-26 23:12:02', 'Actualizar', 73, 'cliente'),
+(1023, 1, '2023-04-26 23:12:12', 'Actualizar', 70, 'cliente'),
+(1024, 1, '2023-04-26 23:12:21', 'Actualizar', 64, 'cliente'),
+(1025, 1, '2023-04-26 23:12:29', 'Actualizar', 29, 'cliente'),
+(1026, 72, '2023-04-26 23:26:09', 'Insertar', 144, 'ticket'),
+(1027, 1, '2023-04-26 23:53:43', 'Actualizar', 144, 'ticket'),
+(1028, 1, '2023-04-26 23:54:01', 'Actualizar', 144, 'ticket'),
+(1029, 72, '2023-04-27 16:12:42', 'Insertar', 145, 'ticket'),
+(1030, 1, '2023-04-27 16:13:54', 'Actualizar', 145, 'ticket');
 
 -- --------------------------------------------------------
 
@@ -576,13 +489,13 @@ CREATE TABLE `ticket` (
   `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
   `serie` varchar(100) NOT NULL,
   `asunto` varchar(70) NOT NULL,
-  `mensaje` varchar(250) NOT NULL,
+  `mensaje` varchar(500) NOT NULL,
   `solucion` varchar(300) NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `idDepartamento` int(11) NOT NULL,
   `idStatus` int(11) NOT NULL,
   `id_atiende` int(11) NOT NULL,
-  `fecha_actualizacion` timestamp NULL DEFAULT NULL,
+  `fecha_actualizacion` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `foto` varchar(256) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -591,79 +504,29 @@ CREATE TABLE `ticket` (
 --
 
 INSERT INTO `ticket` (`id`, `fecha`, `serie`, `asunto`, `mensaje`, `solucion`, `idUsuario`, `idDepartamento`, `idStatus`, `id_atiende`, `fecha_actualizacion`, `foto`) VALUES
-(28, '2023-03-08 22:31:19', 'TK82N11', 'asas', 'asas', 'listo', 1, 3, 94576, 8, '2023-03-10 01:17:39', NULL),
-(30, '2023-03-08 22:31:19', 'TK95N13', 'asa', 'asas', '', 1, 3, 94574, 8, '2023-03-08 04:16:05', NULL),
-(31, '2023-03-08 22:31:19', 'TK68N14', 'asas', 'sasa', '', 1, 3, 94574, 8, '2023-03-08 04:16:07', NULL),
-(32, '2023-03-08 22:31:19', 'TK19N15', 'asas', 'asas', '', 1, 3, 94574, 8, '2023-03-08 04:16:10', NULL),
-(33, '2023-03-08 22:31:19', 'TK40N16', 'asa', 'saasa', '', 1, 3, 94574, 8, '2023-03-08 04:16:12', NULL),
-(39, '2023-03-08 22:31:19', 'TK95N22', 'asasa', 'asasas', '', 1, 3, 94574, 8, '2023-03-08 04:16:29', NULL),
-(40, '2023-03-08 22:31:19', 'TK44N23', 'asasa', 'asasa', '', 1, 3, 94574, 8, '2023-03-08 04:16:32', NULL),
-(41, '2023-03-08 22:31:19', 'TK05N24', 'asasa', 'asas', '', 1, 3, 94574, 8, '2023-03-08 04:16:35', NULL),
-(42, '2023-03-08 22:31:19', 'TK72N25', 'asasa', 'asasas', '', 1, 3, 94574, 8, '2023-03-08 04:16:38', NULL),
-(43, '2023-03-08 22:31:19', 'TK72N26', 'asasa', 'asasas', '', 1, 3, 94574, 8, '2023-03-08 04:16:42', NULL),
-(45, '2023-03-08 22:31:19', 'TK28N28', 'asasas', 'asasa', '', 1, 3, 94574, 8, '2023-03-08 04:16:48', NULL),
-(46, '2023-03-08 22:31:19', 'TK66N29', 'asasa', 'saasas', '', 1, 3, 94574, 8, '2023-03-08 04:16:50', NULL),
-(47, '2023-03-08 22:31:19', 'TK80N30', 'asasas', 'asasa', '', 1, 3, 94574, 8, '2023-03-08 04:16:53', NULL),
-(48, '2023-03-08 22:31:19', 'TK95N31', 'asasa', 'sasasa', '', 1, 3, 94574, 8, '2023-03-08 04:16:56', NULL),
-(49, '2023-03-08 22:31:19', 'TK99N32', 'asasas', 'asasas', '', 1, 3, 94574, 8, '2023-03-08 04:16:59', NULL),
-(50, '2023-03-08 22:31:19', 'TK26N33', 'asas', 'asasas', '', 1, 3, 94574, 8, '2023-03-08 04:17:04', NULL),
-(51, '2023-03-08 22:31:19', 'TK23N34', 'asasas', 'asasa', '', 1, 3, 94574, 8, '2023-03-08 04:17:07', NULL),
-(52, '2023-03-08 22:31:19', 'TK85N35', 'asasa', 'asas', '', 1, 3, 94574, 8, '2023-03-08 04:17:09', NULL),
-(55, '2023-03-08 22:31:19', 'TK40N38', 'asas', 'asasas', '', 1, 3, 94574, 8, '2023-03-08 04:17:18', NULL),
-(56, '2023-03-08 22:31:19', 'TK18N39', 'asasa', 'asasa', '', 1, 3, 94574, 8, '2023-03-08 04:17:20', NULL),
-(57, '2023-03-08 22:31:19', 'TK16N40', 'asasa', 'asasas', '', 1, 3, 94574, 8, '2023-03-08 04:17:22', NULL),
-(58, '2023-03-08 22:31:19', 'TK53N41', 'asas', 'asasa', '', 1, 3, 94574, 8, '2023-03-08 04:17:25', NULL),
-(61, '2023-03-08 22:31:19', 'TK25N44', 'asa', 'asa', '', 1, 3, 94574, 12, '2023-03-08 04:34:39', NULL),
-(62, '2023-03-08 22:31:19', 'TK27N45', 'asa', 'asa', '', 1, 3, 94574, 12, '2023-03-08 04:34:43', NULL),
-(63, '2023-03-08 22:31:19', 'TK38N46', 'aa', 'ASAS', '', 1, 3, 94574, 8, '2023-03-08 04:34:48', NULL),
-(67, '2023-03-27 20:08:23', 'TK70N29', 'Prueba', 'Procedimientos almacenados', '', 1, 3, 94574, 3, NULL, NULL),
-(68, '2023-03-27 20:13:35', 'TK49N30', 'Prueba de base de da', 'Prueba Triggers', '', 1, 3, 94574, 29, NULL, NULL),
-(69, '2023-03-28 22:44:01', 'TK69N31', 'Fotos infantiles', 'Mañana iré a dejar mis fotitos', '', 40, 3, 94574, 3, NULL, NULL),
-(70, '2023-03-28 22:46:57', 'TK09N32', 'Tarea Jenny', 'ada', '', 40, 3, 94574, 5, NULL, NULL),
-(71, '2023-03-28 22:47:02', 'TK51N33', '1', '1', '', 40, 3, 94574, 3, NULL, NULL),
-(72, '2023-03-28 22:47:06', 'TK32N34', '2', '2', '', 40, 3, 94574, 1, NULL, NULL),
-(73, '2023-03-28 22:47:09', 'TK75N35', '3', '3', '', 40, 3, 94574, 1, NULL, NULL),
-(74, '2023-03-28 22:47:12', 'TK89N36', '4', '4', '', 40, 3, 94574, 1, NULL, NULL),
-(75, '2023-03-28 22:47:15', 'TK14N37', '5', '5', '', 40, 3, 94574, 3, NULL, NULL),
-(76, '2023-03-28 22:47:18', 'TK60N38', '6', '6', '', 40, 3, 94574, 3, NULL, NULL),
-(77, '2023-03-28 22:47:21', 'TK84N39', '7', '7', '', 40, 3, 94574, 3, NULL, NULL),
-(78, '2023-03-28 22:47:23', 'TK04N40', '8', '8', '', 40, 3, 94574, 1, NULL, NULL),
-(79, '2023-03-28 22:47:27', 'TK64N41', '9', '9', '', 40, 3, 94574, 3, NULL, NULL),
-(80, '2023-03-28 22:47:31', 'TK13N42', '10', '10', '', 40, 3, 94574, 3, NULL, NULL),
-(81, '2023-03-28 22:47:34', 'TK54N43', '11', '11', '', 40, 3, 94574, 3, NULL, NULL),
-(82, '2023-03-28 22:47:37', 'TK60N44', '12', '12', '', 40, 3, 94574, 3, NULL, NULL),
-(83, '2023-03-28 22:47:41', 'TK22N45', '13', '13', '', 40, 3, 94574, 3, NULL, NULL),
-(84, '2023-03-28 22:47:44', 'TK30N46', '14', '14', '', 40, 3, 94574, 3, NULL, NULL),
-(85, '2023-03-28 22:47:47', 'TK20N47', '15', '15', '', 40, 3, 94574, 3, NULL, NULL),
-(86, '2023-03-28 22:47:50', 'TK79N48', '16', '16', '', 40, 3, 94574, 3, NULL, NULL),
-(87, '2023-03-28 22:47:54', 'TK93N49', '17', '17', '', 40, 3, 94574, 3, NULL, NULL),
-(88, '2023-03-28 22:47:58', 'TK58N50', '18', '18', '', 40, 3, 94574, 3, NULL, NULL),
-(89, '2023-03-28 22:48:02', 'TK74N51', '19', '19', '', 40, 3, 94574, 3, NULL, NULL),
-(90, '2023-03-28 22:48:06', 'TK07N52', '20', '20', '', 40, 3, 94574, 3, NULL, NULL),
-(91, '2023-03-28 22:48:10', 'TK55N53', '21', '21', '', 40, 3, 94574, 5, NULL, NULL),
-(92, '2023-03-28 22:48:13', 'TK26N54', '22', '22', '', 40, 3, 94574, 5, NULL, NULL),
-(93, '2023-03-28 22:48:16', 'TK50N55', '23', '23', '', 40, 3, 94574, 5, NULL, NULL),
-(94, '2023-03-28 22:48:21', 'TK08N56', '24', '24', '', 40, 3, 94574, 5, NULL, NULL),
-(95, '2023-03-28 22:48:58', 'TK01N57', '25', '25', '', 40, 3, 94574, 5, NULL, NULL),
-(96, '2023-03-28 22:49:03', 'TK04N58', '26', '26', '', 40, 3, 94574, 5, NULL, NULL),
-(97, '2023-03-28 22:49:06', 'TK72N59', '27', '27', '', 40, 3, 94574, 5, NULL, NULL),
-(98, '2023-03-28 22:49:10', 'TK53N60', '28', '28', '', 40, 3, 94574, 5, NULL, NULL),
-(99, '2023-03-28 22:49:13', 'TK81N61', '29', '29', '', 40, 3, 94574, 5, NULL, NULL),
-(100, '2023-03-28 22:49:17', 'TK83N62', '30', '30', '', 40, 3, 94574, 5, NULL, NULL),
-(101, '2023-03-28 22:49:21', 'TK68N63', '31', '31', '', 40, 3, 94574, 5, NULL, NULL),
-(102, '2023-04-10 15:23:49', 'TK82N61', 'Foto ticket', 'equis de ', '', 1, 2524, 94574, 29, NULL, 'Fotos/padalustro1.jpg'),
-(103, '2023-04-10 16:35:47', 'TK52N62', 'Foto ticket', 'dadas', '', 1, 2524, 94574, 29, NULL, 'Fotos/ISOTIPO_ALCMX.png'),
-(104, '2023-04-10 16:37:05', 'TK63N63', 'Ahaa', 'asasa', '', 1, 2524, 94574, 29, NULL, 'Fotos/1T.jpg'),
-(105, '2023-04-10 23:01:48', 'TK51N64', 'Primer ticket con creo', 'Esta es mi primer pruebaq ', '', 1, 2524, 94574, 29, NULL, 'Fotos/error.png'),
-(106, '2023-04-10 23:15:55', 'TK99N65', 'Primer ticket con creo 2', 'Esto es con la finalidad de probar si el creo realmente está funcionando de manera apropiada', '', 1, 2524, 94574, 29, NULL, 'Fotos/soporte.jpg'),
-(107, '2023-04-10 23:20:37', 'TK05N66', 'Primer ticket con creo 3', 'Esto es con la finalidad de probar si el creo realmente está funcionando de manera apropiada', '', 1, 2524, 94574, 29, NULL, 'Fotos/track1.jpg'),
-(108, '2023-04-10 23:22:39', 'TK88N67', 'Primer ticket con creo 4', 'Esto es con la finalidad de probar si el creo realmente está funcionando de manera apropiada y  con tickets funcionales ', '', 1, 2524, 94574, 29, NULL, 'Fotos/1T.jpg'),
-(109, '2023-04-10 23:36:55', 'TK28N68', 'Primer ticket con creo 5', 'Esto es con la finalidad de probar si el creo realmente está funcionando de manera apropiada', '', 1, 2524, 94574, 29, NULL, 'Fotos/camion.jpg'),
-(110, '2023-04-10 23:37:59', 'TK23N69', 'Primer ticket con creo 6', 'Esto es con la finalidad de probar si el creo realmente está funcionando de manera apropiada', 'Todavia no queda ', 1, 2524, 94574, 29, '2023-04-11 00:07:53', 'Fotos/track1.jpg'),
-(111, '2023-04-11 15:27:35', 'TK99N70', 'Primer ticket con creo 1111111', 'Hellooo', '', 1, 2524, 94574, 29, NULL, 'Fotos/UTP0143830_LEONARDO SAINOS PEREZ.jpg'),
-(112, '2023-04-11 15:28:11', 'TK54N71', 'Primer ticket con creo 1111111', 'Hellooo', '', 1, 2524, 94574, 29, NULL, 'Fotos/UTP0143830_LEONARDO SAINOS PEREZ.jpg'),
-(113, '2023-04-11 16:49:17', 'TK10N72', 'Foto con imagen vista', 'Woow se ve xd ', '', 1, 2524, 94574, 29, NULL, 'Fotos/UTP0143830_LEONARDO SAINOS PEREZ.jpg'),
-(114, '2023-04-11 20:40:43', 'TK44N73', 'Acabe el sistema', 'Ya acabe el sistemaa que emocion', 'Ya quedo', 1, 2524, 94574, 29, '2023-04-11 22:51:21', 'Fotos/Empresas1.jpg');
+(123, '2023-04-21 15:55:37', 'TK34N5', 'APOYO CON LICENCIA DE SOFTWARE', 'Tengo problemas con la licencia de Adobe PS. Me marca que está caducado y no me deja trabajar.\r\n\r\nGracias.', 'Vale en un momento eliminamos esa versión para instalar otra', 29, 2524, 94576, 31, '2023-04-21 17:18:39', 'Fotos/PROBLEMA LICENCIA PS.jpeg'),
+(124, '2023-04-21 15:58:01', 'TK35N6', 'NO ME PERMITE IMPRIMIR A LA CANON G4010', 'Buen día.\r\n\r\nQuiero imprimir documentos a color y me arroja el mensaje de que la impresora NO está conectada, siendo que sí está prendida y otros compañeros Sí pueden imprimir.\r\n\r\nGracias.', 'Ok lo reviso', 29, 2524, 94576, 31, '2023-04-21 16:40:28', 'Fotos/error impresion.PNG'),
+(125, '2023-04-21 19:10:10', 'TK32N3', 'unidad T-35 ', 'la unidad no posiciona se le llama y si regresa mensaje y ubicacion pero en la plataforma de alcomex no posiciona nada sigue en amarillo', 'SE VERIFICA INFORMACION DE CONFIGURACION DE GPS EN PLATAFORMA Y SE DETECTA IMEI ERRONEA; APOYO  BRINDADO POR JOSEPH SALDAÑA', 64, 2526, 94576, 31, '2023-04-21 23:15:30', 'Fotos/ff6c1f87-7164-4586-b08b-8ee15ca2e56c.jpg'),
+(126, '2023-04-21 23:34:42', 'TK39N4', 'hasdl jc', 'dvb sdt', 'resolbido', 71, 2526, 94576, 31, '2023-04-21 23:35:44', 'Fotos/error.jp'),
+(127, '2023-04-22 20:00:54', 'TK94N5', 'FALLA CORREO ', 'No carga correo cuando lo abro desde el buscador o aplicación y tambien fallas en recepción de correo a mis clientes.', 'Listo. Problema de contraseñas y versión de office', 65, 2526, 94576, 31, '2023-04-25 22:57:31', 'Fotos/error.jp'),
+(128, '2023-04-24 15:55:37', 'TK95N6', 'camioneta Ct-19', 'buen dia equipo solicito de su apoyo para que la unida ct-19 no posiciona y carga hoy al medio dia gracias y buen dia.', 'Se revisa unidad, se envian comandos via telefonica y el dispositivo comienza a posicionar, se sospecha que la falla se debe a falta de bateria en la unidad.', 64, 2526, 94576, 31, '2023-04-24 17:28:34', 'Fotos/Captura de pantalla 2023-04-24 095509.png'),
+(129, '2023-04-24 15:56:43', 'TK08N7', 'Facturas en mal estado', 'Las facturas presentan errores en el llenado.', 'Listo', 76, 2535, 94576, 67, '2023-04-24 23:51:40', 'Fotos/error.jp'),
+(130, '2023-04-24 16:45:07', 'TK31N8', 'gps saveiro', 'buen día equipo solicito de su apoyo para la colocación del gps de la camioneta saveiro VW del Heriberto Alvarez quedo atento sobre este porceso buena tarde.', 'SE INSTALA Y CONFIGURA GPS CON PARO DE MOTOR A DISTANCIA CON IMEI 868166052418787 Y NIMERO SIM: 2212482408 PARA SAVEIRO ADMINISTRATIVA', 64, 2526, 94576, 31, '2023-04-24 17:28:03', 'Fotos/error.jp'),
+(131, '2023-04-24 16:54:58', 'TK57N9', 'Correo electrónico ', 'No recibo correos, en automático mi correo rechaza los ingresos a bandeja', 'Resuelto doc, problema de contraseñas y versión de Office', 74, 2526, 94576, 31, '2023-04-25 22:56:15', 'Fotos/WhatsApp Image 2023-04-24 at 10.23.39 AM.jpeg'),
+(132, '2023-04-24 17:43:41', 'TK84N10', 'Revision de Memoria.', 'La memoria la coloque en la cpiadora Brother, al momento de volver a abrirla en mi computadora me sale la siguiente imagen.', 'En revisión', 69, 2526, 94575, 1, '2023-04-24 18:06:24', 'Fotos/Captura de pantalla (8).png'),
+(133, '2023-04-24 22:59:40', 'TK09N11', 'gps saveiro mariano', 'buena tarde equipo solicito de su apoyo para la colocacion del gps a la camioneta saveiro que esta asignada al señor mariano. quedo atento a cualquier comenmtario sobre la instalacion del equipo buena tarde.', 'Listo, gps instalado. Para cualquier situación el número que queda registrado es 868166052410958 y el número de teléfono  es 2223487962', 64, 2526, 94576, 1, '2023-04-24 23:50:02', 'Fotos/error.jp'),
+(134, '2023-04-25 18:50:44', 'TK23N12', 'team wiber ', 'no restablece la coneccion de su apoyo por favor buena tarde. ', 'Listo, conexión restablecida', 64, 2526, 94576, 1, '2023-04-25 18:53:54', 'Fotos/Captura de pantalla 2023-04-24 095509.png'),
+(135, '2023-04-25 18:55:15', 'TK32N13', 'ANYDESK', ' NO PERMITE CONECTAR UN SERVIDOR ', 'Gracias por el aviso', 75, 2526, 94576, 1, '2023-04-25 19:08:39', 'Fotos/X.PNG'),
+(136, '2023-04-25 19:59:50', 'TK44N14', 'Carpetas Compartidas', 'No puedo acceder a las carpetas compartidas', 'Se restablece la conexión de Switch para  las IP', 59, 2526, 94576, 1, '2023-04-25 20:02:14', 'Fotos/error.jp'),
+(137, '2023-04-25 21:59:47', 'TK99N15', 'unidad T-19', 'pido de su apoyo para verificar los motivos por que la unidad t-19 no esta posicionando quedo atento al seguimiento de la unidad.', 'Ya esta posicionando, el motivo de que no posiciona es por que se encontraba en zona con baja cobertura', 64, 2526, 94576, 31, '2023-04-26 18:26:08', 'Fotos/Captura de pantalla 2023-04-25 155801.png'),
+(138, '2023-04-26 12:50:48', 'TK40N16', 'plataforma', 'la mayoria de las unidades estan en amarillo', 'Ya quedó', 75, 2526, 94576, 1, '2023-04-26 15:37:12', 'Fotos/error.jp'),
+(139, '2023-04-26 17:03:53', 'TK66N17', 'vídeo cámaras', 'solicito de su apoyo solo para poder  visualizar las camaras en el turno del monitorista josue gonzalez huerta, del dia 25 al 26 de abril de 2023.', 'se cita en el site para revisar camaras directamente del grabador', 64, 2526, 94576, 31, '2023-04-26 22:22:41', 'Fotos/error.jp'),
+(140, '2023-04-26 17:51:03', 'TK61N18', 'instalacion de Whatsapp web.', 'no me permite abrir whatsapp, con el codigo  QR', 'Se hace actualizaciones de la app por playstore y se borra la memoria cache y comienza a funcionar normal.', 72, 2526, 94576, 1, '2023-04-26 18:21:18', 'Fotos/error.jp'),
+(141, '2023-04-26 18:04:11', 'TK93N19', 'excel', 'no me permite hacer anotaciones, ni anexar comentarios en una celda en excel.', 'Para la solución se activa la licencia de office y se hacen actualizaciones para algunas opciones de excel como insertar comentarios', 72, 2526, 94576, 1, '2023-04-26 18:23:15', 'Fotos/error.jp'),
+(142, '2023-04-26 18:06:14', 'TK63N20', 'Ruido en mi CPU', 'es incomodo , no deja de sonar y me estresa', 'Se detecta la falla y se realiza cambio de cooler y de case de disco duro, tambien se reajusta disco duro', 72, 2526, 94576, 31, '2023-04-26 19:45:53', 'Fotos/error.jp'),
+(143, '2023-04-26 19:17:38', 'TK01N21', 'team wiber', 'pido de su apoyo ya que team wiber no podemos acceder para correr el server.\r\nquedo atento buena tarde.', 'Se revisa la condición de conectividad y se detecta la falla, se da soporte via anydesk, y se colocan como favoritos los accesos a server 1 y server 2', 64, 2526, 94576, 31, '2023-04-26 20:11:21', 'Fotos/Captura de pantalla 2023-04-26 131548.png'),
+(144, '2023-04-26 23:26:09', 'TK56N22', 'IMPRESORA', 'ME PODRIAN A POYAR A ANEXAR LAS IMPRESONAS A LA COMPU, PARA PODER IMPRIMIR', 'Se agregaron impresoras canon G4010 y Brother', 72, 2526, 94576, 1, '2023-04-26 23:54:01', 'Fotos/error.jp'),
+(145, '2023-04-27 16:12:42', 'TK87N23', 'instalacion de Whatsapp web.', 'NO ME PERMITE ABRIR APLICACION . ', 'Resuelto', 72, 2526, 94576, 1, '2023-04-27 16:13:54', 'Fotos/error.jp');
 
 --
 -- Disparadores `ticket`
@@ -716,7 +579,29 @@ INSERT INTO `user_delete` (`folio_id`, `fecha`, `idUsuario`, `nombre_completo`, 
 (12, '2023-03-29 11:50:57', 48, 'asa adasdasdasdsasas', 4046, 'Prueba1', 0, 0, 0, 0),
 (13, '2023-03-29 11:50:57', 47, 'asa asas', 4046, 'Prueba', 0, 0, 0, 0),
 (14, '2023-03-31 09:40:37', 49, 'Ajax AjaxJquery', 4046, 'Prueba', 0, 0, 0, 0),
-(15, '2023-04-01 11:29:00', 51, 'Taller B2 Hernandez Escuela', 9947, 'Prueba', 0, 0, 0, 0);
+(15, '2023-04-01 11:29:00', 51, 'Taller B2 Hernandez Escuela', 9947, 'Prueba', 0, 0, 0, 0),
+(16, '2023-04-13 18:48:51', 50, 'Ajax AjaxJquery', 9947, 'Prueba', 0, 0, 0, 0),
+(17, '2023-04-13 18:48:51', 52, 'Prueba buscador buscador', 9947, 'Talleres', 0, 0, 0, 0),
+(18, '2023-04-13 18:48:51', 54, 'Reseteo de contraseña Contraseña', 9947, 'Recursos Humanos', 0, 0, 0, 0),
+(19, '2023-04-13 18:48:51', 53, 'Taller B2assa asasa', 9947, 'Sin departamento', 0, 0, 0, 0),
+(20, '2023-04-13 18:49:12', 30, 'Minerva Salas', 4046, 'Titulacion', 0, 0, 0, 0),
+(21, '2023-04-13 19:02:10', 3, 'Alondra Sanchez Torivio', 5267, 'Sin departamento', 18, 0, 0, 0),
+(22, '2023-04-14 09:44:09', 38, 'Jenny Ortega Garcia', 5267, 'Sin departamento', 0, 0, 0, 0),
+(23, '2023-04-14 09:44:09', 7, 'Luis Enrique Granillo Gamino', 5267, 'Sin departamento', 0, 0, 0, 0),
+(24, '2023-04-14 09:44:23', 22, 'Bruno Absalon Flores Rosas', 5267, 'Sin departamento', 0, 0, 0, 0),
+(25, '2023-04-14 09:45:56', 57, 'Jose Perez Hernandez', 9947, 'Sin departamento', 0, 0, 0, 0),
+(26, '2023-04-14 09:45:56', 56, 'Juan Perez Garcia', 9947, 'Sin departamento', 0, 0, 0, 0),
+(27, '2023-04-14 09:45:56', 8, 'Roman Sanchez', 9947, 'Sin departamento', 22, 0, 0, 0),
+(28, '2023-04-14 09:46:17', 23, 'Luis Hernandez Escuela', 4046, 'Sin departamento', 0, 0, 0, 0),
+(29, '2023-04-14 10:20:32', 5, 'Andrés Sebastián Sánchez Cortez', 5267, 'Sin departamento', 12, 0, 0, 0),
+(30, '2023-04-20 17:56:13', 40, 'Uriel Isai Hernández Hernández ', 5267, 'Sin departamento', 0, 0, 0, 0),
+(31, '2023-04-21 10:11:34', 55, 'Alondra   Sanchez Torivio', 5267, 'B1 Sistemas', 0, 0, 0, 0),
+(32, '2023-04-21 10:12:22', 58, 'Ernesto Sainos Hernandez', 9947, 'Sin departamento', 0, 0, 0, 0),
+(33, '2023-04-21 11:58:33', 63, 'Registro prueba', 9947, 'Sin departamento', 0, 0, 0, 0),
+(34, '2023-04-21 12:00:25', 12, 'Luis Enrique Granillo Gamino', 4046, 'B1 Soporte técnico', 0, 0, 0, 0),
+(35, '2023-04-21 16:19:59', 61, 'Luis Manuel Amaro Vazquez', 5267, 'B1 Coordinación tráfico', 0, 0, 0, 0),
+(36, '2023-04-26 10:09:39', 60, 'Carlos Alberto  Diaz Martinez', 5267, 'B1 Contabilidad', 0, 0, 0, 0),
+(37, '2023-04-26 14:31:18', 77, 'ALEXA SANCHEZ HELLO', 9947, 'B1 Devoluciones', 0, 0, 0, 0);
 
 --
 -- Índices para tablas volcadas
@@ -734,7 +619,6 @@ ALTER TABLE `administrador`
 --
 ALTER TABLE `cliente`
   ADD PRIMARY KEY (`id_cliente`),
-  ADD UNIQUE KEY `id_num` (`email_cliente`),
   ADD KEY `FK_EST2` (`idEstatus`),
   ADD KEY `FK_ROL` (`id_rol`),
   ADD KEY `FK_CLIENTEDEPA` (`id_departamento`);
@@ -805,13 +689,13 @@ ALTER TABLE `administrador`
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT de la tabla `departamento`
 --
 ALTER TABLE `departamento`
-  MODIFY `idDepartamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2528;
+  MODIFY `idDepartamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2541;
 
 --
 -- AUTO_INCREMENT de la tabla `enviocorreo`
@@ -829,7 +713,7 @@ ALTER TABLE `estatus`
 -- AUTO_INCREMENT de la tabla `registro_alteraciones`
 --
 ALTER TABLE `registro_alteraciones`
-  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=595;
+  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1031;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -841,13 +725,13 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `ticket`
 --
 ALTER TABLE `ticket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=146;
 
 --
 -- AUTO_INCREMENT de la tabla `user_delete`
 --
 ALTER TABLE `user_delete`
-  MODIFY `folio_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `folio_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- Restricciones para tablas volcadas

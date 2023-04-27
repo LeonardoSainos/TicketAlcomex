@@ -33,44 +33,9 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
     $id = $_SESSION['id'];
     $tecnico = MysqlQuery::RequestPost('tecnico');
 
-    $autoriza= false;
-    $imagen_ticket="";
-    
-
-    if(isset($_FILES['foto']) && !empty($_FILES['foto']['tmp_name'])){
-        $archivo = $_FILES['foto'];
-        $nombre = $archivo['name'];
-        $tipo= $archivo['type'];
-        $size = $archivo['size'];
-        $ruta_temporal = $archivo['tmp_name']; 
-    if(!empty($ruta_temporal)) {
-    $dimensiones = getimagesize($ruta_temporal);
-    $carpeta = "../TICKET/user/Fotos";
-    if($tipo!= "image/jpg" && $tipo!="image/JPG" && $tipo!="image/jpeg" && $tipo!= "image/png" && $tipo!="image/gif") {
-        echo "<script>alert('El archivo que tratas de enviar no es una foto o imagen');            
-                  </script>";
-        $autoriza= false;
-    } elseif($size > 5 *1024*1024) {
-        echo "<script>alert('Error, el tamaño máximo permitido es de 5MB');
-        
-                </script>";
-        $autoriza= false;
-    } else {
-        $src = $carpeta . '/'. $nombre;
-        move_uploaded_file($ruta_temporal, $src);
-        $imagen_ticket= "Fotos/".$nombre;
-        $autoriza= true;
-    }
-  }
-    }
-    else{
-      $autoriza= true;
-      $imagen_ticket= "Fotos/error.jp";
-    }
-   
-
-    if($autoriza==true) {
-        if(MysqlQuery::Guardar("ticket", "foto,serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende", "'$imagen_ticket','$id_ticket','$asunto_ticket','$mensaje_ticket',$id,'$departamento_ticket',94574,$tecnico")) {
+    $resultado = Imagen::procesar_imagen("../TICKET/user/Fotos", "foto");
+		if($resultado['autoriza']==true){
+        if(MysqlQuery::Guardar("ticket", "foto,serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende","'". $resultado['imagen_ticket'] ."' ,'$id_ticket','$asunto_ticket','$mensaje_ticket',$id,'$departamento_ticket',94574,$tecnico")) {
             MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente", "$iid,'Insertar','".date("Y-m-d H:i:s") ."','ticket'");
             echo '
             <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 

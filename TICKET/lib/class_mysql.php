@@ -27,7 +27,47 @@ class Mysql{
     }
 
 }
+ class Imagen {
 
+    public static  function procesar_imagen($rutaImagen, $nombreimagen) {
+        $autoriza = false;
+        $imagen_ticket = "";
+        if(isset($_FILES[$nombreimagen]) && !empty($_FILES[$nombreimagen]['tmp_name'])){
+            $archivo = $_FILES[$nombreimagen];
+            $nombre = $archivo['name'];
+            $tipo= $archivo['type'];
+            $size = $archivo['size'];
+            $ruta_temporal = $archivo['tmp_name']; 
+            if(!empty($ruta_temporal)) {
+                $dimensiones = getimagesize($ruta_temporal);
+                $carpeta = $rutaImagen;
+                if($tipo!= "image/jpg" && $tipo!="image/JPG" && $tipo!="image/jpeg" && $tipo!= "image/png" && $tipo!="image/gif") {
+                    echo "<script>alert('El archivo que tratas de enviar no es una foto o imagen');</script>";
+                    $autoriza = false;
+                } elseif($size > 5 *1024*1024) {
+                    echo "<script>alert('Error, el tamaño máximo permitido es de 5MB');</script>";
+                    $autoriza = false;
+                } else {
+                    $src = $carpeta . '/'. $nombre;
+                    move_uploaded_file($ruta_temporal, $src);
+                    $imagen_ticket = $nombreimagen."/".$nombre;
+                    $autoriza = true;
+                }
+            }
+        }
+        else{
+            $autoriza = true;
+            $imagen_ticket = $nombreimagen."/error.jpg";
+        }
+        // Retorna los valores calculados
+        return array(
+            "autoriza" => $autoriza,
+            "imagen_ticket" => $imagen_ticket
+        );
+    }
+    
+    
+ }
 class MysqlQuery {
 
     public static function limpiarCadena($valor) {

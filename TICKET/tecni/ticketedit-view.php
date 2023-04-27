@@ -14,7 +14,11 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
 		$estado_edit=  MysqlQuery::RequestPost('estado_ticket');
 		$solucion_edit=  MysqlQuery::RequestPost('solucion_ticket');
 		$radio_email=  MysqlQuery::RequestPost('optionsRadios');
- 		if(MysqlQuery::Actualizar("ticket", "idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'")){
+
+    
+    $resultado = Imagen::procesar_imagen("../TICKET/tecni/Respuesta", "respuesta");
+		if($resultado['autoriza']==true){
+      MysqlQuery::Actualizar("ticket", "respuestafoto= '". $resultado['imagen_ticket'] . "',idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'");
                           
       if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Actualizar','".date("Y-m-d H:i:s") ."','ticket'"))
  
@@ -62,7 +66,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
             $mail->SMTPSecure =  PHPMailer:: ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
             $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
             //Recipients
-            $mail->setFrom($esend, 'Soporte técnico ' . $depa . ' Alcomex');
+            $mail->setFrom($esend, 'Soporte Técnico ' . $depa . ' Alcomex');
           $mail->addAddress($Acorreo, $ANombre);     //Add a recipient
           //Content
           $mail->isHTML(true);       
@@ -142,7 +146,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
         </div>
           <div class="container">
             <div class="col-sm-12">
-                <form class="form-horizontal" role="form" action="" method="POST">
+                <form class="form-horizontal" role="form" action="" method="POST" enctype="multipart/form-data" >
                 		<input type="hidden" name="id_edit" value="<?php echo $reg['id']?>">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Fecha</label>
@@ -238,7 +242,12 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                               <textarea class="form-control" readonly="" rows="3"  name="mensaje_ticket" readonly=""><?php echo $reg['mensaje']?></textarea>
                           </div>
                         </div>
-                    
+                        <div class="form-group text-center">
+                          <label  class="col-sm-2 control-label">Foto:</label>
+                          <div class="col-sm-10">
+                                    <img  style=" margin:5px; text-shadow: 0 0 30px #fb5d14; box-shadow: 0 0 20px #fb5d14; border-radius:1em;"  src='<?php echo"./user/". $reg['foto'] ?>' alt='Sin imagen' width="10%" height="auto">
+                          </div>
+                        </div>
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Solución</label>
                           <div class="col-sm-10">
@@ -246,12 +255,25 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                           </div>
                         </div>
 
-                        <div class="form-group text-center">
-                          <label  class="col-sm-2 control-label">Foto:</label>
+                     
+
+                        <div class="form-group">
+                          <label  class="col-sm-2 control-label">Evidencia solución:</label>
+                          <center>
                           <div class="col-sm-10">
-                                    <img  style=" margin:5px; text-shadow: 0 0 30px #fb5d14; box-shadow: 0 0 20px #fb5d14; border-radius:1em;"  src='<?php echo"./user/". $reg['foto'] ?>' alt='Sin imagen' width="10%" height="auto">
+                              <div class='input-group text-center'>                            
+                                   <img width="25%" height="50%" style=" margin:15px;  text-shadow: 0 0 30px #33FF71; box-shadow: 0 0 20px #33FF71;" class="sombra" id="output"/>
+                                   <br>
+                                    <label for="imageUpload"  class="btn btn-success btn-block btn-outlined"style=" padding:7px; text-shadow: 0 0 20px #33FF71; box-shadow: 0 0 10px #33FF71;">Añadir foto o imagen</label>  
+                                     <br>
+                                     
+                                  <input type="file" accept="image/*" name="respuesta"  id="imageUpload"  style="display: none; text-shadow: 0 0 30px rgb(48, 26, 241); box-shadow: 0 0 20px rgb(19, 70, 238);" onchange="loadFile(event)">
+                                    
+                                </div>
                           </div>
+                          </center>
                         </div>
+                 
                     
                         <div class="row">
                             <div class="col-sm-offset-5">
