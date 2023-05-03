@@ -155,6 +155,8 @@
                                                         <li ><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
                                                         <li ><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
                                                         <li ><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
+                                                        <li ><span style='margin-left:22px;'class='glyphicon glyphicon-user'></span> <input   form="pdf" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Exportar'  ></li>
+                                                 
                                                         <li ><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input  form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" value=" Resetear contraseña" name="Resetear"  /> </a></li>  
                                                 </ul>
                                           </div>
@@ -173,6 +175,10 @@
                                                         </ul>
                                                     </div>   
                                         </div>
+
+                                        <form id="pdf" method="POST" action="../TICKET/lib/users.php">
+                                            <input type="hidden" name="Exportar" value="5267" />
+                                           </form>
                                           <br><br>
                 <div class="row">
                     <div class="col-md-12 text-center">
@@ -299,7 +305,7 @@
                                     </li>
                                 <?php else: ?>
                                     <li>
-                                        <a href="./admin.php?view=admin&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
+                                        <a href="./admin.php?view=tec&pagina=<?php echo $pagina+1; ?>" aria-label="Previous">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>

@@ -2,6 +2,8 @@
 class Mysql{
 
     public static function Conectar(){
+
+        
         if(!$con= mysqli_connect(SERVER,USER,PASS,BD)){
             echo "Error en el servidor, verifique sus datos";
         }
@@ -26,48 +28,57 @@ class Mysql{
 
     }
 
-}
- class Imagen {
-
-    public static  function procesar_imagen($rutaImagen, $nombreimagen) {
+}class Imagen {
+    public static function procesar_imagen($rutaImagen, $nombreimagen) {
         $autoriza = false;
         $imagen_ticket = "";
-        if(isset($_FILES[$nombreimagen]) && !empty($_FILES[$nombreimagen]['tmp_name'])){
+
+        if (isset($_FILES[$nombreimagen]) && !empty($_FILES[$nombreimagen]['tmp_name'])) {
             $archivo = $_FILES[$nombreimagen];
             $nombre = $archivo['name'];
-            $tipo= $archivo['type'];
+            $tipo = $archivo['type'];
             $size = $archivo['size'];
             $ruta_temporal = $archivo['tmp_name']; 
-            if(!empty($ruta_temporal)) {
+
+            if (!empty($ruta_temporal)) {
                 $dimensiones = getimagesize($ruta_temporal);
                 $carpeta = $rutaImagen;
-                if($tipo!= "image/jpg" && $tipo!="image/JPG" && $tipo!="image/jpeg" && $tipo!= "image/png" && $tipo!="image/gif") {
+                
+                if ($tipo != "image/jpg" && $tipo != "image/JPG" && $tipo != "image/jpeg" && $tipo != "image/png" && $tipo != "image/gif") {
                     echo "<script>alert('El archivo que tratas de enviar no es una foto o imagen');</script>";
                     $autoriza = false;
-                } elseif($size > 5 *1024*1024) {
+                } elseif ($size > 5 * 1024 * 1024) {
                     echo "<script>alert('Error, el tamaño máximo permitido es de 5MB');</script>";
                     $autoriza = false;
                 } else {
-                    $src = $carpeta . '/'. $nombre;
+                    $extension = pathinfo($nombre, PATHINFO_EXTENSION);
+                    $nombre_unico = uniqid('', true) . '.' . $extension;
+                    $src = $carpeta . '/' . $nombre_unico;
+                    
+                    if (file_exists($src)) {
+                        // Si el archivo ya existe, renombrarlo con un nombre único
+                        $nombre_unico = uniqid('', true) . '.' . $extension;
+                        $src = $carpeta . '/' . $nombre_unico;
+                    }
+
                     move_uploaded_file($ruta_temporal, $src);
-                    $imagen_ticket = $nombreimagen."/".$nombre;
+                    $imagen_ticket = $nombreimagen . '/' . $nombre_unico;
                     $autoriza = true;
                 }
             }
-        }
-        else{
+        } else {
             $autoriza = true;
             $imagen_ticket = "";
         }
+
         // Retorna los valores calculados
         return array(
             "autoriza" => $autoriza,
             "imagen_ticket" => $imagen_ticket
         );
     }
-    
-    
- }
+}
+
 class MysqlQuery {
 
     public static function limpiarCadena($valor) {
@@ -87,7 +98,7 @@ class MysqlQuery {
         $valor = str_ireplace("\\", "", $valor);
         $valor = str_ireplace("!", "", $valor);
         $valor = str_ireplace("¡", "", $valor);
-        $valor = str_ireplace("?", "", $valor);
+     //   $valor = str_ireplace("?", "", $valor);
         $valor = str_ireplace("=", "", $valor);
         $valor = str_ireplace("&", "", $valor);
         return $valor;
@@ -111,15 +122,12 @@ class MysqlQuery {
         $data = addslashes($_FILES[$val]);
         $datos = MysqlQuery::limpiarCadena($data);
         return $datos;        
-
     }
 
     public static function Guardar($tabla, $campos, $valores) {
         if (!$sql = Mysql::consulta("INSERT INTO $tabla ($campos) VALUES($valores)"))
          {
             die("Error al insertar los datos en la tabla");
-
-          
         }
         return $sql;
     }

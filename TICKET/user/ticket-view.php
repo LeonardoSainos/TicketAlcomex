@@ -33,7 +33,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
     $id = $_SESSION['id'];
     $tecnico = MysqlQuery::RequestPost('tecnico');
 
-    $resultado = Imagen::procesar_imagen("../TICKET/user/Fotos", "foto");
+    $resultado = Imagen::procesar_imagen("../TICKET/user/Fotos", "Fotos");
 		if($resultado['autoriza']==true){
         if(MysqlQuery::Guardar("ticket", "foto,serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende","'". $resultado['imagen_ticket'] ."' ,'$id_ticket','$asunto_ticket','$mensaje_ticket',$id,'$departamento_ticket',94574,$tecnico")) {
             MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente", "$iid,'Insertar','".date("Y-m-d H:i:s") ."','ticket'");
@@ -158,7 +158,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                       <p class="text-primary text-justify">Por favor llene todos los datos de este formulario para abrir su ticket. El <strong>Ticket ID</strong> será enviado a la dirección de correo electronico proporcionada en este formulario.</p>
                     </div>
                     <div class="col-sm-8">
-                      <form class="form-horizontal" role="form" action="" method="POST" enctype="multipart/form-data">
+                      <form class="form-horizontal" role="form" action="" method="POST" enctype="multipart/form-data" >
                           <fieldset>
                       
                         <div class="form-group">
@@ -219,7 +219,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                           <label  class="col-sm-2 control-label">Asunto:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                <input type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="60" required="">
+                                <input pattern="^[A-Za-z0-9.,;¡!¿?\p{L} ]+$" type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="60" required="">
                                 <span class="input-group-addon"><i class="fa fa-paperclip"></i></span>
                               </div> 
                           </div>
@@ -228,7 +228,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Detalles del problema:</label>
                           <div class="col-sm-10">
-                            <textarea class="form-control" rows="3" placeholder= "Describa su problema" name="mensaje_ticket" required=""></textarea>
+                            <textarea pattern="^[A-Za-z0-9.,;¡!¿?\p{L}]+$" class="form-control" rows="3" placeholder= "Describa su problema" name="mensaje_ticket" required=""></textarea>
                           </div>
                         </div>
 
@@ -240,7 +240,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                                    <br>
                                     <label for="imageUpload"  class="btn btn-warning btn-block btn-outlined"style=" padding:7px; text-shadow: 0 0 20px #fb5d14; box-shadow: 0 0 10px #fb5d14;">Añadir foto o imagen</label>  
                                      <br>
-                                  <input type="file" accept="image/*" name="foto"  id="imageUpload"  style="display: none; text-shadow: 0 0 30px rgb(48, 26, 241); box-shadow: 0 0 20px rgb(19, 70, 238);" onchange="loadFile(event)">
+                                  <input type="file" accept="image/*" name="Fotos"  id="imageUpload"  style="display: none; text-shadow: 0 0 30px rgb(48, 26, 241); box-shadow: 0 0 20px rgb(19, 70, 238);" onchange="loadFile(event)">
                               </div>
                           </div>
                         </div>

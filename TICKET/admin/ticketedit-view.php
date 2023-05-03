@@ -26,10 +26,10 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
     $resultado = Imagen::procesar_imagen("../TICKET/admin/Respuesta", "respuesta");
 		if($resultado['autoriza']==true){
       if($fotoR==""){  
-        MysqlQuery::Actualizar("ticket", "respuestafoto= '". $resultado['imagen_ticket'] . "',idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'");
+        MysqlQuery::Actualizar("ticket","id_atiende=$Atiende_edit,respuestafoto= '". $resultado['imagen_ticket'] . "',idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'");
         }              
         else{
-          MysqlQuery::Actualizar("ticket", "idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'");
+          MysqlQuery::Actualizar("ticket", "id_atiende= $Atiende_edit, idStatus='$estado_edit', solucion='$solucion_edit',fecha_actualizacion= '" . date("Y-m-d H:i:s"). "'", "id='$id_edit'");
        
         }      
      if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Actualizar','".date("Y-m-d H:i:s") ."','ticket'"))
@@ -180,34 +180,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                             </div>
                         </div>
                     
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Estado:</label>
-                            <div class='col-sm-10'>
-                                <div class="input-group">
-
-
-                            
-                                    <select class="form-control" name="estado_ticket">
-                                 
-                                    <option  value=" <?php echo $reg['idEstatus']; ?>"> <?php echo $reg['Nombre']; ?>   </option> 
-                                      <?php 
-                                        $sql = Mysql::consulta("SELECT * FROM estatus WHERE Nombre <> '".  $reg['Nombre'] . "'" . "  AND ((idEstatus <> 31448 AND idEstatus <> 94573 ) AND   (idEstatus <> 19231 AND idEstatus<>   25542 ) ) ");
-                                        while( $reg1=mysqli_fetch_array($sql, MYSQLI_ASSOC)){
-                                          echo "
-                                            <option value='" . $reg1['idEstatus']  . "'>" .
-                                             $reg1['Nombre'] ."
-                                            </option>";
-                                          }
-                                        ?> 
-                                   
-                                      </select>
-
-
-                                      
-                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                </div>
-                            </div>
-                        </div>
+                      
 
                         <div class="form-group">  
                           <label  class="col-sm-2 control-label">Nombre:</label>
@@ -285,17 +258,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                               <textarea class="form-control" readonly="" rows="3"  name="mensaje_ticket" readonly=""><?php echo $reg['mensaje']?></textarea>
                           </div>
                         </div>
-                    
-                       
-                    <div class="form-group">
-                          <label  class="col-sm-2 control-label">Foto:</label>
-                        <center>
-                        <div class="col-sm-10">
-                          <br>
-                                    <img  style=" margin:5px; text-shadow: 0 0 30px #fb5d14; box-shadow: 0 0 20px #fb5d14;"  src='<?php echo"./user/". $reg['foto'] ?>' alt='Sin imagen' width="10%" height="auto">
-                          </div>
-                        </center>
-                        </div>
+
 
 
                         <div class="form-group">
@@ -304,7 +267,42 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                             <textarea class="form-control" rows="3"  name="solucion_ticket" required=""><?php echo $reg['solucion'];?></textarea>
                           </div>
                         </div>
-                   
+                        <div class="form-group">
+                            <label style="color:red;"class="col-sm-2 control-label">Estado:</label>
+                            <div class='col-sm-10'>
+                                <div class="input-group">                            
+                                    <select  style="color:white; background:#fb5d14;" class="form-control" name="estado_ticket">
+                                    <option  value=" <?php echo $reg['idEstatus']; ?>"> <?php echo $reg['Nombre']; ?>   </option> 
+                                      <?php 
+                                        $sql = Mysql::consulta("SELECT * FROM estatus WHERE Nombre <> '".  $reg['Nombre'] . "'" . "  AND ((idEstatus <> 31448 AND idEstatus <> 94573 ) AND   (idEstatus <> 19231 AND idEstatus<>   25542 ) ) ");
+                                        while( $reg1=mysqli_fetch_array($sql, MYSQLI_ASSOC)){
+                                          echo "
+                                            <option value='" . $reg1['idEstatus']  . "'>" .
+                                             $reg1['Nombre'] ."
+                                            </option>";
+                                          }
+                                        ?> 
+                                      </select>
+
+
+                                      
+                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                          <label  class="col-sm-2 control-label">Foto:</label>
+                        <center>
+                        <div class="col-sm-10">
+                          <br>
+
+                                          <div>
+                                          <img class="imagen-modal" style="margin:5px; text-shadow: 0 0 30px #fb5d14; box-shadow: 0 0 20px #fb5d14;" src='<?php echo"./user/". $reg['foto'] ?>' alt='Sin imagen' width="10%" height="auto">
+
+                                          </div>
+                                       </div>
+                        </center>
+                        </div>
 
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Evidencia solución:</label>
@@ -355,3 +353,46 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                       </form>
             </div><!--col-md-12-->
           </div><!--container-->
+
+<!--MODAL PARA MOSTRAR IMAGEN -->
+          <div class="modal fade" id="mi-modal" tabindex="-1" role="dialog" aria-labelledby="mi-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" >
+                        <h5 class="modal-title" id="mi-modal-label">Imagen</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img id="imagen-modal" src="" alt="">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+      </div>
+
+
+      <script> // Cuando se hace clic en una imagen con la clase .imagen-modal
+$('.imagen-modal').on('click', function() {
+    // Obtener la URL de la imagen a mostrar
+    var src = $(this).attr('src');
+    
+    // Asignar la URL al elemento img del modal
+    $('#imagen-modal').attr('src', src);
+    
+    // Mostrar el modal
+    $('#mi-modal').modal('show');
+
+    
+    // Establecer la altura y ancho máximos del 100% y el margen automático
+    $('#imagen-modal').css({
+        'max-height': '100%',
+        'max-width': '100%',
+        'margin': 'auto'
+    });
+});
+</script>
+

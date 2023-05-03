@@ -149,7 +149,9 @@
                                                         <li ><span style='margin-left:22px;'class='glyphicon glyphicon-trash'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Eliminar' name="Eliminar"></li>
                                                         <li ><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
                                                         <li ><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
-                                                     <li ><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input  form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" value=" Resetear contraseña" name="Resetear"/> </a></li>  
+                                                        <li ><span style='margin-left:22px;'class='glyphicon glyphicon-user'></span> <input   form="pdf" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Exportar'  ></li>
+                                                 
+                                                        <li ><a href='' class='btn btn-link '   > <span class='glyphicon glyphicon-log-in'></span><input  form="acciones" class='btn btn-link ' style='text-decoration:none;'  type="submit" value=" Resetear contraseña" name="Resetear"/> </a></li>  
                                                     </ul>                                                         
                                           </div>
                                           <div style="display:flex; float:right;">
@@ -166,7 +168,9 @@
                                             </ul>
                                          </div>
                                           </div>            
-                                           
+                                          <form id="pdf" method="POST" action="../TICKET/lib/users.php">
+                                            <input type="hidden" name="Exportar" value="4046" />
+                                           </form>
                                            
                                           <br><br>
                 <div class="row">
