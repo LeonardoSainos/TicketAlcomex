@@ -123,8 +123,7 @@
                                                 <!-- dropdown menu links -->
                                                         
                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input  form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
+ 
                                                        
                                                  </ul>
                                           </div>  
@@ -160,7 +159,7 @@
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                                $regpagina = 15;
+                                $regpagina = 50;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
                                 $selusers=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS cliente.id_cliente, cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta, cliente.Fecha_creacion FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=$rol  ORDER BY $ordenamuestra LIMIT $inicio, $regpagina");
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");

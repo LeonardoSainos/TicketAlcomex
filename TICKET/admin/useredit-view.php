@@ -5,10 +5,10 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
     $departamento = MysqlQuery:: RequestPost('departamento_cliente');
 	  $rol= MysqlQuery::RequestPost('rol_cliente');
    $correo=strtolower(MysqlQuery::RequestPost('email_cliente'));
-   $telefono = MysqlQuery:: RequestPost('telefono');	 
-
+   $telefono = MysqlQuery:: RequestPost('telefono');	
+   $anydesk = MysqlQuery:: RequestPost('anydesk');
    $nombre = mb_strtoupper(MysqlQuery::RequestPost('nombre_completo'));
-		if(MysqlQuery::Actualizar("cliente", "nombre_completo='$nombre',telefono_celular = $telefono, email_cliente='$correo',id_departamento = '$departamento', id_rol='$rol', idEstatus= '$estado'", "id_cliente='$id_edit'")){
+		if(MysqlQuery::Actualizar("cliente", "anydesk = $anydesk , nombre_completo='$nombre',telefono_celular = $telefono, email_cliente='$correo',id_departamento = '$departamento', id_rol='$rol', idEstatus= '$estado'", "id_cliente='$id_edit'")){
       $id = $_SESSION['id'];                            
       if(MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$id,'Actualizar','".date("Y-m-d H:i:s") ."','cliente'")){
  
@@ -35,7 +35,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
 		}
 	}     
 	$id = MysqlQuery::RequestGet('id');
-	$sql = Mysql::consulta("SELECT DISTINCT  r.idRol, r.Nombre as Nrol,c.telefono_celular, c.Fecha_creacion,c.id_cliente,c.nombre_completo,c.email_cliente, c.nombre_usuario,e.Nombre AS NombreE, e.idEstatus, d.nombre, d.idDepartamento FROM cliente c INNER JOIN estatus e ON c.idEstatus = e.idEstatus INNER JOIN departamento d ON d.idDepartamento = c.id_departamento INNER JOIN rol r ON c.id_rol= r.idRol  WHERE c.id_cliente= $id");
+	$sql = Mysql::consulta("SELECT DISTINCT  r.idRol, r.Nombre as Nrol,c.telefono_celular, c.Fecha_creacion,c.id_cliente,c.nombre_completo,c.email_cliente, c.nombre_usuario,e.Nombre AS NombreE, e.idEstatus, d.nombre, d.idDepartamento, c.anydesk FROM cliente c INNER JOIN estatus e ON c.idEstatus = e.idEstatus INNER JOIN departamento d ON d.idDepartamento = c.id_departamento INNER JOIN rol r ON c.id_rol= r.idRol  WHERE c.id_cliente= $id");
 	$reg=mysqli_fetch_array($sql, MYSQLI_ASSOC);
 ?>
         <!--************************************ Page content******************************-->
@@ -170,7 +170,15 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
                               </div> 
                           </div>
                         </div>
-
+                        <div class="form-group">
+                          <label for="inputEmail3" class="col-sm-2 control-label">Anydesk:</label>
+                          <div class="col-sm-10">
+                              <div class='input-group'>
+                                  <input type="text" required="" maxlength="9" pattern="^[0-9]+$" class="form-control"  name="anydesk"   value="<?php echo $reg['anydesk']?>" >
+                                <span class="input-group-addon"><i class="fa fa-desktop"></i></i></span>
+                              </div> 
+                          </div>
+                        </div>
                         
                     <br>
                         <div class="form-group">

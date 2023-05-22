@@ -7,7 +7,7 @@ header('Content-Type: text/html; charset=UTF8');
 require_once __DIR__. "/vendor/autoload.php";
 
 $tipo = MysqlQuery::RequestPost('Exportar');
-$Most = Mysql::consulta("SELECT c.id_cliente, c.fecha_creacion, c.nombre_completo, c.email_cliente, c.telefono_celular, c.nombre_usuario, d.nombre,r.Nombre, e.Nombre as Esta FROM cliente c INNER JOIN departamento d ON d.idDepartamento = c.id_departamento INNER JOIN estatus e ON e.idEstatus = c.idEstatus INNER JOIN rol r on c.id_rol = r.idRol WHERE c.id_rol = $tipo ORDER BY c.nombre_completo");
+$Most = Mysql::consulta("SELECT c.Anydesk,c.id_cliente, c.fecha_creacion, c.nombre_completo, c.email_cliente, c.telefono_celular, c.nombre_usuario, d.nombre,r.Nombre, e.Nombre as Esta FROM cliente c INNER JOIN departamento d ON d.idDepartamento = c.id_departamento INNER JOIN estatus e ON e.idEstatus = c.idEstatus INNER JOIN rol r on c.id_rol = r.idRol WHERE c.id_rol = $tipo ORDER BY c.nombre_completo");
 
 
 $r = Mysql:: consulta ("SELECT * FROM rol WHERE idRol = $tipo");
@@ -38,6 +38,7 @@ $html = $html .
             <td>Departamento</td>
             <td>Rol</td>
             <td>Estatus</td>
+            <td>Anydesk</td>
              </tr>
 
             </thead>
@@ -59,6 +60,7 @@ $html = $html .
             <td>".$Mostrar['nombre']."</td>
             <td>".$Mostrar['Nombre']."</td>
             <td>".$Mostrar['Esta']."</td>
+            <td>".$Mostrar['Anydesk']."</td>
             </tr>
 
 ";

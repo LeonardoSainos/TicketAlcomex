@@ -77,7 +77,7 @@
                                 mysqli_set_charset($mysqli, "utf8");
 
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                                $regpagina = 15;
+                                $regpagina =  50;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
 
                                 $seladmin=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS  cliente.id_cliente,cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.nombre as Esta   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  where cliente.id_rol=4046  ORDER by cliente.nombre_completo LIMIT $inicio, $regpagina");

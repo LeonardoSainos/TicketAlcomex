@@ -64,7 +64,8 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
               $mail = new PHPMailer(true);
               try {
                   //Server settings
-                  $mail->SMTPDebug = SMTP::DEBUG_SERVER;                    //Enable verbose debug output
+//                  $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+                  $mail->SMTPDebug = 0;                    //Enable verbose debug output
                   $mail->isSMTP();                                            //Send using SMTP
                   $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
                   $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
@@ -112,8 +113,13 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                 $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
                 $mail->send();
                 echo "<script>
-             
-                window.history.go(-1);
+                alert('Ticket creado con éxito')
+                setTimeout(function() {
+            
+                }, 8000); 
+                alert('Ticket creado con éxito');
+
+                window.location.href ='/TicketAlcomex/TICKET/index.php?view=soporte';
                 </script>";
             } catch (Exception $e) {
                 echo " <script> alert( {$mail->ErrorInfo}); </script>";
@@ -219,7 +225,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                           <label  class="col-sm-2 control-label">Asunto:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                <input pattern="^[A-Za-z0-9.,;¡!¿?\p{L} ]+$" type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="60" required="">
+                                <input pattern="[A-Za-z0-9?!,.;\-¿¡\[\]ÁÉÍÓÚÜáéíóúüÑñ\s]+" type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="60" required="">
                                 <span class="input-group-addon"><i class="fa fa-paperclip"></i></span>
                               </div> 
                           </div>
@@ -228,10 +234,9 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Detalles del problema:</label>
                           <div class="col-sm-10">
-                            <textarea pattern="^[A-Za-z0-9.,;¡!¿?\p{L}]+$" class="form-control" rows="3" placeholder= "Describa su problema" name="mensaje_ticket" required=""></textarea>
+                            <textarea pattern="[A-Za-z0-9?!,.;\-¿¡\[\]ÁÉÍÓÚÜáéíóúüÑñ\s]+" class="form-control" rows="3" placeholder= "Describa su problema" name="mensaje_ticket" required=""></textarea>
                           </div>
                         </div>
-
                         <div class="form-group">
                           <label  class="col-sm-2 control-label">Foto:</label>
                           <div class="col-sm-10">
@@ -244,8 +249,6 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                               </div>
                           </div>
                         </div>
-                        
-
                         <div class="form-group">
                           <div class="col-sm-offset-2 col-sm-10 text-center">
                             <button type="submit" class="btn btn-warning">Abrir ticket</button>

@@ -28,11 +28,12 @@ class Mysql{
 
     }
 
-}class Imagen {
+}
+
+class Imagen {
     public static function procesar_imagen($rutaImagen, $nombreimagen) {
         $autoriza = false;
         $imagen_ticket = "";
-
         if (isset($_FILES[$nombreimagen]) && !empty($_FILES[$nombreimagen]['tmp_name'])) {
             $archivo = $_FILES[$nombreimagen];
             $nombre = $archivo['name'];

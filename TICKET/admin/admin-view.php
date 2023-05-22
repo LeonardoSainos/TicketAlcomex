@@ -190,9 +190,9 @@
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                                $regpagina = 15;
+                                $regpagina = 50;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
-                                $seladmin=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS  cliente.id_cliente,cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.Nombre as Esta, cliente.Fecha_creacion   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  WHERE cliente.id_rol=4046  ORDER BY " . $ordenamuestra . " LIMIT $inicio, $regpagina");
+                                $seladmin=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS  cliente.id_cliente,cliente.telefono_celular as celular, cliente.nombre_completo,cliente.nombre_usuario,cliente.email_cliente,departamento.nombre as Depa, estatus.Nombre as Esta, cliente.Fecha_creacion, cliente.anydesk   FROM cliente  INNER JOIN departamento  ON cliente.id_departamento = departamento.idDepartamento INNER JOIN estatus   ON estatus.idEstatus = cliente.idEstatus  WHERE cliente.id_rol=4046  ORDER BY " . $ordenamuestra . " LIMIT $inicio, $regpagina");
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);                        
                                 $numeropaginas = ceil($totalregistros["FOUND_ROWS()"]/$regpagina);
@@ -214,6 +214,7 @@
                                         <th class="text-center">Departamento</th>
                                         <th class="text-center">Estatus</th>
                                         <th class="text-center">Teléfono </th>
+                                        <th class="text-center">Anydesk</th>
                                         <th class="text-center">Opciones</th>
                                     </tr>
                                 </thead>
@@ -232,7 +233,9 @@
                                         <td class="text-center"><?php echo $row['Depa']; ?> </td>
                                         <td class="text-center"><?php echo $row['Esta'];?> </td>
                                         <td class="text-center"><?php echo $row['celular'];?> </td>
-                                        <td style="display:none"  ><?php echo $row['id_cliente']; ?></td>  
+                                        <td style="display:none"  ><?php echo $row['id_cliente']; ?></td> 
+                                        <td class="text-center"><?php echo $row['anydesk'];?> </td>
+                                      
                                    
                                         <td class="text-center">
                                                   <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
@@ -245,7 +248,7 @@
                                         endwhile; 
                                     ?>
                                     <tr>
-                                        <td class="text-center"  colspan="10"> Seleccionar :<input onclick="MarcarCheckBox(this);"  type="checkbox" /> Todos | Ninguno </td>
+                                        <td class="text-center"  colspan="11"> Seleccionar :<input onclick="MarcarCheckBox(this);"  type="checkbox" /> Todos | Ninguno </td>
                                     </tr>
                                 </tbody>
                             </table>

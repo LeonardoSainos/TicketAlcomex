@@ -97,8 +97,7 @@
                                                    <ul class='dropdown-menu'>
                                                 <!-- dropdown menu links -->
                                                         <li class=><span style='margin-left:22px'class='glyphicon glyphicon-user'></span>  <input class="btn btn-link" style='text-decoration:none;' type="button" data-toggle='modal' data-target='#modal1' value="Nuevo usuario"> </li>
-                                                           <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-ban-circle'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Bloquear' name="Bloquear"></li>
-                                                        <li class=><span style='margin-left:22px;'class='glyphicon glyphicon-refresh'></span> <input   form="acciones" class='btn btn-link ' style='text-decoration:none;'type='submit' value='Desbloquear' name="Desbloquear"></li>
+                                            
                                                         </ul>                                                                                    
                                                
                                           </div>

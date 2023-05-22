@@ -185,9 +185,9 @@
                                 $mysqli = mysqli_connect(SERVER, USER, PASS, BD);
                                 mysqli_set_charset($mysqli, "utf8");
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                                $regpagina = 15;
+                                $regpagina = 50;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
-                                $seladmin= mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS c.id_cliente,c.nombre_completo, c.nombre_usuario, c.email_cliente, d.nombre as Depa, r.Nombre, c.telefono_celular as celular, c.Fecha_creacion, e.Nombre as Esta, c.Fecha_creacion FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento INNER JOIN estatus e ON e.idEstatus = c.idEstatus INNER JOIN rol r ON c.id_rol = r.idRol WHERE (c.id_cliente LIKE '%$busqueda%' OR c.nombre_usuario LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.Fecha_creacion LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR r.Nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' ) AND id_rol = $rol LIMIT $inicio,$regpagina");
+                                $seladmin= mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS c.id_cliente,c.nombre_completo, c.nombre_usuario, c.email_cliente, d.nombre as Depa, r.Nombre, c.telefono_celular as celular, c.Fecha_creacion, e.Nombre as Esta, c.Fecha_creacion,c.anydesk FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento INNER JOIN estatus e ON e.idEstatus = c.idEstatus INNER JOIN rol r ON c.id_rol = r.idRol WHERE (c.id_cliente LIKE '%$busqueda%' OR c.nombre_usuario LIKE '%$busqueda%' OR c.nombre_completo LIKE '%$busqueda%' OR c.email_cliente LIKE '%$busqueda%' OR c.telefono_celular LIKE '%$busqueda%' OR c.Fecha_creacion LIKE '%$busqueda%' OR d.nombre LIKE '%$busqueda%' OR r.Nombre LIKE '%$busqueda%' OR e.Nombre LIKE '%$busqueda%' OR c.anydesk LIKE '%$busqueda%') AND id_rol = $rol LIMIT $inicio,$regpagina");
                                 $totalregistros = mysqli_query($mysqli,"SELECT FOUND_ROWS()");
                                 $totalregistros = mysqli_fetch_array($totalregistros, MYSQLI_ASSOC);
                                 $encontrados = mysqli_num_rows($seladmin);
@@ -214,6 +214,7 @@
                                         <th class="text-center">Departamento</th>
                                         <th class="text-center">Estatus</th>
                                         <th class="text-center">Teléfono </th>
+                                        <th class="text-center">Anydesk</th>
                                         <th class="text-center">Opciones</th>
                                     </tr>
                                 </thead>
@@ -233,6 +234,8 @@
                                         <td class="text-center"><?php echo $row['Esta'];?> </td>
                                         <td class="text-center"><?php echo $row['celular'];?> </td>
                                         <td style="display:none"  ><?php echo $row['id_cliente']; ?></td>  
+                                        <td class="text-center"><?php echo $row['anydesk'];?> </td>
+                                     
                                    
                                         <td class="text-center">
                                                   <!-- Aqui hay un problema, de 11-02-2023 resolver lunes -->
@@ -245,7 +248,7 @@
                                         endwhile; 
                                     ?>
                                     <tr>
-                                        <td class="text-center"  colspan="10"> Seleccionar :<input onclick="MarcarCheckBox(this);"  type="checkbox" /> Todos | Ninguno </td>
+                                        <td class="text-center"  colspan="11"> Seleccionar :<input onclick="MarcarCheckBox(this);"  type="checkbox" /> Todos | Ninguno </td>
                                     </tr>
                                 </tbody>
                             </table>

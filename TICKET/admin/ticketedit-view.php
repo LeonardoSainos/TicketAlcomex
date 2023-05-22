@@ -70,7 +70,7 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
             $mail = new PHPMailer(true);
             try {
                 //Server settings
-                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                    //Enable verbose debug output
+                $mail->SMTPDebug = 0;                    //Enable verbose debug output
                 $mail->isSMTP();                                            //Send using SMTP
                 $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
                 $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
@@ -227,14 +227,14 @@ if(isset($_POST['id_edit']) && isset($_POST['solucion_ticket']) && isset($_POST[
                               <div class='input-group'>
                               <select class="form-control" name="id_atiende">
 
-                                        <?php $a= Mysql ::consulta("SELECT * FROM cliente where id_cliente=  " . $reg['atender'] . ""    ); 
+                                        <?php $a= Mysql ::consulta("SELECT * FROM cliente where id_cliente=  " . $reg['atender'] . ""); 
                                         $atiende = mysqli_fetch_array($a, MYSQLI_ASSOC); ?>
     
 
 
                                     <option  value=" <?php echo $reg['atender']; ?>"> <?php echo $atiende['nombre_completo']; ?>   </option> 
                                       <?php 
-                                        $t1 = Mysql::consulta("SELECT * FROM cliente WHERE (id_rol= 5267 OR id_rol = 4046) AND (id_cliente<>'" . $reg['atender']. "' AND id_departamento <> 2505)");
+                                        $t1 = Mysql::consulta("SELECT * FROM cliente WHERE (id_rol= 5267 OR id_rol = 4046) AND ((id_cliente<>'" . $reg['atender']. "') AND(( id_departamento <> 2505) AND idEstatus = 31448))");
                                         while( $t2=mysqli_fetch_array($t1, MYSQLI_ASSOC)){
                                           echo "
                                             <option value='" . $t2['id_cliente']  . "'>" .

@@ -147,7 +147,7 @@
                                 mysqli_set_charset($mysqli, "utf8");
 
                                 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                                $regpagina = 50;
+                                $regpagina = 100;
                                 $inicio = ($pagina > 1) ? (($pagina * $regpagina) - $regpagina) : 0;
                                 if(isset($_GET['ticket'])){
                                     if($_GET['ticket']=="tecni"){

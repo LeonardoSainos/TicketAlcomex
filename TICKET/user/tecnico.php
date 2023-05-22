@@ -3,7 +3,7 @@ include '../lib/class_mysql.php';
 include '../lib/config.php';
 $idDepartamento = MysqlQuery::RequestPost('id_departamento');
 if(isset($idDepartamento)){
-    $t = Mysql::consulta("SELECT * FROM cliente WHERE ((id_rol = 5267 OR id_rol=4046)AND  idEstatus<> 25542 ) AND id_departamento= $idDepartamento ORDER BY nombre_completo");
+    $t = Mysql::consulta("SELECT * FROM cliente WHERE ((id_rol = 5267 OR id_rol=4046)AND  idEstatus=31448 ) AND id_departamento= $idDepartamento ORDER BY nombre_completo");
 
     if(mysqli_num_rows($t)>0){
         $tecnicos = mysqli_fetch_all($t, MYSQLI_ASSOC);
