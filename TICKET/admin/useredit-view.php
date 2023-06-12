@@ -174,7 +174,7 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
                           <label for="inputEmail3" class="col-sm-2 control-label">Anydesk:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                                  <input type="text" required="" maxlength="9" pattern="^[0-9]+$" class="form-control"  name="anydesk"   value="<?php echo $reg['anydesk']?>" >
+                                  <input type="text" required="" maxlength="10" pattern="^[0-9]+$" class="form-control"  name="anydesk"   value="<?php echo $reg['anydesk']?>" >
                                 <span class="input-group-addon"><i class="fa fa-desktop"></i></i></span>
                               </div> 
                           </div>

@@ -111,10 +111,6 @@ if(isset($_POST['id_edit']) && isset($_POST['nombre_completo']) && isset($_POST[
                                 </div>
                             </div>
                         </div>
-
-
-
-
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Departamento:</label>
                             <div class='col-sm-10'>

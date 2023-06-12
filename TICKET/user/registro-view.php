@@ -105,7 +105,7 @@
             </div>
             <div class="form-group">
               <label><i class="fa fa-phone"></i>&nbsp;Teléfono</label>
-              <input type="tel" maxlength="10" class="form-control"  name="telefono"  placeholder="Escriba su número de teléfono" required="">
+              <input type="tel" maxlength="10" minlength="10" class="form-control"  name="telefono"  placeholder="Escriba su número de teléfono" required="">
             </div>
             <button type="submit" class="btn btn-warning">Crear cuenta</button>
           </form>

@@ -50,7 +50,7 @@ if(mysqli_num_rows($consulta_tablaTicket)>=1){
 
             $semaforo = 0;
             
-            if($lsT['estado_ticket']=='PENDIENTE' || $lsT['estado_ticket']=='Pendiente' || $lsT['estado_ticket']=='pendiente'){
+            if($lsT['estado_ticket']=='ABIERTO' || $lsT['estado_ticket']=='Abierto' || $lsT['estado_ticket']=='abierto'){
                 echo '
                 <div class="col-sm-10 lead text-justify">
                 <h2 class="text-info">Estado de ticket de soporte</h2>

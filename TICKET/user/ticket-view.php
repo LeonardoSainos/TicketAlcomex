@@ -85,12 +85,12 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                 <p style="text-align:center;" ><b>Se te ha asignado un nuevo ticket, los datos del ticket son los siguientes:</b><br>
             </p>
             <p style="text-align:center;">
-                Creado : ' .  date("Y-m-d H:i:s").  ' <br>
-                Ticket : ' .$id_ticket . '<br>
-                Usuario :'. $NombreEmisor.' <br>
-                Correo : '. $CorreoEmisor .' <br> 
-                Asunto :'. $asunto_ticket. '<br>
-                Mensaje :'.$mensaje_ticket . '<br>
+                Creado: ' .  date("Y-m-d H:i:s").  ' <br>
+                Ticket: ' .$id_ticket . '<br>
+                Usuario: '. $NombreEmisor.' <br>
+                Correo: '. $CorreoEmisor .' <br> 
+                Asunto: '. $asunto_ticket. '<br>
+                Mensaje: '.$mensaje_ticket . '<br>
             </p>
                <br> '.
                 '
@@ -113,7 +113,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                 $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
                 $mail->send();
                 echo "<script>
-                alert('Ticket creado con éxito')
+           
                 setTimeout(function() {
             
                 }, 8000); 
