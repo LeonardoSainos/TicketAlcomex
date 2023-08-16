@@ -1,0 +1,295 @@
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception; 
+require '/xampp/htdocs/TicketAlcomex/vendor/autoload.php';
+
+if(isset($_SESSION['nombre']) && ($_SESSION['rol']==9947 ||  $_SESSION['rol']==4046 || $_SESSION['rol']==5267 )){
+        $iid= $_SESSION['id'];
+        $ddd= $_SESSION['departamento'];
+        
+
+if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
+
+    /*Este codigo nos servira para generar un numero diferente para cada ticket*/
+    $codigo = "";
+    $longitud = 2;
+    for ($i=1; $i<=$longitud; $i++) {
+        $numero = rand(0, 9);
+        $codigo .= $numero;
+    }
+    $num=Mysql::consulta("SELECT id FROM ticket");
+    $numero_filas = mysqli_num_rows($num);
+
+    $numero_filas_total=$numero_filas+1;
+    $id_ticket="TK".$codigo."N".$numero_filas_total;
+    /*Fin codigo numero de ticket*/
+    // $fecha_ticket= MysqlQuery::RequestPost('fecha_ticket');
+    $nombre_ticket= MysqlQuery::RequestPost('name_ticket');
+    $email_ticket=MysqlQuery::RequestPost('email_ticket');
+    $asunto_ticket=MysqlQuery::RequestPost('asunto_ticket');
+    $mensaje_ticket=MysqlQuery::RequestPost('mensaje_ticket');
+    $id = $_SESSION['id'];
+    $tecnico = MysqlQuery::RequestPost('usuario');
+
+    $resultado = Imagen::procesar_imagen("../TICKET/user/Fotos", "Fotos");
+		if($resultado['autoriza']==true){
+        if(MysqlQuery::Guardar("ticket", "foto,serie,asunto,mensaje,idUsuario,idDepartamento,idStatus,id_atiende","'". $resultado['imagen_ticket'] ."' ,'$id_ticket','$asunto_ticket','$mensaje_ticket',$id,'$ddd',94574,$tecnico")) {
+            MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente", "$iid,'Insertar','".date("Y-m-d H:i:s") ."','ticket'");
+            echo '
+            <div class="alert alert-info alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="text-center">TICKET CREADO</h4>
+                <p class="text-center">
+                    Ticket creado con éxito '.$_SESSION['nombre'].'<br>El TICKET ID es: <strong>'.$id_ticket.'</strong>
+                </p>
+            </div>
+        ';
+              $destino = Mysql::consulta("SELECT c.id_cliente,c.nombre_completo,c.email_cliente,d.nombre  FROM cliente c INNER JOIN departamento d ON c.id_departamento = d.idDepartamento WHERE c.id_cliente = $tecnico");
+              $destinoArray = mysqli_fetch_array($destino,MYSQLI_ASSOC);
+              $Correo= $destinoArray['email_cliente'];
+              $Nombre= $destinoArray['nombre_completo'];
+              $depa = $destinoArray['nombre'];
+              
+
+              $emisor = Mysql:: consulta("SELECT * FROM cliente WHERE  id_cliente = $id");
+              $emisorArray = mysqli_fetch_array($emisor, MYSQLI_ASSOC);
+              $CorreoEmisor= $emisorArray['email_cliente'];
+              $NombreEmisor= $emisorArray['nombre_completo'];
+              $send = Mysql:: consulta("SELECT cast(aes_decrypt(e.contraseña, 'AES') as char) as RECUPERAR ,d.correo FROM enviocorreo e INNER JOIN departamento d ON e.correo = d.idDepartamento WHERE e.id = 2");
+              $sendd = mysqli_fetch_array($send,MYSQLI_ASSOC);
+              $esend = $sendd['correo'];
+              $ep= $sendd['RECUPERAR'];
+              $mail = new PHPMailer(true);
+              try {
+                  //Server settings
+//                  $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+                  $mail->SMTPDebug = 0;                    //Enable verbose debug output
+                  $mail->isSMTP();                                            //Send using SMTP
+                  $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                  $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                  $mail->Username   = $esend;                     //SMTP username
+                  $mail->Password   = $ep;                               //SMTP password
+                  $mail->SMTPSecure =  PHPMailer:: ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                  $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                  //Recipients
+                  $mail->setFrom($esend, 'Soporte técnico ' . $depa . ' Alcomex');
+                $mail->addAddress($Correo, $Nombre);     //Add a recipient
+                //Content
+                $mail->isHTML(true);       
+                $mail->CharSet = 'UTF-8';                           //Set email format to HTML
+                $mail->Subject = 'Nuevo Ticket #' . $id_ticket;
+                $mail->Body=  '<h2 style="text-align:center; color: #fb5d14;">
+                ¡Hola <strong> ' . $Nombre . ' ! </strong> </h2><br>
+                <p style="text-align:center;" ><b>Se te ha asignado un nuevo ticket, los datos del ticket son los siguientes:</b><br>
+            </p>
+            <p style="text-align:center;">
+                Creado: ' .  date("Y-m-d H:i:s").  ' <br>
+                Ticket: ' .$id_ticket . '<br>
+                Usuario: '. $NombreEmisor.' <br>
+                Correo: '. $CorreoEmisor .' <br> 
+                Asunto: '. $asunto_ticket. '<br>
+                Mensaje: '.$mensaje_ticket . '<br>
+            </p>
+               <br> '.
+                '
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <center>
+                <img style="align-items: center; justify-content: center;" width="250px" height="auto" src="https://i.pinimg.com/564x/bd/e3/f8/bde3f81141a064e60a231874c29ddd6e.jpg" />
+                </center>
+                <br>
+               
+                <p style="text-align:center;">
+                Atentamente Soporte Técnico Alcomex
+                <br>
+                <hr>
+                </p>
+                <p style="text-align:center;">
+                Esperamos haber atendido satisfactoriamente su problema.
+                </p>
+            </div>'  
+                  ;
+                $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                $mail->send();
+                echo "<script>
+           
+                setTimeout(function() {
+            
+                }, 8000); 
+                alert('Ticket creado con éxito');
+
+                window.location.href ='/TicketAlcomex/TICKET/index.php?view=soporte';
+                </script>";
+            } catch (Exception $e) {
+                echo " <script> alert( {$mail->ErrorInfo}); </script>";
+            }
+        } else  {
+          $autoriza == false;
+            echo '
+                <div class="alert alert-danger alert-dismissible fade in col-sm-3 animated bounceInDown" role="alert" style="position:fixed; top:70px; right:10px; z-index:10;"> 
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="text-center">OCURRIÓ UN ERROR</h4>
+                    <p class="text-center">
+                        No hemos podido crear el ticket. Por favor intente nuevamente.
+                    </p>
+                </div>
+            ';
+        }
+    }
+}
+?>
+        <div class="container">
+          <div class="row well">
+            <div class="col-sm-3">
+              <img src="img/support.png" class="img-responsive" alt="Image">
+            </div>
+            <div class="col-sm-9 lead">
+              <h2 class="text-info">¿Cómo abrir un nuevo Ticket?</h2>
+              <p>Para abrir un nuevo ticket deberá de llenar todos los campos de el siguiente formulario. Usted podra verificar el estado de su ticket mediante el <strong>Ticket ID</strong> que se le proporcionara a usted cuando llene y nos envie el siguiente formulario.</p>
+            </div>
+          </div><!--fin row 1-->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title text-center"><strong><i class="fa fa-ticket"></i>&nbsp;&nbsp;&nbsp;Ticket</strong></h3>
+                </div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-sm-4 text-center">
+                      <br><br><br>
+                      <img src="img/write_email.png" alt=""><br><br>
+                      <p class="text-primary text-justify">Por favor llene todos los datos de este formulario para abrir su ticket. El <strong>Ticket ID</strong> será enviado a la dirección de correo electronico proporcionada en este formulario.</p>
+                    </div>
+                    <div class="col-sm-8">
+                      <form class="form-horizontal" role="form" action="" method="POST" enctype="multipart/form-data" >
+                          <fieldset>
+                      
+                        <div class="form-group">
+                          <label  class="col-sm-2 control-label">Nombre:</label>
+                          <div class="col-sm-10">
+                              <div class='input-group'>
+                                <input type="text" readonly="" class="form-control" placeholder="Nombre" required=""   name="name_ticket"   value="<?php echo $_SESSION['nombre_completo']; ?>" >
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                              </div>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="inputEmail3" class="col-sm-2 control-label">Email:</label>
+                          <div class="col-sm-10">
+                              <div class='input-group'>
+                                <input readonly="" type="email" class="form-control" id="inputEmail3"   placeholder="Email" name="email_ticket" required="" title="Ejemplo@dominio.com" value="<?php echo $_SESSION['email']; ?>" >
+                                <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+                              </div> 
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label  class="col-sm-2 control-label">Enviar a:</label>
+                          <div class="col-sm-10">
+                              <div class='input-group'>
+                              <select id="departamento" required class="form-control" name="usuario">
+                                <option>Selecciona un usuario</option>
+                                      <?php 
+                                        $sql = Mysql::consulta("SELECT * FROM cliente WHERE id_departamento <> 2505 AND id_departamento =" . $ddd . " ORDER BY nombre_completo");
+                                        while( $reg1=mysqli_fetch_array($sql, MYSQLI_ASSOC)){
+                                          echo "
+                                            <option value='" . $reg1['id_cliente']  . "'>" .
+                                             $reg1['nombre_completo'];?>  
+                                            </option>
+                                            <?php
+                                          }
+                                        ?>                                        
+                                      </select>
+                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                              </div> 
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label  class="col-sm-2 control-label">Asunto:</label>
+                          <div class="col-sm-10">
+                              <div class='input-group'>
+                                <input pattern="[A-Za-z0-9?!,.;\-¿¡\[\]ÁÉÍÓÚÜáéíóúüÑñ\s]+" type="text" class="form-control" placeholder="Asunto" name="asunto_ticket" maxlength="60" required="">
+                                <span class="input-group-addon"><i class="fa fa-paperclip"></i></span>
+                              </div> 
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label  class="col-sm-2 control-label">Detalles del problema:</label>
+                          <div class="col-sm-10">
+                            <textarea pattern="[A-Za-z0-9?!,.;\-¿¡\[\]ÁÉÍÓÚÜáéíóúüÑñ\s]+" class="form-control" rows="3" placeholder= "Describa su problema" name="mensaje_ticket" required= ></textarea>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label  class="col-sm-2 control-label">Foto:</label>
+                          <div class="col-sm-10">
+                              <div class='input-group text-center'>                            
+                                   <img width="25%" height="50%" style=" margin:15px;  text-shadow: 0 0 30px #fb5d14; box-shadow: 0 0 20px #fb5d14;" class="sombra" id="output"/>
+                                   <br>
+                                    <label for="imageUpload"  class="btn btn-warning btn-block btn-outlined"style=" padding:7px; text-shadow: 0 0 20px #fb5d14; box-shadow: 0 0 10px #fb5d14;">Añadir foto o imagen</label>  
+                                     <br>
+                                  <input type="file" accept="image/*" name="Fotos"  id="imageUpload"  style="display: none; text-shadow: 0 0 30px rgb(48, 26, 241); box-shadow: 0 0 20px rgb(19, 70, 238);" onchange="loadFile(event)">
+                              </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-sm-offset-2 col-sm-10 text-center">
+                            <button type="submit" class="btn btn-warning">Abrir ticket</button>
+                          </div>
+                        </div>
+                             </fieldset> 
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+<?php
+}else{
+?>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="./img/Stop.png" alt="Image" class="img-responsive"/><br>
+                <img src="./img/Transp_ALCOMEX.png" alt="Image" class="img-responsive"/>
+                
+            </div>
+            <div class="col-sm-7 text-center">
+                <h1 class="text-danger">Lo sentimos esta página es solamente para usuarios registrados en soporte técnico Alcomex</h1>
+                <h3 class="text-info">Inicia sesión para poder acceder</h3>
+            </div>
+            <div class="col-sm-1">&nbsp;</div>
+        </div>
+    </div>
+<?php
+}
+?>
+<script type="text/javascript">
+  $(document).ready(function(){
+      $("#fechainput").datepicker();
+  });
+
+  var liga="../TICKET/user/";
+$(function(){
+  $("#departamento").on('change',function(){
+    var id_departamento = $("#departamento").val();
+    var url = liga+ 'tecnico.php';
+    $.ajax({
+      type: 'POST',
+      url:url,
+      data: 'id_departamento=' +id_departamento,
+      success: function(data){
+        $("#tecnico option").remove();
+        $("#tecnico").append(data);
+      }
+    });
+    return false;
+  });
+});
+
+</script>

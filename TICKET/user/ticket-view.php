@@ -190,7 +190,7 @@ if(isset($_POST['name_ticket']) && isset($_POST['email_ticket'])) {
                           <label  class="col-sm-2 control-label">Enviar a:</label>
                           <div class="col-sm-10">
                               <div class='input-group'>
-                              <select id="departamento" class="form-control" name="departamento_ticket">
+                              <select id="departamento" required class="form-control" name="departamento_ticket">
                                 <option>Selecciona un departamento</option>
                                       <?php 
                                         $sql = Mysql::consulta("SELECT * FROM departamento WHERE idDepartamento <> 2505 AND idDepartamento <>" . $ddd . " ORDER BY nombre");

@@ -284,8 +284,6 @@
                                         }
                                     }
                                 ?>
-                                
-                                
                                 <?php if($pagina == $numeropaginas): ?>
                                     <li class="disabled">
                                         <a aria-label="Previous">

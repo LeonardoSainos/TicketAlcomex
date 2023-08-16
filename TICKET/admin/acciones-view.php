@@ -150,7 +150,6 @@ if(@$_POST['Desbloquear'])
                     $esend = $sendd['correo'];
                     $ep= $sendd['RECUPERAR'];
                     $mail = new PHPMailer(true);
-                         
                             try {
                                 //Server settings
                                 $mail->SMTPDebug =0;                    //Enable verbose debug output

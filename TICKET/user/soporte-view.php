@@ -19,6 +19,8 @@
           <p class="text-justify">Si tienes un problema en tu área de trabajo,reportalo creando un nuevo ticket y te ayudaremos a solucionarlo.Si desea actualizar una peticion ya realizada utiliza el formulario de la derecha <em>Comprobar estado de Ticket</em>, solamente los <strong>usuarios registrados</strong> pueden abrir un nuevo ticket.</p>
           <p>Para abrir un nuevo <strong>ticket</strong> has click en el siguiente boton</p>
           <a type="button" class="btn btn-warning" href="./index.php?view=ticket">Nuevo Ticket</a>
+          <a type="button" class="btn btn-danger" href="./index.php?view=interno">Interno</a>
+   
         </div>
       </div>
     </div><!--fin col-md-6-->

@@ -12,7 +12,7 @@ if($_SESSION['rol']!=4046){
 ?>
         <?php
             $ViewDiferent=["searchUsers","searchDepa","searchTicket","filterDepa","filterTicket","filterUsers"];
-            $WhiteList=["ticketadmin","ticketedit","users","admin","config","tec","depa","depaedit","useredit","acciones"];
+            $WhiteList=["ticketadmin" ,"interno","ticketedit","users","admin","config","tec","depa","depaedit","useredit","acciones"];
             if(isset($_GET['view']) && in_array($_GET['view'], $WhiteList) && is_file("./admin/".$_GET['view']."-view.php")){
               ?>            
                     <!DOCTYPE html>

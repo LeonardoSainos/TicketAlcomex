@@ -12,7 +12,7 @@ echo %nombre%;
 
 cd C:\xampp\mysql\bin
 
-mysqldump -u root -p Sistemas777 %1 > C:\xampp\htdocs\TicketAlcomex\DB\backup\ticketdb\%nombre%
+mysqldump -u root -pSistemas777 %1 > C:\xampp\htdocs\TicketAlcomex\DB\backup\ticketdb\%nombre%
 
 pause > nul
 
