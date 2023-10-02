@@ -66,8 +66,8 @@
               else if(isset($_POST['Gnombre']) && isset($_POST['Gapellidos']) && isset($_POST['Gcorreo'] )){
                 $N = MysqlQuery :: RequestPost('Gnombre');
                 $A = MysqlQuery :: RequestPost('Gapellidos');
-                $Ncompleto = $N . " " . $A;
-                $Gcorreo = MysqlQuery :: RequestPost('Gcorreo');
+                $Ncompleto = mb_strtoupper( $N . " " . $A);
+                $Gcorreo = strtolower(MysqlQuery :: RequestPost('Gcorreo'));
                 $Departamento = MysqlQuery :: RequestPost('Gdepartamento');
                 $Rol = MysqlQuery :: RequestPost('Grol');
                 $Estatus = MysqlQuery :: RequestPost('Gestatus');
@@ -75,7 +75,7 @@
                 $Gusuario = Mysqlquery:: RequestPost('Gusuario');
                 $Verificar = Mysql::consulta("SELECT * FROM cliente WHERE email_cliente = '" . $Gcorreo ."' OR telefono_celular = ' " . $Telefono  . "'");
                 if(mysqli_num_rows($Verificar)<=0){
-                    if(MysqlQuery::Guardar("cliente", "nombre_completo, nombre_usuario, email_cliente,id_departamento,id_rol,idEstatus,telefono_celular", "'$Ncompleto', '$Gusuario', '$Gcorreo',$Departamento, $Rol,$Estatus,' $Telefono'"))
+                    if(MysqlQuery::Guardar("cliente", "nombre_completo, nombre_usuario, email_cliente,id_departamento,id_rol,idEstatus,telefono_celular,anydesk", "'$Ncompleto', '$Gusuario', '$Gcorreo',$Departamento, $Rol,$Estatus,' $Telefono',"  . 0 . ""))
                     {
                         MysqlQuery::ProcedimientoAlmacenado("registro_alteracionesCliente","$iid,'Insertar','".date("Y-m-d H:i:s") ."','cliente'");
                         echo '
