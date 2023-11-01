@@ -1,0 +1,111 @@
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Depa`(IN `id` INT)
+Begin
+SET AUTOCOMMIT=0;
+START TRANSACTION;
+ 
+UPDATE cliente SET id_departamento=2505 WHERE id_departamento=id;
+
+UPDATE ticket SET idDepartamento = 2505 WHERE idDepartamento = id;
+DELETE FROM enviocorreo WHERE correo = id;
+DELETE FROM departamento WHERE idDepartamento=id and idDepartamento <> 2505;
+commit;
+SET AUTOCOMMIT=1;
+
+ROLLBACK;
+SET AUTOCOMMIT=1;
+
+END$$
+DELIMITER ;
+
+
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `EliminarUsuario`(IN `id` INT(11), IN `fechaInicio` VARCHAR(20), IN `fechaFin` VARCHAR(20), IN `pen` INT(11), IN `cre` INT(11), IN `res` INT(11), IN `pro` INT(11))
+BEGIN 
+Declare admin int DEFAULT 0;
+Declare tecnico int DEFAULT 0;
+Declare aleatorio int DEFAULT 0;
+Declare aleatorio2 int DEFAULT 0;
+DECLARE rol int DEFAULT 0;
+DECLARE departamento varchar(50);
+DECLARE nombreCompleto varchar(60);
+DECLARE depaUsuDele int DEFAULT 0;
+
+START TRANSACTION;
+
+SET depaUsuDele = (SELECT id_departamento FROM cliente WHERE id_cliente = id);
+SET admin=(SELECT id_cliente FROM cliente where id_cliente <> id and (id_rol=5267 AND id_departamento=depaUsuDele) order by fecha_creacion DESC LIMIT 0,1);
+UPDATE departamento SET idJefe=admin WHERE idJefe=id;
+SET tecnico =(SELECT COUNT(*) FROM ticket WHERE id_atiende = admin AND fecha BETWEEN  CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin,' 23:59:59'));              
+ 
+set rol =(SELECT id_rol FROM cliente WHERE id_cliente = id);
+set departamento= (SELECT departamento.nombre FROM cliente INNER JOIN departamento ON departamento.idDepartamento = cliente.id_departamento  WHERE cliente.id_cliente= id);
+set nombreCompleto = (SELECT nombre_completo FROM cliente WHERE id_cliente = id); 
+
+IF tecnico <=20 THEN 
+    UPDATE ticket SET id_atiende = admin WHERE id_atiende = id  AND fecha BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');
+	SET aleatorio =(SELECT id_cliente FROM cliente WHERE id_rol= 4046 ORDER BY email_cliente LIMIT 0,1);
+    UPDATE ticket SET id_atiende = aleatorio WHERE id_atiende = id AND  fecha NOT BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');
+    DELETE FROM ticket WHERE idUsuario = id or id_atiende = id;
+      INSERT INTO user_delete (idUsuario,nombre_completo,id_rol,id_departamento,pendiente,creados,resuelto,proceso) VALUES (id,nombreCompleto,rol,departamento,pen,cre,res,pro);
+    DELETE FROM cliente WHERE id_cliente = id;
+COMMIT;           
+ELSEIF tecnico >=20 THEN 
+      set aleatorio =(SELECT id_cliente FROM cliente WHERE id_rol= 4046 ORDER BY email_cliente LIMIT 0,1);
+       UPDATE ticket SET id_atiende = aleatorio WHERE id_atiende = id AND  fecha NOT BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');
+       SET aleatorio2 = (SELECT id_cliente FROM cliente WHERE id_rol= 4046 AND id_cliente<> aleatorio ORDER BY email_cliente LIMIT 0,1);
+       UPDATE ticket SET id_atiende = aleatorio2 WHERE id_atiende = id AND  fecha BETWEEN CONCAT(fechaInicio, ' 00:00:00') AND CONCAT(fechaFin, ' 23:59:59');   
+       INSERT INTO user_delete (idUsuario,nombre_completo,id_rol,id_departamento,pendiente,creados,resuelto,proceso) VALUES (id,nombreCompleto,rol,departamento,pen,cre,res,pro);
+       DELETE FROM ticket WHERE idUsuario = id or id_atiende = id;
+       DELETE FROM cliente WHERE id_cliente = id;
+COMMIT;
+END IF;
+ 
+END$$
+DELIMITER ;
+
+
+
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `NuevoUsuario`(IN `usuario` INT, IN `acciones` VARCHAR(12), IN `fechad` VARCHAR(20), IN `tablad` VARCHAR(15))
+BEGIN
+Declare usuarioD int;
+Declare temporal int;
+set usuarioD = (SELECT  id_cliente FROM cliente WHERE id_cliente = usuario);
+UPDATE registro_alteraciones set usuario= usuarioD ,idAlterado= usuarioD,accion = acciones WHERE usuario= 0 OR (fecha = fechad AND tabla=tablad);
+
+END$$
+DELIMITER ;
+
+
+
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `registro_alteracionesCliente`(IN `usuario` INT, IN `acciones` VARCHAR(12), IN `fechad` VARCHAR(20), IN `tablad` VARCHAR(15))
+BEGIN
+Declare usuarioD int;
+set usuarioD = (SELECT  id_cliente FROM cliente WHERE id_cliente = usuario);
+UPDATE registro_alteraciones set usuario= usuarioD , accion = acciones WHERE usuario= 0 OR (fecha = fechad AND tabla=tablad);
+
+END$$
+DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ticket`(IN `ide` INT)
+Begin
+ 
+DELETE FROM ticket WHERE id = ide;  
+  
+   
+END$$
+DELIMITER ;

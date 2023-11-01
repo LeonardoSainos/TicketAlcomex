@@ -1,0 +1,29 @@
+CREATE TRIGGER `Eliminarregistro_alteracionesDepa` BEFORE DELETE ON `departamento`
+ FOR EACH ROW INSERT INTO registro_alteraciones (usuario,accion,idAlterado,tabla)   VALUES (0,"Eliminar", OLD.idDepartamento,"departamento")
+
+
+
+CREATE TRIGGER `Eliminarregistro_alteracionesTicket` BEFORE DELETE ON `ticket`
+ FOR EACH ROW INSERT INTO registro_alteraciones (usuario,accion,idAlterado,tabla)   VALUES (0,"Eliminar", OLD.id,"ticket")
+
+CREATE TRIGGER `Eliminarregistro_alteracionesUsuarios` BEFORE DELETE ON `cliente`
+ FOR EACH ROW INSERT INTO registro_alteraciones (usuario,accion,idAlterado,tabla)   VALUES (0,"Eliminar", OLD.id_cliente,"cliente")
+
+CREATE TRIGGER `InsertarCliente` AFTER INSERT ON `cliente`
+ FOR EACH ROW INSERT INTO registro_alteraciones (usuario,accion,idAlterado,tabla)   VALUES (0,"", NEW.id_cliente,"cliente")
+
+CREATE TRIGGER `InsertarDepartamento` AFTER INSERT ON `departamento`
+ FOR EACH ROW INSERT INTO registro_alteraciones (usuario,accion,idAlterado,tabla)   VALUES (0,"", NEW.idDepartamento,"departamento")
+
+CREATE TRIGGER `InsertarTicket` AFTER INSERT ON `ticket`
+ FOR EACH ROW INSERT INTO registro_alteraciones (usuario,accion,idAlterado,tabla)   VALUES (0,"", NEW.id,"ticket")
+
+CREATE TRIGGER `registro_alteracion_clientes` AFTER UPDATE ON `cliente`
+ FOR EACH ROW INSERT INTO registro_alteraciones (usuario,accion,idAlterado,tabla)   VALUES (0,"", NEW.id_cliente,"cliente")
+
+
+CREATE TRIGGER `registro_alteracionesDepa` AFTER UPDATE ON `departamento`
+ FOR EACH ROW INSERT INTO registro_alteraciones (usuario,accion,idAlterado,tabla)   VALUES (0,"", NEW.idDepartamento,"departamento")
+
+CREATE TRIGGER `registro_alteracionesTickets` AFTER UPDATE ON `ticket`
+ FOR EACH ROW INSERT INTO registro_alteraciones (usuario,accion,idAlterado,tabla)   VALUES (0,"", NEW.id,"ticket")
